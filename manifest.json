@@ -1,0 +1,21 @@
+{
+  "name": "The Louisville Wiki",
+  "short_name": "Lou Wiki",
+  "description": "A zine-style wiki and generator for Louisville, KY.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f4f4f4",
+  "theme_color": "#111111",
+  "icons":[
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
