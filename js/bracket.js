@@ -5,8 +5,10 @@ import { openModal, closeModal } from './utils.js';
 
 export function openBracketSetup() {
     const select = document.getElementById('bracketCategoryDropdown');
+    const excluded = ['Clubs & Activities', 'Louisville Media', 'Local Business', 'Louisville History Timeline'];
     select.innerHTML = '';
     Object.keys(wikiData).forEach(key => {
+        if (excluded.includes(key)) return;
         const validItems = wikiData[key].items.filter(i => !i.header);
         if (validItems.length >= 16) {
             const opt = document.createElement('option');

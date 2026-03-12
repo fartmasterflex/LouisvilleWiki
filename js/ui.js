@@ -1,7 +1,7 @@
 import { wikiData } from '../library_data.js';
 // --- js/ui.js ---
 import { state } from './state.js';
-import { gSearch, gLucky } from './utils.js';
+import { gSearch, gLucky, openModal } from './utils.js';
 
 // Theme Toggle
 export function toggleTheme() {
@@ -59,8 +59,12 @@ export function renderTOC() {
     html += `<div class="tools-header">Generators & Tools</div>`;
     html += `<button class="toc-btn" onclick="openBracketSetup()">🏆 Custom Bracket Maker</button>`;
     html += `<button class="toc-btn" onclick="openCrawlGenerator()">🍻 Dive Bar Crawl Generator</button>`;
-    html += `<button class="toc-btn" onclick="openSlotMachine()">🎰 Perfect Night Out Slot</button>`;
-    html += `<button class="toc-btn" onclick="openBingo()">🎱 Weird Louisville Bingo</button>`;
+    html += `<button class="toc-btn" onclick="openSlotMachine()">🎰 Night Out Slot</button>`;
+    html += `<button class="toc-btn" onclick="openBingo()">🎱 Louisville Bingo</button>`;
+
+    // Community Section
+    html += `<div class="tools-header">Community</div>`;
+    html += `<button class="toc-btn" onclick="openGiscus()">💬 Community Board</button>`;
 
     html += '</div>';
     app.innerHTML = html;
@@ -90,6 +94,8 @@ export function renderList(categoryKey) {
     `;
 
     if (data.type === 'table') {
+        displayItems = applyFilters(displayItems);
+        html += renderFilterChips(displayItems);
         displayItems.sort((a, b) => {
             let valA = a[state.tableSort.col] || ''; let valB = b[state.tableSort.col] || '';
             if (state.tableSort.col === 'price') { valA = valA.length; valB = valB.length; }
@@ -186,12 +192,78 @@ export function renderList(categoryKey) {
 export function sortTable(column) {
     if (state.tableSort.col === column) state.tableSort.asc = !state.tableSort.asc;
     else { state.tableSort.col = column; state.tableSort.asc = true; }
+    state.savePrefs();
     renderList(state.currentCategory);
 }
 
 export function toggleCol(column) {
     state.visibleCols[column] = !state.visibleCols[column];
+    state.savePrefs();
     renderList(state.currentCategory);
+}
+
+function getUniqueValues(items, key) {
+    const values = new Set();
+    items.forEach(item => {
+        if (item[key]) values.add(item[key]);
+    });
+    return Array.from(values).sort();
+}
+
+function renderFilterChips(items) {
+    const cuisines = getUniqueValues(items, 'cuisine');
+    const prices = getUniqueValues(items, 'price');
+    
+    let html = `<div class="filter-chips">`;
+    
+    html += `<div class="filter-group"><span class="filter-label">Cuisine:</span>`;
+    cuisines.forEach(c => {
+        const active = state.filters.cuisine.includes(c) ? 'active' : '';
+        html += `<span class="filter-chip ${active}" onclick="toggleFilter('cuisine', '${c.replace(/'/g, "\\'")}')">${c}</span>`;
+    });
+    html += `</div>`;
+    
+    html += `<div class="filter-group"><span class="filter-label">Price:</span>`;
+    prices.forEach(p => {
+        const active = state.filters.price.includes(p) ? 'active' : '';
+        html += `<span class="filter-chip ${active}" onclick="toggleFilter('price', '${p}')">${p}</span>`;
+    });
+    html += `</div>`;
+    
+    const hasFilters = state.filters.cuisine.length > 0 || state.filters.price.length > 0;
+    if (hasFilters) {
+        const count = items.length;
+        html += `<button class="filter-clear" onclick="clearFilters()">Clear Filters</button>`;
+        html += `<span class="filter-count">${count} result${count !== 1 ? 's' : ''}</span>`;
+    }
+    
+    html += `</div>`;
+    return html;
+}
+
+export function toggleFilter(type, value) {
+    const arr = state.filters[type];
+    const idx = arr.indexOf(value);
+    if (idx > -1) arr.splice(idx, 1);
+    else arr.push(value);
+    renderList(state.currentCategory);
+}
+
+export function clearFilters() {
+    state.filters.cuisine = [];
+    state.filters.price = [];
+    renderList(state.currentCategory);
+}
+
+function applyFilters(items) {
+    let result = items;
+    if (state.filters.cuisine.length > 0) {
+        result = result.filter(item => item.cuisine && state.filters.cuisine.includes(item.cuisine));
+    }
+    if (state.filters.price.length > 0) {
+        result = result.filter(item => item.price && state.filters.price.includes(item.price));
+    }
+    return result;
 }
 
 // Attach to window 
@@ -200,4 +272,12 @@ window.renderList = renderList;
 window.sortTable = sortTable;
 window.toggleCol = toggleCol;
 window.toggleTheme = toggleTheme;
+window.toggleFilter = toggleFilter;
+window.clearFilters = clearFilters;
+
+export function openGiscus() {
+    openModal('giscusModal');
+}
+
+window.openGiscus = openGiscus;
 

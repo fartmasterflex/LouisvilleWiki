@@ -1,6 +1,6 @@
 // --- js/main.js ---
 // Main Entry Point
-import { renderTOC, initTheme, toggleTheme, renderList, sortTable, toggleCol } from './ui.js';
+import { renderTOC, initTheme, toggleTheme, renderList, sortTable, toggleCol, openGiscus } from './ui.js';
 
 // Import modules and expose to window for inline HTML onclick handlers
 import { gSearch, gLucky, openModal, closeModal } from './utils.js';
@@ -9,7 +9,7 @@ import { openCrawlGenerator, generateCrawl } from './crawl.js';
 import { openSlotMachine, spinSlots } from './slot.js';
 import { openBingo, generateBingo, addBingoItem, resetCustomBingo } from './bingo.js';
 import { openCategoryMap, initCrawlMap } from './map.js';
-import { startBoatRace } from './easter_eggs.js';
+import { startBoatRace, titleClick, subtitleClick, toggleWeird, toggleNeon } from './easter_eggs.js';
 
 Object.assign(window, {
     toggleTheme: toggleTheme,
@@ -22,7 +22,9 @@ Object.assign(window, {
     openSlotMachine, spinSlots,
     openBingo, generateBingo, addBingoItem, resetCustomBingo,
     openCategoryMap, initCrawlMap,
-    startBoatRace
+    startBoatRace,
+    titleClick, subtitleClick, toggleWeird, toggleNeon,
+    openGiscus,
 });
 
 

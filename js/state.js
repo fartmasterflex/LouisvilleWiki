@@ -1,9 +1,30 @@
 // --- js/state.js ---
 // Global state
 
+function loadTablePrefs() {
+    try {
+        const saved = localStorage.getItem('wikiTablePrefs');
+        if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return null;
+}
+
+function saveTablePrefs() {
+    localStorage.setItem('wikiTablePrefs', JSON.stringify({
+        sort: state.tableSort,
+        cols: state.visibleCols
+    }));
+}
+
+const savedPrefs = loadTablePrefs();
+
 export const state = {
-    tableSort: { col: 'name', asc: true },
-    visibleCols: { location: true, cuisine: true, dish: true },
+    tableSort: savedPrefs?.sort || { col: 'name', asc: true },
+    visibleCols: savedPrefs?.cols || { location: true, cuisine: true, dish: true },
+    filters: {
+        cuisine: [],
+        price: []
+    },
     currentCategory: '',
     
     // Bracket State
@@ -12,5 +33,8 @@ export const state = {
     currentBracketCategory: '',
     
     // Slot Machine State
-    slotInterval: null
+    slotInterval: null,
+    
+    // Save helper
+    savePrefs: saveTablePrefs
 };

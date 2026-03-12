@@ -3,6 +3,32 @@ import { wikiData } from '../library_data.js';
 import { openModal } from './utils.js';
 import { manualCoords } from './coordinates.js';
 
+let leafletLoaded = false;
+let leafletLoadPromise = null;
+
+function loadLeaflet() {
+    if (leafletLoaded) return Promise.resolve();
+    if (leafletLoadPromise) return leafletLoadPromise;
+    
+    leafletLoadPromise = new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+        
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = () => {
+            leafletLoaded = true;
+            resolve();
+        };
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
+    
+    return leafletLoadPromise;
+}
+
 let categoryMapInstance = null;
 let categoryMarkers = [];
 
@@ -46,6 +72,8 @@ async function geocodeLocation(name) {
 // --- CATEGORY MAP ---
 
 export async function openCategoryMap(categoryKey) {
+    await loadLeaflet();
+    
     const data = wikiData[categoryKey];
     if (!data || !data.items) return;
 
@@ -101,6 +129,8 @@ export async function openCategoryMap(categoryKey) {
 // --- DIVE BAR CRAWL MAP ---
 
 export async function initCrawlMap(barNames) {
+    await loadLeaflet();
+    
     const mapContainer = document.getElementById('crawlMap');
     if (!mapContainer) return;
 
