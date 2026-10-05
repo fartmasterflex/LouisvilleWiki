@@ -1,193 +1,174 @@
 // --- js/map.js ---
-import { wikiData } from '../library_data.js';
-import { openModal } from './utils.js';
-import { manualCoords } from './coordinates.js';
+// Leaflet maps: category map + crawl route. Manual coordinates first, then a
+// polite (rate-limited, cached) Nominatim lookup for anything missing.
+import { wikiData, emojiOf } from './data.js';
+import { openModal, onModalClose, loadScript, loadCss, store, escapeHtml as esc, gSearch } from './utils.js';
 
-let leafletLoaded = false;
-let leafletLoadPromise = null;
+let manualCoords = {};
+let coordsReady = import('./coordinates.js')
+    .then(m => { manualCoords = m.manualCoords || {}; })
+    .catch(e => { console.warn('coordinates.js failed to load — falling back to geocoding only.', e); });
+
+const LOU = [38.2527, -85.7585];
+const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 
 function loadLeaflet() {
-    if (leafletLoaded) return Promise.resolve();
-    if (leafletLoadPromise) return leafletLoadPromise;
-    
-    leafletLoadPromise = new Promise((resolve, reject) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-        document.head.appendChild(link);
-        
-        const script = document.createElement('script');
-        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-        script.onload = () => {
-            leafletLoaded = true;
-            resolve();
-        };
-        script.onerror = reject;
-        document.head.appendChild(script);
-    });
-    
-    return leafletLoadPromise;
+    loadCss(LEAFLET_CSS);
+    return loadScript(LEAFLET_JS);
 }
 
-let categoryMapInstance = null;
-let categoryMarkers = [];
+const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+const tileUrl = () => isDark()
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
-let crawlMapInstance = null;
-let crawlMarkers = [];
+// ---------------------------------------------------------------
+// GEOCODING
+// ---------------------------------------------------------------
+const GEO_KEY = 'louGeo';
+const geoCache = store.get(GEO_KEY, {}) || {};
+let lastNominatim = 0;
+let geoChain = Promise.resolve();
 
-// Louisville Center
-const LOU_LAT = 38.2527;
-const LOU_LNG = -85.7585;
+function cached(name) {
+    if (manualCoords[name]) return { lat: manualCoords[name][0], lng: manualCoords[name][1] };
+    if (geoCache[name] !== undefined) return geoCache[name];
+    return undefined;
+}
 
-// Shared function to geocode a location name
-// Checks hardcoded coordinates FIRST, then falls back to Nominatim
-async function geocodeLocation(name) {
-    // 1. Check hardcoded coordinates first
-    if (manualCoords[name]) {
-        return { lat: manualCoords[name][0], lng: manualCoords[name][1] };
-    }
-
-    // 2. Check sessionStorage cache
-    const cacheKey = `geo_${name}`;
-    const cached = sessionStorage.getItem(cacheKey);
-    if (cached) return JSON.parse(cached);
-
-    // 3. Fall back to Nominatim
-    try {
-        const query = encodeURIComponent(`${name} Louisville KY`);
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`);
-        const data = await response.json();
-
-        if (data && data.length > 0) {
-            const coords = { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-            sessionStorage.setItem(cacheKey, JSON.stringify(coords));
+// Nominatim asks for max 1 request/second — serialize and space them out
+function nominatim(name) {
+    geoChain = geoChain.then(async () => {
+        const wait = Math.max(0, 1100 - (Date.now() - lastNominatim));
+        if (wait) await new Promise(r => setTimeout(r, wait));
+        lastNominatim = Date.now();
+        try {
+            const q = encodeURIComponent(`${name} Louisville KY`);
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`);
+            const data = await res.json();
+            const coords = data && data.length ? { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) } : null;
+            geoCache[name] = coords;
+            store.set(GEO_KEY, geoCache);
             return coords;
+        } catch (e) {
+            return null;
         }
-    } catch (e) {
-        console.error("Geocoding failed for", name, e);
-    }
-    return null;
+    });
+    return geoChain;
 }
 
-// --- CATEGORY MAP ---
+export async function geocodeLocation(name) {
+    await coordsReady;
+    const c = cached(name);
+    if (c !== undefined) return c;
+    return nominatim(name);
+}
+
+function pinIcon(label, dark = false) {
+    return L.divIcon({
+        className: '',
+        html: `<div class="zine-pin ${dark ? 'dark' : ''}">${label}</div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        popupAnchor: [0, -14],
+    });
+}
+
+// ---------------------------------------------------------------
+// CATEGORY MAP
+// ---------------------------------------------------------------
+let catMap = null, catLayer = null, catTiles = null, catToken = 0;
 
 export async function openCategoryMap(categoryKey) {
-    await loadLeaflet();
-    
     const data = wikiData[categoryKey];
     if (!data || !data.items) return;
-
+    const token = ++catToken;
+    const status = document.getElementById('mapStatus');
+    document.getElementById('categoryMapTitle').textContent = `${emojiOf(categoryKey)} ${categoryKey}`;
+    status.textContent = 'loading map…';
     openModal('categoryMapModal');
-    document.getElementById('categoryMapTitle').innerText = `${categoryKey} Map`;
 
-    // Initialize map if needed
-    if (!categoryMapInstance) {
-        categoryMapInstance = L.map('categoryMapContainer').setView([LOU_LAT, LOU_LNG], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap contributors & CARTO'
-        }).addTo(categoryMapInstance);
+    try { await loadLeaflet(); } catch (e) { status.textContent = 'map failed to load (offline?)'; return; }
+    await coordsReady;
+    if (token !== catToken) return;
+
+    if (!catMap) {
+        catMap = L.map('categoryMapContainer', { zoomControl: true }).setView(LOU, 12);
+        catLayer = L.layerGroup().addTo(catMap);
     }
+    if (catTiles) catMap.removeLayer(catTiles);
+    catTiles = L.tileLayer(tileUrl(), { attribution: '&copy; OpenStreetMap contributors &amp; CARTO', maxZoom: 19 }).addTo(catMap);
+    catLayer.clearLayers();
+    setTimeout(() => catMap.invalidateSize(), 120);
 
-    // Clear existing markers
-    categoryMarkers.forEach(m => categoryMapInstance.removeLayer(m));
-    categoryMarkers = [];
-
-    // Ensure map displays correctly in modal
-    setTimeout(() => categoryMapInstance.invalidateSize(), 100);
-
-    // Get items with their full data (for year/date display)
-    const items = data.items.filter(item => item.name && !item.header);
-
+    const items = data.items.filter(i => i.name && !i.header);
     const bounds = [];
+    const pending = [];
+    const add = (item, n, coords) => {
+        let html = `<b>${esc(item.name)}</b>`;
+        if (item.year) html += `<br><i>Est. ${esc(item.year)}</i>`;
+        if (item.note) html += `<br><small>${esc(item.note)}</small>`;
+        html += `<br><a href="${gSearch(item.name)}" target="_blank" rel="noopener">Search ↗</a>`;
+        if (item.url) html += ` · <a href="${esc(item.url)}" target="_blank" rel="noopener">Site ↗</a>`;
+        L.marker([coords.lat, coords.lng], { icon: pinIcon(n, isDark()) }).bindPopup(html).addTo(catLayer);
+        bounds.push([coords.lat, coords.lng]);
+    };
 
-    for (const item of items) {
-        const coords = await geocodeLocation(item.name);
-        if (coords) {
-            // Build popup content — include year if available (for Oldest Restaurants/Landmarks)
-            let popupHtml = `<b>${item.name}</b>`;
-            if (item.year) {
-                popupHtml += `<br><i>Est. ${item.year}</i>`;
-            }
-            if (item.note) {
-                popupHtml += `<br><small>${item.note}</small>`;
-            }
-            popupHtml += `<br><a href="https://www.google.com/search?q=${encodeURIComponent(item.name + ' Louisville')}" target="_blank">Search</a>`;
+    items.forEach((item, i) => {
+        const c = cached(item.name);
+        if (c) add(item, i + 1, c);
+        else if (c === undefined) pending.push([item, i + 1]);
+    });
+    if (bounds.length) catMap.fitBounds(bounds, { padding: [34, 34], maxZoom: 15 });
 
-            const marker = L.marker([coords.lat, coords.lng])
-                .bindPopup(popupHtml)
-                .addTo(categoryMapInstance);
-            categoryMarkers.push(marker);
-            bounds.push([coords.lat, coords.lng]);
+    if (!pending.length) {
+        status.textContent = `${bounds.length}/${items.length} pinned`;
+        return;
+    }
+    let done = 0;
+    for (const [item, n] of pending) {
+        if (token !== catToken) return;
+        status.textContent = `locating ${++done}/${pending.length}…`;
+        const c = await nominatim(item.name);
+        if (token !== catToken) return;
+        if (c) {
+            add(item, n, c);
+            if (bounds.length <= 3 || done === pending.length) catMap.fitBounds(bounds, { padding: [34, 34], maxZoom: 15 });
         }
     }
-
-    if (bounds.length > 0) {
-        categoryMapInstance.fitBounds(bounds, { padding: [30, 30] });
-    }
+    status.textContent = `${bounds.length}/${items.length} pinned`;
 }
 
-// --- DIVE BAR CRAWL MAP ---
+onModalClose('categoryMapModal', () => { catToken++; });
+
+// ---------------------------------------------------------------
+// DIVE BAR CRAWL MAP
+// ---------------------------------------------------------------
+let crawlMap = null;
 
 export async function initCrawlMap(barNames) {
-    await loadLeaflet();
-    
-    const mapContainer = document.getElementById('crawlMap');
-    if (!mapContainer) return;
+    try { await loadLeaflet(); } catch (e) { return; }
+    const el = document.getElementById('crawlMap');
+    if (!el) return;
+    if (crawlMap) { crawlMap.remove(); crawlMap = null; }
+    crawlMap = L.map('crawlMap', { zoomControl: false, attributionControl: true }).setView(LOU, 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap contributors &amp; CARTO' }).addTo(crawlMap);
+    setTimeout(() => crawlMap && crawlMap.invalidateSize(), 250);
 
-    // Destroy and recreate map to fix refresh issues
-    if (crawlMapInstance) {
-        crawlMapInstance.remove();
-        crawlMapInstance = null;
-    }
-
-    crawlMapInstance = L.map('crawlMap').setView([LOU_LAT, LOU_LNG], 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap contributors & CARTO'
-    }).addTo(crawlMapInstance);
-
-    crawlMarkers = [];
-
-    // Important Leaflet fix for modals
-    setTimeout(() => {
-        crawlMapInstance.invalidateSize();
-    }, 250);
-
-    const bounds = [];
-    let polylineCoords = [];
-
+    const pts = [];
     for (let i = 0; i < barNames.length; i++) {
-        const barName = barNames[i];
-        if (!barName) continue;
-
-        const coords = await geocodeLocation(barName);
-        if (coords) {
-            // Create custom numbered icon
-            const customIcon = L.divIcon({
-                className: 'crawl-marker-icon',
-                html: `<div style="background:var(--highlight); color:#000; font-weight:bold; border-radius:50%; width:24px; height:24px; text-align:center; line-height:24px; border:2px solid #000;">${i + 1}</div>`,
-                iconSize: [28, 28],
-                iconAnchor: [14, 14]
-            });
-
-            const marker = L.marker([coords.lat, coords.lng], { icon: customIcon })
-                .bindTooltip(barName, { permanent: true, direction: "top", offset: [0, -10], className: 'crawl-tooltip' })
-                .addTo(crawlMapInstance);
-
-            crawlMarkers.push(marker);
-            bounds.push([coords.lat, coords.lng]);
-            polylineCoords.push([coords.lat, coords.lng]);
-        }
+        if (!barNames[i]) continue;
+        const c = await geocodeLocation(barNames[i]);
+        if (!c || !crawlMap) continue;
+        L.marker([c.lat, c.lng], { icon: pinIcon(i + 1) })
+            .bindTooltip(esc(barNames[i]), { permanent: true, direction: 'top', offset: [0, -12], className: 'crawl-tooltip' })
+            .addTo(crawlMap);
+        pts.push([c.lat, c.lng]);
     }
-
-    // Draw lines between bars
-    if (polylineCoords.length > 1) {
-        const line = L.polyline(polylineCoords, { color: '#F5C518', weight: 3, dashArray: '5, 5' }).addTo(crawlMapInstance);
-        crawlMarkers.push(line);
-    }
-
-    if (bounds.length > 0) {
-        crawlMapInstance.fitBounds(bounds, { padding: [50, 50] });
-    }
+    if (!crawlMap) return;
+    if (pts.length > 1) L.polyline(pts, { color: '#eaff00', weight: 4, dashArray: '2, 9', lineCap: 'round' }).addTo(crawlMap);
+    if (pts.length) crawlMap.fitBounds(pts, { padding: [50, 50], maxZoom: 16 });
 }
 
 window.openCategoryMap = openCategoryMap;

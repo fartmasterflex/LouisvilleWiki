@@ -1,21 +1,28 @@
-import { wikiData } from '../library_data.js';
 // --- js/bracket.js ---
+import { wikiData } from './data.js';
 import { state } from './state.js';
-import { openModal, closeModal } from './utils.js';
+import { openModal, closeModal, toast, shuffle, escapeHtml as esc, loadScript } from './utils.js';
+import { sfx } from './audio.js';
+import { celebrate } from './easter_eggs.js';
+
+const EXCLUDED = ['Clubs & Activities', 'Louisville Media', 'Local Business', 'Louisville History Timeline', 'Golf & Disc Golf'];
 
 export function openBracketSetup() {
     const select = document.getElementById('bracketCategoryDropdown');
-    const excluded = ['Clubs & Activities', 'Louisville Media', 'Local Business', 'Louisville History Timeline'];
+    const prev = state.currentBracketCategory;
     select.innerHTML = '';
     Object.keys(wikiData).forEach(key => {
-        if (excluded.includes(key)) return;
-        const validItems = wikiData[key].items.filter(i => !i.header);
-        if (validItems.length >= 16) {
+        if (EXCLUDED.includes(key)) return;
+        const valid = wikiData[key].items.filter(i => i.name && !i.header);
+        if (valid.length >= 16) {
             const opt = document.createElement('option');
-            opt.value = key; opt.innerText = key;
+            opt.value = key;
+            opt.textContent = `${key} (${valid.length})`;
             select.appendChild(opt);
         }
     });
+    if (prev && [...select.options].some(o => o.value === prev)) select.value = prev;
+    else if (state.currentCategory && [...select.options].some(o => o.value === state.currentCategory)) select.value = state.currentCategory;
     changeBracketCategory();
     openModal('selectorModal');
 }
@@ -23,110 +30,160 @@ export function openBracketSetup() {
 export function changeBracketCategory() {
     state.currentBracketCategory = document.getElementById('bracketCategoryDropdown').value;
     state.selectedRestaurants = [];
+    document.getElementById('selectorFilter').value = '';
     renderSelectorList();
+}
+
+function validNames() {
+    return wikiData[state.currentBracketCategory].items.filter(i => i.name && !i.header).map(i => i.name).sort((a, b) => a.localeCompare(b));
 }
 
 function renderSelectorList() {
     const list = document.getElementById('selectorList');
     const counter = document.getElementById('selectorCounter');
-    const bracketBtn = document.getElementById('makeBracketArea');
-
-    const validItems = wikiData[state.currentBracketCategory].items.filter(i => !i.header);
-    const sorted = validItems.sort((a, b) => a.name.localeCompare(b.name));
+    const q = document.getElementById('selectorFilter').value.trim().toLowerCase();
+    const n = state.selectedRestaurants.length;
+    counter.textContent = `${n}/16`;
+    counter.classList.toggle('full', n === 16);
+    document.getElementById('makeBracketArea').hidden = n !== 16;
 
     list.innerHTML = '';
-    counter.innerText = `${state.selectedRestaurants.length}/16`;
-    bracketBtn.style.display = (state.selectedRestaurants.length === 16) ? 'block' : 'none';
-
-    sorted.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'select-item';
-        if (state.selectedRestaurants.includes(item.name)) div.classList.add('selected');
-        div.innerText = item.name;
-        div.onclick = () => { toggleSelection(item.name); };
-        list.appendChild(div);
+    validNames().filter(name => !q || name.toLowerCase().includes(q)).forEach(name => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'select-item' + (state.selectedRestaurants.includes(name) ? ' selected' : '');
+        b.textContent = name;
+        b.onclick = () => toggleSelection(name);
+        list.appendChild(b);
     });
 }
 
 function toggleSelection(name) {
     if (state.selectedRestaurants.includes(name)) {
         state.selectedRestaurants = state.selectedRestaurants.filter(n => n !== name);
+    } else if (state.selectedRestaurants.length < 16) {
+        state.selectedRestaurants.push(name);
+        sfx.tick();
     } else {
-        if (state.selectedRestaurants.length < 16) { state.selectedRestaurants.push(name); }
-        else { alert("You can only choose 16!"); return; }
+        toast('Sweet 16 means sixteen. Drop one first.', { emoji: '✋', duration: 2200 });
+        return;
     }
+    renderSelectorList();
+}
+
+function randomSixteen() {
+    state.selectedRestaurants = shuffle(validNames()).slice(0, 16);
+    sfx.pop();
     renderSelectorList();
 }
 
 export function generateBracket() {
     closeModal('selectorModal');
-    state.selectedRestaurants.sort(() => Math.random() - 0.5);
+    state.selectedRestaurants = shuffle(state.selectedRestaurants);
     state.bracketState = {};
-    document.getElementById('shareControls').style.display = 'none';
-    document.getElementById('bracketTitleDisplay').innerText = `${state.currentBracketCategory} SWEET 16`;
+    document.getElementById('shareControls').hidden = true;
+    document.getElementById('bracketTitleDisplay').textContent = `${state.currentBracketCategory} · Sweet 16`;
     renderBracketView();
-    openModal('bracketModal');
+    setTimeout(() => openModal('bracketModal'), 200);
 }
+
+// clearing downstream picks when an earlier result changes
+const FEEDS = {
+    'r1-m0': 'r2-m0', 'r1-m1': 'r2-m0', 'r1-m2': 'r2-m1', 'r1-m3': 'r2-m1',
+    'r1-m4': 'r2-m2', 'r1-m5': 'r2-m2', 'r1-m6': 'r2-m3', 'r1-m7': 'r2-m3',
+    'r2-m0': 'r3-m0', 'r2-m1': 'r3-m0', 'r2-m2': 'r3-m1', 'r2-m3': 'r3-m1',
+    'r3-m0': 'final', 'r3-m1': 'final',
+};
 
 export function advanceName(matchId, name) {
+    const prev = state.bracketState[matchId];
     state.bracketState[matchId] = name;
+    if (prev && prev !== name) {
+        let next = FEEDS[matchId];
+        while (next) {
+            if (state.bracketState[next] === prev) delete state.bracketState[next];
+            next = FEEDS[next];
+        }
+        if (state.bracketState.champion === prev) delete state.bracketState.champion;
+    }
+    sfx.click();
+    let crowned = false;
     if (matchId === 'final') {
-        state.bracketState['champion'] = name;
-        document.getElementById('shareControls').style.display = 'block';
+        crowned = state.bracketState.champion !== name;
+        state.bracketState.champion = name;
+        document.getElementById('shareControls').hidden = false;
     }
     renderBracketView();
+    if (crowned) {
+        const box = document.querySelector('.champ-box');
+        box?.classList.add('crowned');
+        sfx.ding();
+        celebrate({ origin: 'center', count: 220 });
+    }
 }
 
-function createMatchCardPlaceholder(id, prevId1, prevId2, initialName1 = null, initialName2 = null) {
-    const name1 = initialName1 || state.bracketState[prevId1] || "---";
-    const name2 = initialName2 || state.bracketState[prevId2] || "---";
-    let winner = (id === 'final') ? state.bracketState['champion'] : state.bracketState[id];
-
-    const click1 = name1 !== "---" ? `onclick="advanceName('${id}', '${name1.replace(/'/g, "\\'")}')"` : "";
-    const click2 = name2 !== "---" ? `onclick="advanceName('${id}', '${name2.replace(/'/g, "\\'")}')"` : "";
-
-    return `
-    <div class="matchup">
-        <div class="b-team ${winner === name1 && name1 !== "---" ? 'winner' : ''}" ${click1}>${name1}</div>
-        <div class="b-team ${winner === name2 && name2 !== "---" ? 'winner' : ''}" ${click2}>${name2}</div>
-    </div>`;
+function card(id, prev1, prev2, init1 = null, init2 = null) {
+    const n1 = init1 || state.bracketState[prev1] || null;
+    const n2 = init2 || state.bracketState[prev2] || null;
+    const winner = id === 'final' ? state.bracketState.champion : state.bracketState[id];
+    const team = (n) => {
+        if (!n) return `<div class="b-team empty">---</div>`;
+        const cls = winner ? (winner === n ? 'winner' : 'loser') : '';
+        return `<div class="b-team ${cls}" data-match="${id}" data-name="${esc(n)}" title="${esc(n)}">${esc(n)}</div>`;
+    };
+    return `<div class="matchup">${team(n1)}${team(n2)}</div>`;
 }
 
 function renderBracketView() {
-    const container = document.getElementById('bracketView');
+    const s = state.selectedRestaurants;
     let html = '<div class="bracket-col">';
-    for (let i = 0; i < 4; i++) html += createMatchCardPlaceholder(`r1-m${i}`, null, null, state.selectedRestaurants[i * 2], state.selectedRestaurants[i * 2 + 1]);
+    for (let i = 0; i < 4; i++) html += card(`r1-m${i}`, null, null, s[i * 2], s[i * 2 + 1]);
     html += '</div><div class="bracket-col">';
-    for (let i = 0; i < 2; i++) html += createMatchCardPlaceholder(`r2-m${i}`, `r1-m${i * 2}`, `r1-m${i * 2 + 1}`);
+    for (let i = 0; i < 2; i++) html += card(`r2-m${i}`, `r1-m${i * 2}`, `r1-m${i * 2 + 1}`);
     html += '</div><div class="bracket-col center">';
-    html += createMatchCardPlaceholder('r3-m0', 'r2-m0', 'r2-m1');
+    html += card('r3-m0', 'r2-m0', 'r2-m1');
     html += '<div class="finals-wrapper">';
-    html += createMatchCardPlaceholder('final', 'r3-m0', 'r3-m1');
-    const champ = state.bracketState['champion'] || "???";
-    html += `<div class="champ-box">CHAMPION<br><span style="font-size:0.9em">${champ}</span></div></div>`;
-    html += createMatchCardPlaceholder('r3-m1', 'r2-m2', 'r2-m3');
+    html += card('final', 'r3-m0', 'r3-m1');
+    html += `<div class="champ-box">🏆 CHAMPION<br><span>${esc(state.bracketState.champion || '???')}</span></div></div>`;
+    html += card('r3-m1', 'r2-m2', 'r2-m3');
     html += '</div><div class="bracket-col">';
-    for (let i = 2; i < 4; i++) html += createMatchCardPlaceholder(`r2-m${i}`, `r1-m${i * 2}`, `r1-m${i * 2 + 1}`);
+    for (let i = 2; i < 4; i++) html += card(`r2-m${i}`, `r1-m${i * 2}`, `r1-m${i * 2 + 1}`);
     html += '</div><div class="bracket-col">';
-    for (let i = 4; i < 8; i++) html += createMatchCardPlaceholder(`r1-m${i}`, null, null, state.selectedRestaurants[i * 2], state.selectedRestaurants[i * 2 + 1]);
+    for (let i = 4; i < 8; i++) html += card(`r1-m${i}`, null, null, s[i * 2], s[i * 2 + 1]);
     html += '</div>';
-    container.innerHTML = html;
+    document.getElementById('bracketView').innerHTML = html;
 }
 
-export function downloadBracket() {
-    const element = document.getElementById('bracketCaptureArea');
-    html2canvas(element, { backgroundColor: "#222" }).then(canvas => {
+export async function downloadBracket() {
+    const btn = document.getElementById('downloadBracketBtn');
+    btn.disabled = true;
+    btn.textContent = 'Printing…';
+    try {
+        if (!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        const canvas = await window.html2canvas(document.getElementById('bracketCaptureArea'), { backgroundColor: '#1b1b1b', scale: 2 });
         const link = document.createElement('a');
         link.download = 'louisville-bracket.png';
         link.href = canvas.toDataURL();
         link.click();
+    } catch (e) {
+        toast('Couldn’t save the image (offline?). Screenshot it instead!', { emoji: '📸' });
+    }
+    btn.disabled = false;
+    btn.textContent = 'Save Bracket Image';
+}
+
+export function initBracket() {
+    document.getElementById('bracketCategoryDropdown').addEventListener('change', changeBracketCategory);
+    document.getElementById('selectorFilter').addEventListener('input', renderSelectorList);
+    document.getElementById('randomSixteenBtn').addEventListener('click', randomSixteen);
+    document.getElementById('clearSixteenBtn').addEventListener('click', () => { state.selectedRestaurants = []; renderSelectorList(); });
+    document.getElementById('generateBracketBtn').addEventListener('click', generateBracket);
+    document.getElementById('downloadBracketBtn').addEventListener('click', downloadBracket);
+    document.getElementById('bracketView').addEventListener('click', (e) => {
+        const t = e.target.closest('.b-team[data-match]');
+        if (t) advanceName(t.dataset.match, t.dataset.name);
     });
 }
 
-// Map globally for inline events
-window.openBracketSetup = openBracketSetup;
-window.changeBracketCategory = changeBracketCategory;
-window.generateBracket = generateBracket;
-window.advanceName = advanceName;
-window.downloadBracket = downloadBracket;
-
+// Map globally for legacy inline events
+Object.assign(window, { openBracketSetup, changeBracketCategory, generateBracket, advanceName, downloadBracket });

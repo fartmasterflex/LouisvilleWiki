@@ -3,164 +3,288 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="A zine-style wiki, directory and toybox for Louisville, KY.">
     <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#111111">
+    <meta name="theme-color" content="#141414">
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23eaff00'/%3E%3Ctext x='50' y='76' font-size='72' text-anchor='middle'%3E%E2%9A%9C%3C/text%3E%3C/svg%3E">
 
     <title>The Louisville Wiki</title>
 
-    <!-- Library for exporting image -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Theme before paint (avoids a light flash for dark-mode folks) -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('wikiTheme');
+                if (!t) t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { }
+        })();
+    </script>
 
+    <!-- Fonts: display / mono / marker -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Permanent+Marker&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
+    <!-- three.js (loaded lazily via dynamic import; the site works without it) -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" crossorigin>
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js" crossorigin>
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js" crossorigin>
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div class="grain" aria-hidden="true"></div>
 
-    <div id="app">
-        <header>
-            <!-- Neon switch: top-left -->
-            <div id="neon-switch" onclick="toggleNeon()" title="flip it">
-                <div id="neon-switch-lever"></div>
-                <div id="neon-switch-dot"></div>
-            </div>
-            <!-- Theme toggle: top-right -->
-            <div style="position: absolute; top: 15px; right: 15px;">
-                <button id="themeToggleBtn" onclick="toggleTheme()"
-                    style="background:none; border:none; font-size: 1.5rem; cursor:pointer;"
-                    title="Toggle Dark Mode">🌙</button>
-            </div>
-            <h1 id="wikiTitle" data-text="Louisville&#10;Wiki" onclick="titleClick()" style="cursor:default; user-select:none;">Louisville<br>Wiki</h1>
-            <div class="subtitle" id="subtitleBtn" onclick="subtitleClick()" style="cursor:pointer;">by Fartmaster Flex</div>
-        </header>
-        <main id="content-area"></main>
-        <footer>
-            <span id="weirdBtn" onclick="toggleWeird()" style="background:var(--ink); color:var(--paper); padding: 2px 6px; cursor:pointer;">keep Louisville weird, pls</span>
-            <div id="secretBoat" onclick="startBoatRace()"
-                style="cursor:pointer; display:inline-block; margin-left:15px; opacity:0.3; font-size: 1.2rem;"
-                title="???">🚢</div>
-        </footer>
+    <!-- MASTHEAD TICKER -->
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track" id="ticker"></div>
     </div>
 
-    <!-- MODALS -->
+    <!-- HERO: live 3D city + title -->
+    <header id="hero" class="hero">
+        <canvas id="heroCanvas" aria-label="An interactive 3D print of the Louisville skyline"></canvas>
+        <div class="hero-fallback" aria-hidden="true"></div>
 
-    <!-- Map View Modal -->
-    <div id="categoryMapModal" class="modal-overlay">
-        <div class="modal-box large" style="height: 80vh;">
-            <div class="modal-close" onclick="closeModal('categoryMapModal')">×</div>
-            <h2 id="categoryMapTitle" style="text-align:center; text-transform:uppercase; margin: 10px 0;">Map</h2>
-            <div id="categoryMapContainer" style="width: 100%; flex-grow: 1; border: 2px solid var(--ink);"></div>
+        <div class="hero-overlay">
+            <div class="masthead-meta">VOL. 2 &nbsp;·&nbsp; ISSUE №502 &nbsp;·&nbsp; <span id="issueDate"></span> &nbsp;·&nbsp; FREE — TAKE ONE</div>
+            <h1 id="wikiTitle" class="wiki-title" data-text="Louisville Wiki">
+                <a href="#/" class="title-link" aria-label="The Louisville Wiki — home">
+                    <span class="t-lou">Louisville</span>
+                    <span class="t-wiki">Wiki</span>
+                </a>
+            </h1>
+            <div class="hero-stickers">
+                <button type="button" class="sticker sticker-author" id="subtitleBtn">by Fartmaster Flex</button>
+                <button type="button" class="sticker sticker-say" id="sayItBtn" title="how do you say it?">say it: <b id="sayIt">LUH-vul</b></button>
+            </div>
+        </div>
+
+        <div class="hero-controls">
+            <button type="button" id="neon-switch" title="flip it" aria-label="Neon sign switch" aria-pressed="false">
+                <span id="neon-switch-lever"></span>
+                <span id="neon-switch-dot"></span>
+            </button>
+            <button type="button" id="themeToggleBtn" class="round-btn" title="Day / Night" aria-label="Toggle dark mode">🌙</button>
+        </div>
+
+        <div class="hero-hint" id="heroHint">✦ the city is clickable ✦</div>
+    </header>
+
+    <div id="app">
+        <main id="content-area" tabindex="-1"></main>
+    </div>
+
+    <footer class="site-footer">
+        <svg class="river" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true">
+            <path class="river-1" d="M0 30 Q 75 10 150 30 T 300 30 T 450 30 T 600 30 T 750 30 T 900 30 T 1050 30 T 1200 30 T 1350 30 V60 H0Z" />
+            <path class="river-2" d="M0 38 Q 75 22 150 38 T 300 38 T 450 38 T 600 38 T 750 38 T 900 38 T 1050 38 T 1200 38 T 1350 38 V60 H0Z" />
+        </svg>
+        <div class="footer-inner">
+            <div class="footer-row">
+                <button type="button" id="weirdBtn" class="weird-btn">keep Louisville weird, pls</button>
+                <button type="button" id="secretBoat" class="secret-boat" title="???" aria-label="???">🚢</button>
+            </div>
+            <div class="footer-row small">
+                <button type="button" id="stickerBookBtn" class="chip-btn">🔒 secrets <span id="secretCount">0/20</span></button>
+                <button type="button" id="soundBtn" class="chip-btn" aria-pressed="true">🔊 sound on</button>
+                <a class="chip-btn" href="#/">⌂ index</a>
+            </div>
+            <p class="colophon">Printed on a haunted Xerox in the 502. Made with bourbon, toner &amp; <span class="heart">♥</span>.
+                Not affiliated with anybody respectable.</p>
+        </div>
+    </footer>
+
+    <!-- ============ MODALS ============ -->
+
+    <!-- Map View -->
+    <div id="categoryMapModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="categoryMapTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box large map-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <div class="modal-head">
+                <h2 id="categoryMapTitle" class="modal-title">Map</h2>
+                <span id="mapStatus" class="map-status"></span>
+            </div>
+            <div id="categoryMapContainer" class="map-frame"></div>
         </div>
     </div>
 
-    <!-- Bracket Selector Modal -->
-    <div id="selectorModal" class="modal-overlay">
+    <!-- Bracket Selector -->
+    <div id="selectorModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="selectorTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
         <div class="modal-box">
-            <div class="modal-close" onclick="closeModal('selectorModal')">×</div>
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
             <div class="selector-header">
-                <h3>Custom Bracket Maker</h3>
-                <p style="font-size: 0.8rem; margin:0 0 10px 0;">Pick a category, choose your Sweet 16, and battle it
-                    out.</p>
-                <select id="bracketCategoryDropdown" class="dropdown-tool" onchange="changeBracketCategory()"
-                    style="width: 100%;">
-                    <!-- Options populated dynamically -->
-                </select>
-                <br>
+                <h2 id="selectorTitle" class="modal-title">🏆 Bracket Maker</h2>
+                <p class="modal-sub">Pick a category, choose your Sweet 16, battle it out.</p>
+                <select id="bracketCategoryDropdown" class="dropdown-tool"></select>
+                <div class="selector-tools">
+                    <input type="search" id="selectorFilter" class="text-input" placeholder="filter…" autocomplete="off">
+                    <button type="button" class="btn-map" id="randomSixteenBtn">🎲 random 16</button>
+                    <button type="button" class="btn-map" id="clearSixteenBtn">clear</button>
+                </div>
                 <div id="selectorCounter" class="selector-counter">0/16</div>
             </div>
             <div id="selectorList" class="selector-list"></div>
-            <div id="makeBracketArea" style="text-align:center; padding-top:10px; display:none;">
-                <button class="btn-tool" onclick="generateBracket()" style="width:100%;">Generate Bracket!</button>
+            <div id="makeBracketArea" class="make-bracket" hidden>
+                <button type="button" class="btn-tool" id="generateBracketBtn">Generate Bracket! →</button>
             </div>
         </div>
     </div>
 
-    <!-- Bracket View Modal -->
-    <div id="bracketModal" class="modal-overlay">
-        <div class="modal-box large" style="background:#222; border-color:#888;">
-            <div class="modal-close" style="color:#fff;" onclick="closeModal('bracketModal')">×</div>
+    <!-- Bracket View -->
+    <div id="bracketModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="bracketTitleDisplay" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box large bracket-box">
+            <button type="button" class="modal-close light" data-close aria-label="Close">×</button>
             <div id="bracketCaptureArea" class="bracket-capture-area">
-                <h2 id="bracketTitleDisplay"
-                    style="text-align:center; color:var(--highlight); margin:5px 0; font-size:1.5rem; text-transform: uppercase;">
-                    SWEET 16</h2>
+                <h2 id="bracketTitleDisplay" class="bracket-title">SWEET 16</h2>
                 <div id="bracketView" class="bracket-container"></div>
-                <div style="text-align:center; font-size:10px; color:#666; margin-top:5px;">generated by The Louisville
-                    Wiki</div>
+                <div class="bracket-foot">generated by The Louisville Wiki ⚜</div>
             </div>
-            <div id="shareControls" style="text-align: center; margin: 10px; display: none;">
-                <button class="btn-tool" onclick="downloadBracket()">Save Bracket Image</button>
+            <div id="shareControls" class="share-controls" hidden>
+                <button type="button" class="btn-tool" id="downloadBracketBtn">Save Bracket Image</button>
             </div>
         </div>
     </div>
 
-    <!-- Dive Bar Crawl Modal -->
-    <div id="crawlModal" class="modal-overlay">
-        <div class="modal-box large" style="max-height: 95vh;">
-            <div class="modal-close" onclick="closeModal('crawlModal')">×</div>
-            <h2 style="text-align:center; text-transform:uppercase; margin-top:0;">Dive Bar Crawl</h2>
-            <p style="text-align:center; font-size:0.9rem;">3 Gritty Bars. 1 Neighborhood. Walkable(ish).</p>
-            <div class="crawl-box">
-                <div style="font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color:var(--ink);">NEIGHBORHOOD:
-                </div>
-                <div id="crawlNeighborhood"
-                    style="font-size: 1.5rem; font-weight: 900; text-transform: uppercase; margin-bottom: 15px;">---
-                </div>
-                <div id="crawlBars">
-                    <span class="crawl-bar">---</span>
-                    <span class="crawl-bar">---</span>
-                    <span class="crawl-bar">---</span>
-                </div>
+    <!-- Dive Bar Crawl -->
+    <div id="crawlModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="crawlTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box wide">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="crawlTitle" class="modal-title">🍻 Dive Bar Crawl</h2>
+            <p class="modal-sub">3 gritty bars. 1 neighborhood. Walkable(ish).</p>
+            <div class="crawl-ticket">
+                <div class="crawl-ticket-label">NEIGHBORHOOD</div>
+                <div id="crawlNeighborhood" class="crawl-hood">---</div>
+                <ol id="crawlBars" class="crawl-bars">
+                    <li class="crawl-bar">---</li>
+                    <li class="crawl-bar">---</li>
+                    <li class="crawl-bar">---</li>
+                </ol>
+                <div class="crawl-ticket-foot">ADMIT ONE · NO REFUNDS · HYDRATE</div>
             </div>
-
-            <!-- NEW CRAWL MAP CONTAINER -->
-            <div id="crawlMap" style="width: 100%; height: 250px; border: 2px solid var(--ink); margin-bottom: 15px;">
-            </div>
-
-            <button class="btn-tool" onclick="generateCrawl()">Generate New Route</button>
+            <div id="crawlMap" class="map-frame crawl-map"></div>
+            <button type="button" class="btn-tool" id="crawlAgainBtn">Generate New Route ↻</button>
         </div>
     </div>
 
-    <!-- Night Out Slot Modal -->
-    <div id="slotModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-close" onclick="closeModal('slotModal')">×</div>
-            <h2 style="text-align:center; text-transform:uppercase; margin-top:0;">Perfect Night Out</h2>
-            <div class="slot-container">
-                <div class="slot-box"><span class="slot-label">THE ACTIVITY</span><span id="slot1">---</span></div>
-                <div class="slot-box"><span class="slot-label">THE DINNER</span><span id="slot2">---</span></div>
-                <div class="slot-box"><span class="slot-label">THE LATE NIGHT</span><span id="slot3">---</span></div>
+    <!-- Night Out Slot -->
+    <div id="slotModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="slotTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box wide slot-box-modal">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="slotTitle" class="modal-title">🎰 Perfect Night Out</h2>
+            <p class="modal-sub">Pull the lever. Let fate book your evening.</p>
+            <div id="slotStage" class="slot-stage"></div>
+            <div class="slot-container" id="slotReadout">
+                <div class="slot-box"><span class="slot-label">THE ACTIVITY</span><span id="slot1">???</span></div>
+                <div class="slot-box"><span class="slot-label">THE DINNER</span><span id="slot2">???</span></div>
+                <div class="slot-box"><span class="slot-label">THE LATE NIGHT</span><span id="slot3">???</span></div>
             </div>
-            <button class="btn-tool" id="spinBtn" onclick="spinSlots()">Pull Lever</button>
+            <button type="button" class="btn-tool" id="spinBtn">Pull Lever</button>
         </div>
     </div>
 
-    <!-- Bingo Modal -->
-    <div id="bingoModal" class="modal-overlay">
-        <div class="modal-box" style="width: 500px;">
-            <div class="modal-close" onclick="closeModal('bingoModal')">×</div>
-            <h2 style="text-align:center; text-transform:uppercase; margin-top:0;">Weird Louisville Bingo</h2>
-
+    <!-- Bingo -->
+    <div id="bingoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="bingoTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box bingo-modal">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="bingoTitle" class="modal-title">🃏 Weird Louisville Bingo</h2>
+            <div class="bingo-letters" aria-hidden="true"><span>B</span><span>I</span><span>N</span><span>G</span><span>O</span></div>
             <div id="bingoBoard" class="bingo-grid"></div>
-
-            <div style="margin-top: 15px; border-top: 2px dashed #ccc; padding-top: 15px;">
-                <div style="font-size:0.8rem; font-weight:bold;">Add Custom Square:</div>
+            <div class="bingo-custom">
+                <label for="customBingoInput" class="field-label">Add a custom square:</label>
                 <div class="bingo-input-area">
-                    <input type="text" id="customBingoInput" class="bingo-input"
-                        placeholder="e.g. See the Pope Lick Monster" maxlength="40">
-                    <button class="btn-tool" onclick="addBingoItem()" style="flex:0;">Add</button>
+                    <input type="text" id="customBingoInput" class="text-input" placeholder="e.g. See the Pope Lick Monster" maxlength="40">
+                    <button type="button" class="btn-tool slim" id="addBingoBtn">Add</button>
                 </div>
             </div>
-            <div style="margin-top: 10px; display: flex; gap:10px;">
-                <button class="btn-tool" onclick="generateBingo()">Reshuffle Board</button>
-                <button class="btn-map" onclick="resetCustomBingo()" style="flex: 0.5; font-size: 0.7rem;">Clear
-                    Custom</button>
+            <div class="modal-actions">
+                <button type="button" class="btn-tool" id="reshuffleBingoBtn">Reshuffle Board</button>
+                <button type="button" class="btn-map" id="clearBingoBtn">Clear Custom</button>
             </div>
         </div>
     </div>
+
+    <!-- Community Board (giscus is injected on first open) -->
+    <div id="giscusModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="giscusTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box large scroll-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="giscusTitle" class="modal-title">💬 Community Board</h2>
+            <p class="modal-sub">Discuss Louisville with fellow wiki visitors. Requires a GitHub account.</p>
+            <div id="giscusMount" class="giscus-mount"><div class="loading-dots">loading the board</div></div>
+        </div>
+    </div>
+
+    <!-- Hidden Gems -->
+    <div id="hiddenGemsModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="gemsTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box scroll-box gems-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="gemsTitle" class="modal-title">🔓 Hidden Gems</h2>
+            <p class="modal-sub marker-note">Places the tourists don't know about. Keep it between us.</p>
+            <ul id="hiddenGemsList" class="gems-list"></ul>
+        </div>
+    </div>
+
+    <!-- Sticker Book (secrets) -->
+    <div id="stickerBookModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="stickerTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box wide scroll-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="stickerTitle" class="modal-title">📒 The Sticker Book</h2>
+            <p class="modal-sub" id="stickerSub">There's more on this site than meets the eye.</p>
+            <div class="sticker-meter"><div class="sticker-meter-fill" id="stickerMeter"></div></div>
+            <div id="stickerGrid" class="sticker-grid"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn-map" id="resetSecretsBtn">reset my secrets</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Surprise Pick -->
+    <div id="pickModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="pickTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box pick-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <div class="pick-kicker">FATE HAS SPOKEN</div>
+            <div id="pickBody" class="pick-body"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn-tool" id="pickAgainBtn">🎲 Roll Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boat race (3D, with a DOM fallback) -->
+    <div id="raceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="raceTitle" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box wide race-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <h2 id="raceTitle" class="modal-title">The Great Steamboat Race</h2>
+            <p class="modal-sub" id="raceInstructions">MASH SPACE TO BEAT CINCINNATI!</p>
+            <div id="raceStage" class="race-stage"></div>
+            <div id="raceStatus" class="race-status">READY… SET…</div>
+            <button type="button" id="rowButton" class="btn-tool row-btn">🚢 ROW! ROW! ROW! 🚢</button>
+        </div>
+    </div>
+
+    <div id="toasts" class="toasts" aria-live="polite"></div>
 
     <!-- KILL OLD SERVICE WORKER FIRST (must be inline, non-module so the SW can't intercept it) -->
     <script>
@@ -168,47 +292,11 @@
             navigator.serviceWorker.getRegistrations().then(function (regs) {
                 regs.forEach(function (r) { r.unregister(); });
             });
-            // Register the new no-op SW which will clear old caches
             navigator.serviceWorker.register('./sw.js').catch(function () { });
         }
     </script>
 
-    <!-- Giscus Community Board Modal -->
-    <div id="giscusModal" class="modal-overlay">
-        <div class="modal-box large" style="padding: 20px; overflow-y: auto;">
-            <div class="modal-close" onclick="closeModal('giscusModal')">×</div>
-            <h2 style="text-align:center; text-transform:uppercase; margin-top:0;">💬 Community Board</h2>
-            <p style="text-align:center; font-size:0.8rem; color:#666; margin-bottom: 20px;">Discuss Louisville with fellow wiki visitors. Requires a GitHub account.</p>
-            <script src="https://giscus.app/client.js"
-                data-repo="FartmasterFlex/LouisvilleWiki"
-                data-repo-id="R_kgDORVhqTg"
-                data-category="Announcements"
-                data-category-id="DIC_kwDORVhqTs4C4Lr2"
-                data-mapping="pathname"
-                data-strict="0"
-                data-reactions-enabled="1"
-                data-emit-metadata="1"
-                data-input-position="top"
-                data-theme="preferred_color_scheme"
-                data-lang="en"
-                crossorigin="anonymous"
-                async>
-            </script>
-        </div>
-    </div>
-
-    <!-- Hidden Gems Modal -->
-    <div id="hiddenGemsModal" class="modal-overlay">
-        <div class="modal-box" style="max-height:85vh; overflow-y:auto;">
-            <div class="modal-close" onclick="closeModal('hiddenGemsModal')">×</div>
-            <h2 style="text-align:center; text-transform:uppercase; margin-top:0;">🔒 Hidden Gems</h2>
-            <p style="text-align:center; font-size:0.8rem; font-style:italic; border-left: 4px solid var(--highlight); padding-left:10px;">Places the tourists don't know about. Keep it between us.</p>
-            <ul id="hiddenGemsList"></ul>
-        </div>
-    </div>
-    <script type="module" src="library_data.js"></script>
     <script type="module" src="js/main.js"></script>
-
 </body>
 
 </html>

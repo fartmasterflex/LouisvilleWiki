@@ -1,5 +1,7 @@
 // --- js/bingo.js ---
-import { openModal } from './utils.js';
+import { openModal, store, shuffle, toast } from './utils.js';
+import { sfx } from './audio.js';
+import { celebrate } from './easter_eggs.js';
 
 const defaultBingoItems = [
     // === FOOD & DRINK ===
@@ -81,57 +83,118 @@ const defaultBingoItems = [
     "See Thunder Over Louisville live"
 ];
 
+const FREE = "FREE SPACE\n(Local Weirdo)";
+const LINES = [
+    [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19], [20, 21, 22, 23, 24],
+    [0, 5, 10, 15, 20], [1, 6, 11, 16, 21], [2, 7, 12, 17, 22], [3, 8, 13, 18, 23], [4, 9, 14, 19, 24],
+    [0, 6, 12, 18, 24], [4, 8, 12, 16, 20]
+];
+
+// board persists: { cells: [25 strings], stamped: [indices] }
+let board = store.get('bingoBoard');
+let wonLines = new Set();
+
 export function openBingo() {
-    generateBingo();
+    if (!board || !Array.isArray(board.cells) || board.cells.length !== 25) newBoard();
+    renderBoard();
     openModal('bingoModal');
 }
 
-function getBingoPool() {
-    const custom = JSON.parse(localStorage.getItem('userBingo')) || [];
-    return [...defaultBingoItems, ...custom];
+function getPool() {
+    return [...defaultBingoItems, ...(store.get('userBingo', []) || [])];
+}
+
+function newBoard() {
+    const pool = shuffle(getPool());
+    while (pool.length < 24) pool.push("Drink Bourbon");
+    const cells = pool.slice(0, 24);
+    cells.splice(12, 0, FREE);
+    board = { cells, stamped: [12] };
+    wonLines = new Set();
+    store.set('bingoBoard', board);
 }
 
 export function generateBingo() {
-    const board = document.getElementById('bingoBoard');
-    board.innerHTML = '';
+    newBoard();
+    renderBoard();
+    sfx.pop();
+}
 
-    let pool = getBingoPool().sort(() => 0.5 - Math.random());
-    while (pool.length < 24) pool.push("Drink Bourbon");
-
-    const selected = pool.slice(0, 24);
-    selected.splice(12, 0, "FREE SPACE\n(Local Weirdo)");
-
-    selected.forEach((text, i) => {
-        const cell = document.createElement('div');
-        cell.className = 'bingo-cell' + (i === 12 ? ' free stamped' : '');
-        cell.innerText = text;
-        if (i !== 12) {
-            cell.onclick = () => cell.classList.toggle('stamped');
-        }
-        board.appendChild(cell);
+function renderBoard() {
+    const el = document.getElementById('bingoBoard');
+    el.innerHTML = '';
+    wonLines = new Set(LINES.map((l, i) => l.every(k => board.stamped.includes(k)) ? i : -1).filter(i => i >= 0));
+    const inWin = new Set([...wonLines].flatMap(i => LINES[i]));
+    board.cells.forEach((text, i) => {
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'bingo-cell' + (i === 12 ? ' free' : '') + (board.stamped.includes(i) ? ' stamped' : '') + (inWin.has(i) ? ' win-line' : '');
+        cell.style.setProperty('--dab-rot', `${(i * 47) % 40 - 20}deg`);
+        const span = document.createElement('span');
+        span.textContent = text;
+        span.style.position = 'relative';
+        span.style.zIndex = '1';
+        const dab = document.createElement('i');
+        dab.className = 'dab';
+        cell.append(dab, span);
+        cell.setAttribute('aria-pressed', board.stamped.includes(i));
+        if (i !== 12) cell.addEventListener('click', () => stamp(i));
+        el.appendChild(cell);
     });
+}
+
+function stamp(i) {
+    const k = board.stamped.indexOf(i);
+    if (k > -1) board.stamped.splice(k, 1);
+    else { board.stamped.push(i); sfx.stamp(); }
+    store.set('bingoBoard', board);
+    const before = wonLines.size;
+    renderBoard();
+    if (wonLines.size > before) triggerBingoWin();
+}
+
+function triggerBingoWin() {
+    if (document.getElementById('bingoWinOverlay')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'bingoWinOverlay';
+    overlay.className = 'egg-overlay';
+    overlay.style.display = 'grid';
+    overlay.style.placeItems = 'center';
+    const b = document.createElement('div');
+    b.style.cssText = `font:400 clamp(3rem,15vw,7rem)/1 var(--f-display);text-transform:uppercase;color:#eaff00;text-shadow:4px 4px 0 #111,8px 8px 0 #d7263d;transform:scale(0) rotate(-10deg);transition:transform .45s cubic-bezier(.175,.885,.32,1.6);letter-spacing:4px;`;
+    b.textContent = 'BINGO!';
+    overlay.appendChild(b);
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => requestAnimationFrame(() => { b.style.transform = 'scale(1) rotate(-3deg)'; }));
+    sfx.ding();
+    celebrate();
+    setTimeout(() => { b.style.transform = 'scale(0) rotate(10deg)'; setTimeout(() => overlay.remove(), 500); }, 2600);
 }
 
 export function addBingoItem() {
     const input = document.getElementById('customBingoInput');
     const val = input.value.trim();
-    if (val.length > 0) {
-        let custom = JSON.parse(localStorage.getItem('userBingo')) || [];
-        custom.push(val);
-        localStorage.setItem('userBingo', JSON.stringify(custom));
-        input.value = '';
-        generateBingo();
-    }
+    if (!val) return;
+    const custom = store.get('userBingo', []) || [];
+    custom.push(val);
+    store.set('userBingo', custom);
+    input.value = '';
+    toast(`Added “${val.replace(/</g, '&lt;')}” — reshuffling your card.`, { emoji: '🃏', duration: 2200 });
+    generateBingo();
 }
 
 export function resetCustomBingo() {
     if (confirm("Clear your custom bingo squares?")) {
-        localStorage.removeItem('userBingo');
+        store.remove('userBingo');
         generateBingo();
     }
 }
 
-window.openBingo = openBingo;
-window.generateBingo = generateBingo;
-window.addBingoItem = addBingoItem;
-window.resetCustomBingo = resetCustomBingo;
+export function initBingo() {
+    document.getElementById('addBingoBtn').addEventListener('click', addBingoItem);
+    document.getElementById('customBingoInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') addBingoItem(); });
+    document.getElementById('reshuffleBingoBtn').addEventListener('click', generateBingo);
+    document.getElementById('clearBingoBtn').addEventListener('click', resetCustomBingo);
+}
+
+Object.assign(window, { openBingo, generateBingo, addBingoItem, resetCustomBingo });

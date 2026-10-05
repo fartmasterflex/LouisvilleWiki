@@ -1,207 +1,391 @@
 // --- js/easter_eggs.js ---
+// Every secret on the site lives here. See secrets.js for the sticker book.
+import { unlock, isFound, foundCount, SECRETS, onSecretsChange } from './secrets.js';
+import { sfx } from './audio.js';
+import { toast, openModal, closeModal, onModalClose, escapeHtml, rand, isTouch, prefersReducedMotion } from './utils.js';
+import { registerSearchEgg } from './search.js';
+import { state } from './state.js';
 
-// -----------------------------------------------
-// BOAT RACE (secret footer button)
-// -----------------------------------------------
-export function startBoatRace() {
-    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    const raceHtml = `
-        <div id="raceModal" class="modal-overlay" style="display:flex;">
-            <div class="modal-box" style="width:90%; max-width:500px; text-align:center; background:#fff; color:#000;">
-                <div class="modal-close" onclick="this.parentElement.parentElement.remove()">×</div>
-                <h2 style="margin-top:0;">THE GREAT STEAMBOAT RACE</h2>
-                <p style="font-size:0.8rem; font-weight:bold;">${isMobile ? 'TAP THE BUTTON BELOW TO ROW!' : 'MASH THE \'SPACE\' KEY TO BEAT CINCINNATI!'}</p>
-                <div id="raceTrack" style="border:4px solid #000; height:120px; position:relative; overflow:hidden; background:cyan; margin:20px 0; border-radius:10px; user-select:none; -webkit-user-select:none;">
-                    <div id="playerBoat" style="position:absolute; left:0; top:20px; font-size:40px; transition: left 0.1s linear; z-index:2; transform: scaleX(-1);">🚢</div>
-                    <div id="rivalBoat" style="position:absolute; left:0; top:65px; font-size:40px; transition: left 0.1s linear; opacity:0.7; z-index:1; transform: scaleX(-1);">🚤</div>
-                    <div style="position:absolute; right:0; top:0; bottom:0; width:15px; background:red; border-left:2px dashed white; z-index:3;"></div>
-                </div>
-                <div id="raceStatus" style="font-weight:900; font-size:1.2rem; min-height:1.5em;">READY... SET...</div>
-                ${isMobile ? '<button id="rowButton" style="width:100%; padding:18px; font-size:1.3rem; font-weight:900; background:#F5C518; border:3px solid #000; border-radius:10px; cursor:pointer; margin-top:10px; user-select:none; -webkit-user-select:none;">🚢 ROW! ROW! ROW! 🚢</button>' : ''}
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', raceHtml);
+let hero = null;
+export function setHero(h) { hero = h; if (hero && state.neonOn) hero.setNeon(true); }
 
-    let playerPos = 0; let rivalPos = 0; let racing = false;
-    const finishLine = 380;
-
-    setTimeout(() => { document.getElementById('raceStatus').innerText = "GO GO GO!"; racing = true; }, 1500);
-
-    const rivalDrive = setInterval(() => {
-        if (!racing) return;
-        rivalPos += Math.random() * 14;
-        const rBoat = document.getElementById('rivalBoat');
-        if (rBoat) rBoat.style.left = rivalPos + 'px';
-        if (rivalPos > finishLine) {
-            racing = false;
-            document.getElementById('raceStatus').innerText = "CINCINNATI WON. DISGRACEFUL.";
-            clearInterval(rivalDrive);
-        }
-    }, 100);
-
-    function movePlayer() {
-        if (!racing) return;
-        playerPos += 12;
-        const pBoat = document.getElementById('playerBoat');
-        if (pBoat) pBoat.style.left = playerPos + 'px';
-        if (playerPos > finishLine) {
-            racing = false;
-            document.getElementById('raceStatus').innerText = "THE BELLE WINS! CHAMPION OF THE OHIO!";
-            document.getElementById('raceStatus').style.color = "green";
-            clearInterval(rivalDrive);
-            window.removeEventListener('keydown', raceHandler);
-        }
-    }
-
-    const raceHandler = function (e) {
-        if (e.code === "Space" && racing) { e.preventDefault(); movePlayer(); }
-    };
-    window.addEventListener('keydown', raceHandler);
-
-    const rowBtn = document.getElementById('rowButton');
-    if (rowBtn) {
-        rowBtn.addEventListener('touchstart', function (e) { e.preventDefault(); movePlayer(); });
-        rowBtn.addEventListener('mousedown', function (e) { e.preventDefault(); movePlayer(); });
-    }
-
-    const raceTrack = document.getElementById('raceTrack');
-    if (raceTrack && isMobile) {
-        raceTrack.addEventListener('touchstart', function (e) { e.preventDefault(); movePlayer(); });
-    }
-
-    const checkClosed = setInterval(() => {
-        if (!document.getElementById('raceModal')) {
-            window.removeEventListener('keydown', raceHandler);
-            clearInterval(rivalDrive);
-            clearInterval(checkClosed);
-        }
-    }, 500);
+// Lazy 3D effects with graceful fallbacks
+let fxMod = null;
+async function fx() {
+    if (fxMod) return fxMod;
+    try { fxMod = await import('./three/fx.js'); } catch (e) { fxMod = null; }
+    return fxMod;
 }
 
-window.startBoatRace = startBoatRace;
-
-// -----------------------------------------------
-// FLEUR-DE-LIS RAIN (click title 5x)
-// — More fleurs, longer animation
-// -----------------------------------------------
-let titleClickCount = 0;
-let titleClickTimer = null;
-
-export function titleClick() {
-    titleClickCount++;
-    clearTimeout(titleClickTimer);
-    titleClickTimer = setTimeout(() => { titleClickCount = 0; }, 1000);
-    if (titleClickCount >= 5) {
-        titleClickCount = 0;
-        startFleurRain();
-    }
+function overlay(cls = '') {
+    const o = document.createElement('div');
+    o.className = 'egg-overlay ' + cls;
+    document.body.appendChild(o);
+    return o;
 }
 
-function startFleurRain() {
-    if (document.getElementById('fleurCanvas')) return;
+function banner(parent, html, ms = 4200) {
+    const b = document.createElement('div');
+    b.className = 'egg-banner';
+    b.innerHTML = html;
+    parent.appendChild(b);
+    requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('in')));
+    setTimeout(() => b.classList.remove('in'), ms);
+    return b;
+}
 
-    const canvas = document.createElement('canvas');
-    canvas.id = 'fleurCanvas';
-    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
-    document.body.appendChild(canvas);
+// DOM confetti fallback (no WebGL)
+function domConfetti(colors = ['#eaff00', '#d7263d', '#ffffff', '#111111', '#00bbff'], n = 90) {
+    const o = overlay();
+    for (let i = 0; i < n; i++) {
+        const c = document.createElement('div');
+        const s = 6 + Math.random() * 10;
+        c.style.cssText = `position:absolute;width:${s}px;height:${s * .6}px;background:${rand(colors)};left:${Math.random() * 100}%;top:-20px;`;
+        o.appendChild(c);
+        c.animate([{ transform: 'translateY(0) rotate(0)', opacity: 1 }, { transform: `translateY(${innerHeight + 40}px) rotate(${Math.random() * 720}deg)`, opacity: .2 }],
+            { duration: 1800 + Math.random() * 1800, delay: Math.random() * 500, easing: 'ease-in', fill: 'forwards' });
+    }
+    setTimeout(() => o.remove(), 4200);
+}
 
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+export async function celebrate(opts = {}) {
+    const m = await fx();
+    if (m) m.confetti(opts); else domConfetti();
+}
 
-    // 150 fleurs, varied sizes and speeds
-    const fleurs = Array.from({ length: 150 }, () => ({
-        x: Math.random() * canvas.width,
-        y: -40 - Math.random() * canvas.height * 1.5,
-        size: 14 + Math.random() * 38,
-        speed: 1.2 + Math.random() * 4,
-        wobble: Math.random() * Math.PI * 2,
-        wobbleSpeed: 0.02 + Math.random() * 0.05,
-        wobbleAmp: 0.5 + Math.random() * 2,
-        rotation: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.06,
-        opacity: 0.5 + Math.random() * 0.5,
-    }));
+// -----------------------------------------------
+// FLEUR STORM (title x3, or click the 3D fleur)
+// -----------------------------------------------
+let fleurBusy = false;
+export async function fleurRain() {
+    if (fleurBusy) return;
+    fleurBusy = true;
+    unlock('fleur');
+    sfx.whoosh();
+    hero?.spinFleur();
+    const m = await fx();
+    if (m) await m.fleurStorm();
+    else await flatFleurRain();
+    fleurBusy = false;
+}
 
-    // Run for 600 frames (~10 seconds at 60fps) then fade
-    let frame = 0;
-    const totalFrames = 600;
-    const colors = ['#eaff00', '#ffffff', '#c8a400', '#fffbe6', '#111111'];
+function flatFleurRain() {
+    return new Promise(res => {
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9700;';
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+        canvas.width = innerWidth; canvas.height = innerHeight;
+        const colors = ['#eaff00', '#ffffff', '#c8a400', '#fffbe6', '#111111'];
+        const F = Array.from({ length: 150 }, () => ({ x: Math.random() * canvas.width, y: -40 - Math.random() * canvas.height * 1.5, s: 14 + Math.random() * 38, v: 1.2 + Math.random() * 4, w: Math.random() * 6, r: Math.random() * 6, rs: (Math.random() - .5) * .06 }));
+        let frame = 0;
+        (function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            F.forEach((f, i) => {
+                f.y += f.v; f.w += .03; f.r += f.rs; f.x += Math.sin(f.w);
+                ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(f.r);
+                ctx.font = `${f.s}px serif`; ctx.fillStyle = colors[i % colors.length]; ctx.textAlign = 'center';
+                ctx.fillText('⚜', 0, 0); ctx.restore();
+                if (f.y > canvas.height + 40) { f.y = -40; f.x = Math.random() * canvas.width; }
+            });
+            if (++frame < 540) requestAnimationFrame(draw);
+            else { canvas.remove(); res(); }
+        })();
+    });
+}
 
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        fleurs.forEach((f, i) => {
-            f.y += f.speed;
-            f.wobble += f.wobbleSpeed;
-            f.rotation += f.rotSpeed;
-            f.x += Math.sin(f.wobble) * f.wobbleAmp;
+// -----------------------------------------------
+// CHURCHILL DOWNS (subtitle x3, or type "derby")
+// -----------------------------------------------
+export async function churchill() {
+    if (document.getElementById('churchillOverlay')) return;
+    unlock('derby');
+    sfx.bugle();
+    const o = overlay();
+    o.id = 'churchillOverlay';
+    const flash = document.createElement('div');
+    flash.style.cssText = 'position:absolute;inset:0;background:linear-gradient(135deg,#c8102e 0%,#fff 50%,#f5c518 100%);opacity:0;transition:opacity .25s;';
+    o.appendChild(flash);
+    requestAnimationFrame(() => { flash.style.opacity = '.28'; setTimeout(() => { flash.style.opacity = '0'; }, 380); });
+    banner(o, 'And they’re off! 🏇<small>THE MOST EXCITING TWO MINUTES IN SPORTS</small>', 4600);
 
-            ctx.save();
-            ctx.globalAlpha = f.opacity;
-            ctx.translate(f.x, f.y);
-            ctx.rotate(f.rotation);
-            ctx.font = `${f.size}px serif`;
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('\u269C', 0, 0);
-            ctx.restore();
+    // the field
+    for (let i = 0; i < 9; i++) {
+        const h = document.createElement('div');
+        h.textContent = '🏇';
+        const size = 26 + i * 4;
+        h.style.cssText = `position:absolute;left:0;top:${46 + i * 5.5}%;font-size:${size}px;transform:scaleX(-1);`;
+        o.appendChild(h);
+        const dur = 2300 + Math.random() * 900;
+        h.animate([{ transform: `translateX(-90px) scaleX(-1)` }, { transform: `translateX(${innerWidth + 120}px) scaleX(-1)` }], { duration: dur, delay: 150 + i * 70, easing: 'linear', fill: 'forwards' });
+        h.animate([{ translate: '0 0' }, { translate: '0 -8px' }, { translate: '0 0' }], { duration: 260, iterations: Infinity });
+        // dust
+        for (let d = 0; d < 3; d++) setTimeout(() => {
+            const p = document.createElement('div');
+            p.textContent = '💨';
+            p.style.cssText = `position:absolute;top:${48 + i * 5.5}%;left:${(d + 1) * 22}%;font-size:${size * .6}px;opacity:.6;`;
+            o.appendChild(p);
+            p.animate([{ opacity: .7, transform: 'scale(.6)' }, { opacity: 0, transform: 'scale(1.6) translateX(-30px)' }], { duration: 900, fill: 'forwards' });
+        }, 400 + d * 500 + i * 60);
+    }
+    const m = await fx();
+    if (m) m.rosePetals();
+    else domConfetti(['#c8102e', '#a00d24', '#ffffff', '#f5c518']);
+    setTimeout(() => o.remove(), 5200);
+}
 
-            if (f.y > canvas.height + 40) {
-                f.y = -40;
-                f.x = Math.random() * canvas.width;
+// -----------------------------------------------
+// THUNDER OVER LOUISVILLE (Konami code)
+// -----------------------------------------------
+let thunderOn = false;
+export async function thunder() {
+    if (thunderOn) return;
+    thunderOn = true;
+    unlock('thunder');
+    const o = overlay();
+    o.style.zIndex = 9750;
+    const sky = document.createElement('div');
+    sky.className = 'hero-fallback';
+    sky.style.cssText = 'position:absolute;inset:auto 0 0 0;height:28vh;background:none;z-index:1;opacity:.95;--ink:#05050b;';
+    o.appendChild(sky);
+    banner(o, '🎆 Thunder Over Louisville 🎆<small>THE BIGGEST FIREWORKS SHOW ON THE CONTINENT</small>', 5000);
+    const skip = document.createElement('button');
+    skip.className = 'chip-btn';
+    skip.textContent = 'skip ✕';
+    skip.style.cssText = 'position:absolute;right:16px;top:16px;pointer-events:auto;background:#111;color:#fff;border-color:#fff;z-index:2;';
+    o.appendChild(skip);
+    const m = await fx();
+    let stop;
+    const done = () => { o.remove(); thunderOn = false; };
+    skip.onclick = () => { m?.stopAll(); done(); };
+    if (m) {
+        sfx.boom(0, .4);
+        await m.fireworks({
+            onBurst: () => {
+                const d = .15 + Math.random() * .3;
+                sfx.boom(d, .25 + Math.random() * .3);
+                if (Math.random() < .5) sfx.crackle(d + .4);
             }
         });
-
-        frame++;
-        if (frame < totalFrames) {
-            requestAnimationFrame(draw);
-        } else {
-            let alpha = 1;
-            const fadeOut = setInterval(() => {
-                alpha -= 0.04;
-                canvas.style.opacity = Math.max(0, alpha);
-                if (alpha <= 0) { clearInterval(fadeOut); canvas.remove(); }
-            }, 30);
-        }
-    }
-
-    draw();
-}
-
-window.titleClick = titleClick;
-
-// -----------------------------------------------
-// GLOBAL PRESS & HOLD (3 sec) → Hidden Gems
-// Works on mouse and touch anywhere on the page
-// -----------------------------------------------
-let globalHoldTimer = null;
-let holdDidFire = false;
-
-function startGlobalHold() {
-    holdDidFire = false;
-    globalHoldTimer = setTimeout(() => {
-        holdDidFire = true;
-        openHiddenGems();
-    }, 3000);
-}
-
-function cancelGlobalHold() {
-    if (globalHoldTimer) {
-        clearTimeout(globalHoldTimer);
-        globalHoldTimer = null;
+        done();
+    } else {
+        for (let i = 0; i < 6; i++) setTimeout(() => domConfetti(['#ff4455', '#ffd700', '#44ccff', '#eaff00', '#ffffff'], 40), i * 700);
+        stop = setTimeout(done, 5000);
     }
 }
 
-// Attach to document — fires on any press/touch
-document.addEventListener('mousedown', startGlobalHold);
-document.addEventListener('mouseup', cancelGlobalHold);
-document.addEventListener('mousemove', cancelGlobalHold);
-document.addEventListener('touchstart', startGlobalHold, { passive: true });
-document.addEventListener('touchend', cancelGlobalHold);
-document.addEventListener('touchmove', cancelGlobalHold, { passive: true });
+// -----------------------------------------------
+// BAT COUNTRY (type "gonzo")
+// -----------------------------------------------
+export async function gonzo() {
+    if (document.body.classList.contains('gonzo')) return;
+    unlock('gonzo');
+    sfx.whoosh();
+    document.body.classList.add('gonzo');
+    const o = overlay();
+    banner(o, '🦇 Welcome to Bat Country 🦇<small>HUNTER S. THOMPSON · LOUISVILLE-BORN · SLUGGER EDITION</small>', 5200);
+    const m = await fx();
+    if (m) await m.batCountry();
+    else await new Promise(r => setTimeout(r, 5000));
+    document.body.classList.remove('gonzo');
+    o.remove();
+}
 
+// -----------------------------------------------
+// THE GREATEST (type "ali")
+// -----------------------------------------------
+export function ali() {
+    if (document.getElementById('aliOverlay')) return;
+    const o = overlay();
+    o.id = 'aliOverlay';
+    const b = banner(o, 'Float like a butterfly… 🦋<small>CATCH ONE</small>', 7000);
+    let caught = false;
+    const flyers = [];
+    for (let i = 0; i < 9; i++) {
+        const f = document.createElement('div');
+        f.className = 'flyer';
+        f.textContent = '🦋';
+        f.style.fontSize = `${30 + Math.random() * 24}px`;
+        o.appendChild(f);
+        const st = { x: -60 - Math.random() * 300, y: innerHeight * (.2 + Math.random() * .6), ph: Math.random() * 6, sp: 70 + Math.random() * 70, el: f, dead: false };
+        flyers.push(st);
+        const hit = () => {
+            if (st.dead) return;
+            st.dead = true;
+            f.textContent = '🐝';
+            sfx.punch();
+            document.body.classList.remove('shake');
+            void document.body.offsetWidth;
+            document.body.classList.add('shake');
+            f.animate([{ transform: `translate(${st.x}px,${st.y}px) scale(1)` }, { transform: `translate(${st.x + 400}px,${st.y - 500}px) scale(2.4) rotate(40deg)`, opacity: 0 }], { duration: 900, fill: 'forwards' });
+            if (!caught) {
+                caught = true;
+                b.innerHTML = '…sting like a bee! 🐝<small>MUHAMMAD ALI · LOUISVILLE’S OWN · THE GREATEST</small>';
+                unlock('ali');
+            }
+        };
+        f.addEventListener('pointerdown', hit);
+    }
+    let last = performance.now();
+    const t0 = last;
+    (function tick(now) {
+        const dt = (now - last) / 1000; last = now;
+        flyers.forEach(s => {
+            if (s.dead) return;
+            s.ph += dt * 3;
+            s.x += s.sp * dt;
+            const y = s.y + Math.sin(s.ph) * 40;
+            s.el.style.transform = `translate(${s.x}px,${y}px) rotate(${Math.sin(s.ph * 2) * 18}deg) scaleX(${Math.sin(s.ph * 6) > 0 ? 1 : .7})`;
+        });
+        if (now - t0 < 11000 && flyers.some(s => !s.dead && s.x < innerWidth + 60)) requestAnimationFrame(tick);
+        else setTimeout(() => o.remove(), 600);
+    })(last);
+}
+
+// -----------------------------------------------
+// BOURBON (type "bourbon")
+// -----------------------------------------------
+let bourbonTimer = null;
+export function bourbon() {
+    unlock('bourbon');
+    sfx.clink();
+    document.body.classList.add('bourbon');
+    toast('One neat pour of Kentucky’s finest. Things may get a little… wavy.', { kicker: 'BOURBON MODE', emoji: '🥃' });
+    clearTimeout(bourbonTimer);
+    bourbonTimer = setTimeout(() => {
+        document.body.classList.remove('bourbon');
+        toast('Drink some water, friend.', { kicker: 'SOBERING UP', emoji: '💧' });
+    }, 11000);
+}
+
+// -----------------------------------------------
+// WRONG CITY (type "cincinnati" / "cincy")
+// -----------------------------------------------
+export function cincy() {
+    if (document.body.classList.contains('cincy')) return;
+    unlock('cincy');
+    sfx.error();
+    const o = overlay();
+    banner(o, '⚠ Cincinnati detected ⚠<small>REROUTING TO A BETTER CITY…</small>', 2900);
+    document.body.classList.add('cincy');
+    setTimeout(() => {
+        document.body.classList.remove('cincy');
+        o.remove();
+        toast('Crisis averted. You’re back in Louisville.', { kicker: 'PHEW', emoji: '⚜️' });
+    }, 3300);
+}
+
+// -----------------------------------------------
+// 502 BAD GATEWAY (type "502")
+// -----------------------------------------------
+export function badGateway() {
+    if (document.querySelector('.fake-error')) return;
+    unlock('502');
+    const o = document.createElement('div');
+    o.className = 'fake-error';
+    o.innerHTML = `<h1>502 Bad Gateway</h1><hr><p>nginx/1.502.0 (Kentucky)</p><div class="fe-stamp">JK — 502 is our area code.<br>Welcome home.</div>`;
+    document.body.appendChild(o);
+    sfx.error();
+    setTimeout(() => { o.querySelector('.fe-stamp').classList.add('in'); sfx.stamp(); }, 1300);
+    const kill = () => { o.remove(); };
+    o.addEventListener('click', kill);
+    setTimeout(kill, 6500);
+}
+
+// -----------------------------------------------
+// POPE LICK MONSTER (click the eyes under the trestle at night, or type "popelick")
+// -----------------------------------------------
+export function popeLick() {
+    if (document.querySelector('.popelick')) return;
+    unlock('pope');
+    sfx.horn();
+    const o = document.createElement('div');
+    o.className = 'popelick';
+    o.innerHTML = `<div class="goat">🐐</div><div class="eyes"><i></i><i></i></div><div class="warn">STAY OFF THE TRESTLE.<small>THE POPE LICK MONSTER IS WATCHING · CLICK TO FLEE</small></div>`;
+    document.body.appendChild(o);
+    const kill = () => { o.remove(); };
+    o.addEventListener('click', kill);
+    setTimeout(kill, 6000);
+}
+
+// -----------------------------------------------
+// WEIRD MODE (footer button)
+// -----------------------------------------------
+let weirdMode = false;
+export function toggleWeird() {
+    weirdMode = !weirdMode;
+    document.body.classList.toggle('weird', weirdMode);
+    const btn = document.getElementById('weirdBtn');
+    if (btn) btn.textContent = weirdMode ? 'ok that’s weird enough' : 'keep Louisville weird, pls';
+    if (weirdMode) { sfx.kazoo(); unlock('weird'); }
+}
+
+// -----------------------------------------------
+// NEON SIGN
+// -----------------------------------------------
+export function toggleNeon() {
+    const title = document.getElementById('wikiTitle');
+    const sw = document.getElementById('neon-switch');
+    if (!title || !sw) return;
+    state.neonOn = !state.neonOn;
+    const on = state.neonOn;
+    sw.classList.toggle('on', on);
+    sw.setAttribute('aria-pressed', on);
+    sfx.click();
+    title.classList.remove('neon-on', 'neon-flicker', 'neon-shutoff');
+    void title.offsetWidth;
+    if (on) {
+        unlock('neon');
+        title.classList.add('neon-flicker');
+        title.addEventListener('animationend', () => { title.classList.remove('neon-flicker'); if (state.neonOn) title.classList.add('neon-on'); }, { once: true });
+        // flicker the city on with the sign
+        setTimeout(() => hero?.setNeon(true), 120);
+        setTimeout(() => hero?.setNeon(false), 260);
+        setTimeout(() => hero?.setNeon(state.neonOn), 420);
+    } else {
+        title.classList.add('neon-shutoff');
+        title.addEventListener('animationend', () => title.classList.remove('neon-shutoff'), { once: true });
+        hero?.setNeon(false);
+    }
+}
+
+// -----------------------------------------------
+// SAY IT RIGHT
+// -----------------------------------------------
+const SAYINGS = [
+    ['LUH-vul', 'how locals say it (mouth barely open)'],
+    ['LOO-uh-vul', 'close enough, you can stay'],
+    ['LOO-ee-ville', 'tourist detected'],
+    ['LOUIS-ville', 'definitely a sportscaster'],
+    ['LOO-vul', 'two bourbons in'],
+    ['LEWIS-ville', 'that’s a different town, bud'],
+];
+const heard = new Set([0]);
+let sayIdx = 0;
+export function sayIt() {
+    sayIdx = (sayIdx + 1) % SAYINGS.length;
+    heard.add(sayIdx);
+    const [word, who] = SAYINGS[sayIdx];
+    const el = document.getElementById('sayIt');
+    const btn = document.getElementById('sayItBtn');
+    if (el) el.textContent = word;
+    if (btn) {
+        btn.title = who;
+        btn.classList.remove('wobble');
+        void btn.offsetWidth;
+        btn.classList.add('wobble');
+    }
+    sfx.tick();
+    if (heard.size === SAYINGS.length) {
+        if (unlock('pronounce')) setTimeout(() => toast('For the record: it’s <b>LUH-vul</b>. Say it like your mouth is full of Hot Brown.', { kicker: 'PRONUNCIATION POLICE', emoji: '🗣️', duration: 5000 }), 1400);
+    } else {
+        toast(`<b>${word}</b> — ${who}`, { duration: 1800 });
+    }
+}
+
+// -----------------------------------------------
+// HIDDEN GEMS + BOAT RACE
+// -----------------------------------------------
 const hiddenGems = [
     { name: "Hillerich & Bradsby Factory Tour", note: "See Louisville Sluggers get made by hand. Free tour, wildly underrated." },
     { name: "Butchertown Market", note: "Tiny indoor market tucked off Story Ave. Worth the detour every time." },
@@ -217,271 +401,259 @@ const hiddenGems = [
     { name: "Mellwood Arts Center", note: "Massive converted industrial building full of artist studios. First Fridays only." },
 ];
 
-function openHiddenGems() {
+export function openHiddenGems() {
     const list = document.getElementById('hiddenGemsList');
     if (list) {
-        list.innerHTML = hiddenGems.map(g => `
-            <li>
-                <div class="item-left">
-                    <span class="item-name">${g.name}</span>
-                    ${g.note ? `<div class="item-note">${g.note}</div>` : ''}
-                </div>
+        list.innerHTML = hiddenGems.map((g, i) => `
+            <li style="animation-delay:${i * 60}ms">
+                <div class="gem-name">💎 ${escapeHtml(g.name)}</div>
+                <div class="gem-note">${escapeHtml(g.note)}</div>
             </li>`).join('');
     }
-    if (typeof openModal === 'function') openModal('hiddenGemsModal');
+    openModal('hiddenGemsModal');
 }
 
-// -----------------------------------------------
-// SUBTITLE CLICK x3 → Churchill Downs Moment
-// Horses face left (direction of travel), Call to Post audio
-// -----------------------------------------------
-let subtitleClickCount = 0;
-let subtitleClickTimer = null;
+let raceCtl = null;
+export async function startBoatRace() {
+    unlock('boat');
+    const touch = isTouch();
+    document.getElementById('raceInstructions').textContent = touch ? 'TAP THE BUTTON (OR THE RIVER) TO ROW!' : 'MASH SPACE (OR THE BUTTON) TO BEAT CINCINNATI!';
+    const status = document.getElementById('raceStatus');
+    status.className = 'race-status';
+    status.textContent = 'READY… SET…';
+    const stage = document.getElementById('raceStage');
+    stage.innerHTML = '';
+    openModal('raceModal');
 
-export function subtitleClick() {
-    subtitleClickCount++;
-    clearTimeout(subtitleClickTimer);
-    subtitleClickTimer = setTimeout(() => { subtitleClickCount = 0; }, 1000);
-    if (subtitleClickCount >= 3) {
-        subtitleClickCount = 0;
-        startChurchillMoment();
-    }
-}
+    const callbacks = {
+        status: (txt, cls = '') => { status.textContent = txt; status.className = 'race-status ' + cls; },
+        win: () => {
+            sfx.whistle(1.8);
+            celebrate();
+            unlock('gems');
+            setTimeout(() => { closeModal('raceModal'); openHiddenGems(); }, 1800);
+        },
+        lose: () => sfx.lose(),
+        go: () => sfx.bugle(),
+        bind: (row) => bindRowing(row, stage),
+    };
 
-function startChurchillMoment() {
-    if (document.getElementById('churchillOverlay')) return;
-
-    // --- Call to Post audio via Web Audio API (bugle fanfare tones) ---
+    raceCtl?.dispose();
+    raceCtl = null;
     try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-            const actx = new AudioCtx();
-            // Classic "Call to Post" note sequence (approximate pitches in Hz)
-            const notes = [
-                { f: 523.25, t: 0.0,  d: 0.3  },
-                { f: 659.25, t: 0.25, d: 0.3  },
-                { f: 783.99, t: 0.5,  d: 0.35 },
-                { f: 659.25, t: 0.85, d: 0.2  },
-                { f: 783.99, t: 1.05, d: 0.4  },
-                { f: 880.00, t: 1.45, d: 0.5  },
-                { f: 783.99, t: 1.95, d: 0.25 },
-                { f: 659.25, t: 2.2,  d: 0.25 },
-                { f: 783.99, t: 2.45, d: 0.6  },
-            ];
-            notes.forEach(({ f, t, d }) => {
-                const osc = actx.createOscillator();
-                const gain = actx.createGain();
-                osc.connect(gain);
-                gain.connect(actx.destination);
-                osc.type = 'sawtooth';
-                osc.frequency.value = f;
-                gain.gain.setValueAtTime(0, actx.currentTime + t);
-                gain.gain.linearRampToValueAtTime(0.18, actx.currentTime + t + 0.03);
-                gain.gain.linearRampToValueAtTime(0, actx.currentTime + t + d);
-                osc.start(actx.currentTime + t);
-                osc.stop(actx.currentTime + t + d + 0.05);
-            });
-        }
-    } catch(e) { /* audio not available, silent fallback */ }
-
-    const overlay = document.createElement('div');
-    overlay.id = 'churchillOverlay';
-    overlay.style.cssText = `
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none; z-index: 9998; overflow: hidden;
-    `;
-    document.body.appendChild(overlay);
-
-    // Flash
-    const flash = document.createElement('div');
-    flash.style.cssText = `
-        position:absolute; inset:0;
-        background: linear-gradient(135deg, #c8102e 0%, #fff 50%, #f5c518 100%);
-        opacity: 0; transition: opacity 0.2s;
-    `;
-    overlay.appendChild(flash);
-    setTimeout(() => { flash.style.opacity = '0.25'; }, 10);
-    setTimeout(() => { flash.style.opacity = '0'; }, 400);
-
-    // Banner
-    const banner = document.createElement('div');
-    banner.style.cssText = `
-        position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
-        background: #c8102e; color: #fff; font-family: 'Courier New', monospace;
-        font-weight: 900; font-size: 1.3rem; text-transform: uppercase;
-        padding: 12px 30px; border: 4px solid #f5c518;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.5); white-space: nowrap;
-        transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        letter-spacing: 2px; text-align:center;
-    `;
-    banner.innerHTML = '🏇 AND THEY\'RE OFF! 🏇<br><span style="font-size:0.75rem; color:#f5c518;">THE GREATEST TWO MINUTES IN SPORTS</span>';
-    overlay.appendChild(banner);
-    setTimeout(() => { banner.style.top = '40px'; }, 50);
-
-    // Horses — scaleX(1) so they face left (direction of travel = left to right but emoji naturally faces left)
-    const horseCount = 7;
-    for (let i = 0; i < horseCount; i++) {
-        const el = document.createElement('div');
-        el.style.cssText = `
-            position: absolute;
-            font-size: ${20 + i * 2}px;
-            top: ${48 + i * 7}%;
-            left: -70px;
-            transition: left ${1.6 + i * 0.12}s linear;
-        `;
-        el.textContent = '🐎';
-        overlay.appendChild(el);
-        setTimeout(() => { el.style.left = (window.innerWidth + 100) + 'px'; }, 150 + i * 60);
-    }
-
-    // Confetti
-    const colors = ['#c8102e', '#ffffff', '#f5c518', '#000000'];
-    for (let i = 0; i < 100; i++) {
-        const c = document.createElement('div');
-        const size = 5 + Math.random() * 9;
-        c.style.cssText = `
-            position: absolute;
-            width: ${size}px; height: ${size}px;
-            background: ${colors[Math.floor(Math.random() * colors.length)]};
-            left: ${Math.random() * 100}%;
-            top: -20px;
-            border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-            opacity: ${0.7 + Math.random() * 0.3};
-        `;
-        overlay.appendChild(c);
-        c.animate([
-            { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-            { transform: `translateY(${window.innerHeight * 0.7 + Math.random() * 100}px) rotate(${360 + Math.random()*360}deg)`, opacity: 0 }
-        ], {
-            duration: 1500 + Math.random() * 2000,
-            delay: Math.random() * 800,
-            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-            fill: 'forwards'
-        });
-    }
-
-    // Cleanup
-    setTimeout(() => {
-        banner.style.top = '-100px';
-        setTimeout(() => overlay.remove(), 600);
-    }, 4500);
-}
-
-window.subtitleClick = subtitleClick;
-
-// -----------------------------------------------
-// FOOTER CLICK → Comic Sans Toggle
-// Applies to body + all toc-btn / category-header elements
-// -----------------------------------------------
-let weirdMode = false;
-
-export function toggleWeird() {
-    weirdMode = !weirdMode;
-    const comicSans = '"Comic Sans MS", "Comic Sans", cursive';
-    const normal = '';
-
-    document.body.style.fontFamily = weirdMode ? comicSans : normal;
-
-    // Force override on elements that have their own font-family set via CSS vars
-    const targets = document.querySelectorAll(
-        '.toc-btn, .category-header, .list-header, .tools-header, h1, h2, h3, .btn-tool, .btn-map, .btn-site, .slot-box'
-    );
-    targets.forEach(el => {
-        el.style.fontFamily = weirdMode ? comicSans : normal;
-    });
-
-    // Re-apply on future renders by patching the CSS variable approach
-    if (weirdMode) {
-        document.documentElement.style.setProperty('--font-stack', comicSans);
-    } else {
-        document.documentElement.style.setProperty('--font-stack', "'Courier New', Courier, monospace");
-    }
-
-    const btn = document.getElementById('weirdBtn');
-    if (btn) btn.style.fontFamily = weirdMode ? comicSans : normal;
-}
-
-window.toggleWeird = toggleWeird;
-
-// -----------------------------------------------
-// NEON SIGN TOGGLE
-// -----------------------------------------------
-let neonOn = false;
-
-export function toggleNeon() {
-    const title = document.getElementById('wikiTitle');
-    const sw = document.getElementById('neon-switch');
-    if (!title || !sw) return;
-
-    neonOn = !neonOn;
-    sw.classList.toggle('on', neonOn);
-
-    // Clear any running animation classes
-    title.classList.remove('neon-on', 'neon-flicker', 'neon-shutoff');
-
-    if (neonOn) {
-        // Flicker on, then settle into RGB cycle
-        void title.offsetWidth; // force reflow to restart animation
-        title.classList.add('neon-flicker');
-        title.addEventListener('animationend', () => {
-            title.classList.remove('neon-flicker');
-            title.classList.add('neon-on');
-        }, { once: true });
-    } else {
-        // Shutoff flicker then back to normal
-        void title.offsetWidth;
-        title.classList.add('neon-shutoff');
-        title.addEventListener('animationend', () => {
-            title.classList.remove('neon-shutoff');
-            title.style.color = '';
-            title.style.textShadow = '';
-        }, { once: true });
+        const { hasWebGL } = await import('./three/core.js');
+        if (!hasWebGL()) throw new Error('no webgl');
+        const mod = await import('./three/boatrace.js');
+        raceCtl = mod.createBoatRace(stage, callbacks);
+    } catch (e) {
+        raceCtl = domRace(stage, callbacks);
     }
 }
 
-window.toggleNeon = toggleNeon;
+onModalClose('raceModal', () => { raceCtl?.dispose(); raceCtl = null; });
+
+// Row input shared by 3D + DOM races
+function bindRowing(row, stage) {
+    const onKey = (e) => { if (e.code === 'Space') { e.preventDefault(); row(); } };
+    const onBtn = (e) => { e.preventDefault(); row(); };
+    const btn = document.getElementById('rowButton');
+    window.addEventListener('keydown', onKey);
+    btn.addEventListener('pointerdown', onBtn);
+    stage.addEventListener('pointerdown', onBtn);
+    return () => {
+        window.removeEventListener('keydown', onKey);
+        btn.removeEventListener('pointerdown', onBtn);
+        stage.removeEventListener('pointerdown', onBtn);
+    };
+}
+
+function domRace(stage, cb) {
+    stage.innerHTML = `<div class="race-lane" id="playerBoat" style="top:20%">🚢</div><div class="race-lane" id="rivalBoat" style="top:58%;opacity:.75">🚤</div><div class="race-finish"></div>`;
+    const W = () => stage.clientWidth - 70;
+    let p = 0, r = 0, racing = false, done = false;
+    const pb = stage.querySelector('#playerBoat'), rb = stage.querySelector('#rivalBoat');
+    const go = setTimeout(() => { racing = true; cb.status('GO GO GO!'); cb.go(); }, 1500);
+    const rival = setInterval(() => {
+        if (!racing) return;
+        r += Math.random() * 14 * (W() / 380);
+        rb.style.left = r + 'px';
+        if (r > W()) { racing = false; done = true; cb.status('CINCINNATI WON. DISGRACEFUL.', 'lose'); cb.lose(); clearInterval(rival); }
+    }, 100);
+    const row = () => {
+        if (!racing) return;
+        p += 12 * (W() / 380);
+        pb.style.left = p + 'px';
+        if (p > W()) { racing = false; done = true; cb.status('THE BELLE WINS! CHAMPION OF THE OHIO!', 'win'); clearInterval(rival); cb.win(); }
+    };
+    const unbind = bindRowing(row, stage);
+    return { dispose() { clearTimeout(go); clearInterval(rival); unbind(); } };
+}
 
 // -----------------------------------------------
-// IDLE 2 MINUTES → Red Cardinal walks across
+// IDLE CARDINAL (sit still 60s)
 // -----------------------------------------------
 let idleTimer = null;
 let cardinalActive = false;
-
-function resetIdleTimer() {
+function resetIdle() {
     clearTimeout(idleTimer);
-    idleTimer = setTimeout(spawnCardinal, 2 * 60 * 1000);
+    idleTimer = setTimeout(spawnCardinal, 60 * 1000);
 }
-
 function spawnCardinal() {
-    if (cardinalActive) return;
+    if (cardinalActive || document.hidden) return resetIdle();
     cardinalActive = true;
-
     const el = document.createElement('div');
-    el.style.cssText = `
-        position: fixed; bottom: 60px; left: -80px;
-        font-size: 52px; z-index: 9997; pointer-events: none;
-        transition: left 14s linear;
-    `;
-    el.textContent = '\uD83D\uDC26';
-    el.style.filter = 'sepia(1) saturate(8) hue-rotate(320deg) drop-shadow(0 0 3px #c8102e)';
-
-    el.animate([
-        { transform: 'translateY(0px) scaleX(-1)' },
-        { transform: 'translateY(-10px) scaleX(-1)' },
-        { transform: 'translateY(0px) scaleX(-1)' },
-    ], { duration: 350, iterations: Infinity });
-
+    el.className = 'cardinal';
+    el.textContent = '🐦';
+    el.title = 'the Kentucky state bird';
     document.body.appendChild(el);
-    setTimeout(() => { el.style.left = (window.innerWidth + 120) + 'px'; }, 50);
-
-    setTimeout(() => {
-        el.remove();
-        cardinalActive = false;
-        resetIdleTimer();
-    }, 15000);
+    const hop = el.animate([
+        { transform: 'translate(-80px, 0) scaleX(-1)' },
+        { transform: `translate(${innerWidth + 100}px, 0) scaleX(-1)` }
+    ], { duration: 15000, easing: 'linear', fill: 'forwards' });
+    el.animate([{ translate: '0 0' }, { translate: '0 -14px' }, { translate: '0 0' }], { duration: 380, iterations: Infinity, easing: 'ease-out' });
+    el.addEventListener('pointerdown', () => {
+        sfx.chirp();
+        if (unlock('cardinal')) toast('The northern cardinal: Kentucky’s state bird, and our favorite team color.', { kicker: 'BIRD WATCHING', emoji: '🐦' });
+        hop.pause();
+        el.animate([{ transform: getComputedStyle(el).transform, opacity: 1 }, { transform: `translate(${innerWidth * .6}px, -${innerHeight}px) scaleX(-1) rotate(-20deg)`, opacity: 0 }], { duration: 1400, fill: 'forwards' });
+        setTimeout(() => el.remove(), 1400);
+    }, { once: true });
+    hop.onfinish = () => el.remove();
+    setTimeout(() => { cardinalActive = false; resetIdle(); }, 16000);
 }
 
-['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
-    window.addEventListener(evt, resetIdleTimer, { passive: true });
-});
-resetIdleTimer();
+// -----------------------------------------------
+// HERO (3D) CALLBACKS
+// -----------------------------------------------
+const WISHES = ['No construction on Bardstown Road.', 'A parking spot in NuLu.', 'Derby tickets. Good ones.', 'A Hot Brown that doesn’t put you to sleep.', 'The Watterson, but empty.', 'Cards AND Cats both win. (impossible)', 'Spring that lasts longer than a week.'];
+const LED_NAMES = { rainbow: 'rainbow chase', cards: 'Cardinal red', divided: 'house divided (Cards vs. Cats)', sparkle: 'twinkle', gold: 'fleur gold' };
+
+export function onHeroEgg(id, payload) {
+    switch (id) {
+        case 'bridge':
+            sfx.pop();
+            if (!unlock('bridge')) toast(`Big Four light show: <b>${LED_NAMES[payload] || payload}</b>`, { duration: 1800 });
+            break;
+        case 'belle':
+            sfx.whistle();
+            if (!unlock('belle')) toast('The Belle of Louisville: 1914, still paddling. Oldest operating steamboat of her kind.', { emoji: '📯', duration: 3000 });
+            break;
+        case 'homerun':
+            sfx.crack();
+            setTimeout(() => toast('HOME RUN! That one’s landing in Indiana.', { kicker: 'CRACK!', emoji: '⚾' }), 250);
+            unlock('homerun');
+            break;
+        case 'fleur3d':
+            fleurRain();
+            break;
+        case 'star':
+            sfx.ding();
+            unlock('star');
+            toast(`Wish granted: ${rand(WISHES)}`, { kicker: 'SHOOTING STAR', emoji: '🌠' });
+            break;
+        case 'pope':
+            popeLick();
+            break;
+    }
+}
+
+// -----------------------------------------------
+// CERTIFICATE (all secrets)
+// -----------------------------------------------
+function certificate() {
+    const c = document.createElement('div');
+    c.className = 'cert';
+    c.innerHTML = `<div class="cert-card">
+        <div class="seal">🏅</div>
+        <div class="stamp hl">OFFICIAL-ISH DOCUMENT</div>
+        <h2>Honorary Louisvillian</h2>
+        <p>Having located all ${SECRETS.length} secrets of The Louisville Wiki, the bearer is hereby entitled to say “LUH-vul” with total confidence, argue about Hot Browns, and complain about the Watterson forever.</p>
+        <button type="button" class="btn-tool">Accept with honor ⚜</button>
+    </div>`;
+    document.body.appendChild(c);
+    c.querySelector('button').onclick = () => c.remove();
+    thunderOn = false;
+    setTimeout(() => thunder(), 400);
+}
+
+// -----------------------------------------------
+// CONSOLE
+// -----------------------------------------------
+function consoleEgg() {
+    const art = [
+        '        ⚜        ',
+        '   THE LOUISVILLE WIKI',
+        '   hand-made in the 502',
+    ].join('\n');
+    try {
+        console.log(`%c${art}`, 'font:900 14px monospace;color:#eaff00;background:#141414;padding:10px 14px;line-height:1.6');
+        console.log('%cpsst — you found the back room. type:  %clouisville.secret()', 'font:12px monospace;color:#888', 'font:bold 12px monospace;color:#d7263d');
+    } catch (e) { /* ignore */ }
+    window.louisville = {
+        secret() {
+            const fresh = unlock('console');
+            fleurRain();
+            return fresh ? '⚜ secret unlocked. check your sticker book.' : '⚜ you already found this one, hacker.';
+        },
+        eggs: () => `${foundCount()}/${SECRETS.length} found. no spoilers here.`,
+    };
+}
+
+// -----------------------------------------------
+// INIT
+// -----------------------------------------------
+export function initEasterEggs() {
+    // title x3
+    let titleClicks = 0, titleTimer = null;
+    document.getElementById('wikiTitle')?.addEventListener('click', (e) => {
+        if (!document.body.classList.contains('is-compact')) e.preventDefault();
+        titleClicks++;
+        clearTimeout(titleTimer);
+        titleTimer = setTimeout(() => { titleClicks = 0; }, 900);
+        if (titleClicks >= 3) { titleClicks = 0; fleurRain(); }
+    });
+
+    // subtitle x3
+    let subClicks = 0, subTimer = null;
+    document.getElementById('subtitleBtn')?.addEventListener('click', () => {
+        subClicks++;
+        clearTimeout(subTimer);
+        subTimer = setTimeout(() => { subClicks = 0; }, 900);
+        if (subClicks >= 3) { subClicks = 0; churchill(); }
+    });
+
+    document.getElementById('sayItBtn')?.addEventListener('click', sayIt);
+    document.getElementById('neon-switch')?.addEventListener('click', toggleNeon);
+    document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
+    document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
+
+    // typed words + konami
+    const WORDS = { gonzo, ali, bourbon, cincinnati: cincy, cincy, '502': badGateway, derby: churchill, popelick: popeLick, thunder, fleur: fleurRain };
+    Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
+    const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let kIdx = 0, buf = '';
+    document.addEventListener('keydown', (e) => {
+        const t = e.target;
+        if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+        kIdx = key === KONAMI[kIdx] ? kIdx + 1 : (key === KONAMI[0] ? 1 : 0);
+        if (kIdx === KONAMI.length) { kIdx = 0; thunder(); return; }
+        if (e.key.length === 1) {
+            buf = (buf + key).slice(-16);
+            for (const w in WORDS) if (buf.endsWith(w)) { buf = ''; WORDS[w](); break; }
+        }
+    });
+
+    ['pointermove', 'pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => addEventListener(evt, resetIdle, { passive: true }));
+    resetIdle();
+
+    onSecretsChange((id, n) => {
+        if (id && n === SECRETS.length) setTimeout(certificate, 1600);
+    });
+
+    consoleEgg();
+}
+
+// Legacy globals
+Object.assign(window, { startBoatRace, toggleWeird, toggleNeon });
