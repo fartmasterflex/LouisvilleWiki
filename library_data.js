@@ -331,8 +331,6 @@ export const wikiData = {
             { header: "Late-Night Food (Open Past 1 AM)" },
             { name: "Spinelli's Pizzeria", note: "Multiple locations. NY style slices out of cars. Open until 5 AM." },
             { name: "Pizza Donisi", note: "Old Louisville. Tiny slice shop open until the Mag Bar crowd goes home." },
-            { name: "La Bamba", note: "Highlands. 'Burritos as big as your head.' Open until 3 AM on weekends." },
-            { name: "The Back Door", note: "Mid City Mall. Best late-night bar food in the city. Incredible wings." },
             { name: "Hilltop Tavern", note: "Clifton. Great for late-night meatloaf sandwiches or vegan BBQ." },
             { name: "Expo", note: "Downtown. Incredible late-night smashburgers hidden inside a neon-drenched dive." },
             { name: "Ramen House", note: "Highlands. Slurping tonkotsu broth at midnight." },
@@ -375,15 +373,12 @@ export const wikiData = {
             { name: "The Belle of Louisville", note: "The oldest operating Mississippi-style steamboat in the world." },
             { name: "Louisville Zoo", note: "130 acres. The Glacier Run and Gorilla Forest are world-class." },
             { name: "Waterfront Botanical Gardens", note: "Built on top of a former landfill, now a stunning oasis overlooking the river." },
-            { name: "Valhalla Golf Club", note: "Host of multiple PGA Championships. Very exclusive iconic sporting site." },
             { name: "Cave Hill Cemetery", note: "An incredibly beautiful Victorian garden cemetery. Visit Ali and Colonel Sanders." },
             { name: "The Big Four Bridge", note: "The pedestrian bridge connecting Louisville to Indiana. Best walked at sunset." },
             { header: "Entertainment & Oddities" },
             { name: "Louisville Mega Cavern", note: "A massive underground limestone quarry. Zipline or bike entirely underground." },
             { name: "Vernon Lanes", note: "Oldest bowling alley in KY. Recently restored, great food, historic lanes." },
             { name: "Recbar", note: "Massive warehouse packed with vintage arcade cabinets and pinball." },
-            { name: "Fowling Warehouse", note: "Throwing footballs at bowling pins while drinking beer. It’s chaotic and fun." },
-            { name: "Derby City Gaming", note: "Historical racing machines (essentially local slots)." }
         ]
     },
     "Thrift, Vintage & Digging": {
@@ -430,14 +425,12 @@ export const wikiData = {
         items: [
             { header: "Active & Sports Leagues" },
             { name: "LXC Sports", note: "The massive mainstream option. Kickball, dodgeball, softball, and flag football." },
-            { name: "World Championship Dainty", note: "A Schnitzelburg tradition since 1971. A game for those 45+. Involves a stick, a 'dainty', and the street." },
-            { name: "Louisville Hardcourt Bike Polo", note: "Shelby Park. Fast, aggressive, and incredibly niche." },
+            { name: "Louisville Hardcourt Bike Polo", note: "Shelby Park, check IG for times" },
             { name: "Derby City Run Club", note: "Meets at local breweries for runs. Very social; people usually stay for a pint after." },
             { name: "SAK Softball", note: "Competitive and recreational softball leagues at various city parks." },
             { name: "Louisville Darts", note: "Competitive and casual dart leagues around town." },
             { name: "Louisville APA Poolplayers Association", note: "The local chapter for amateur pool leagues, playing out of various dive bars and halls." },
             { name: "Derby City Roller Girls", note: "Flat-track roller derby. A great community for those looking for intensity and camaraderie." },
-            { name: "Fowling Warehouse", note: "Football + Bowling. A bizarre hybrid sport that shouldn't work, but does." },
             { header: "The DIY & Maker Scene" },
             { name: "LVL1 Hackerspace", note: "A 24/7 community lab for geeks, engineers, and artists. If you want to build a flamethrower or a robot, go here." },
             { name: "Falls City Community Bikeworks", note: "A DIY shop where you learn to fix your own bike using their tools and knowledge." },
@@ -511,7 +504,7 @@ export const wikiData = {
         honorableMentions: [
             { name: "The Old Talbott Tavern", year: "1779", note: "Bardstown" },
             { name: "Cunningham’s Creekside", year: "1870", note: "Closings and Location Changes." },
-            { name: "Mellwood Tavern", year: "1885", note: "Longest Continually Running Tavern" },
+            { name: "Mellwood Tavern", year: "1885", note: "Longest Continually Running Tavern in the State" },
             { name: "Schimpff Confectionery", year: "1891", note: "Jeffersonville" },
             { name: "Heitzman Bakery", year: "1891", },
             { name: "Suburban Social Club Fish Fry", year: "1919", note: "Saturday's Only" },
@@ -890,7 +883,6 @@ export const wikiData = {
             { name: "LEO Weekly", url: "https://www.leoweekly.com/", note: "Louisville Eccentric Observer. The alternative weekly paper." },
             { name: "Louisville Magazine", url: "https://loumag.com/", note: "Monthly city magazine covering culture, dining, and long-form journalism." },
             { name: "Business First", url: "https://www.bizjournals.com/louisville/", note: "Local business, real estate, and economic news." },
-            { name: "Broken Sidewalk", url: "https://brokensidewalk.com", note: "An inactive but legendary urbanist blog covering architecture and city planning." },
             { header: "Television & Broadcast" },
             { name: "WAVE3 (NBC)", url: "https://www.wave3.com/" },
             { name: "WDRB (Fox)", url: "https://www.wdrb.com/" },
@@ -903,11 +895,6 @@ export const wikiData = {
             { name: "WUOL 90.5", note: "Classical music station, also part of Louisville Public Media." },
             { name: "WLOU 104.7", note: "Historic R&B and Soul station, serving the Black community since 1951." },
             { name: "WXOX 97.1 / ARTxFM", note: "Incredible experimental, volunteer-run freeform community radio." },
-            { header: "Podcasts & Indie" },
-            { name: "Rusty Satellite Show", note: "Long-running podcast interviewing local newsmakers, artists, and politicians." },
-            { name: "Bourbon Pursuit", note: "The official podcast of bourbon culture, based right here." },
-            { name: "Great Flood Podcast", note: "Deep dives into Louisville history, named after the 1937 disaster." },
-            { name: "Live in Lou", note: "City-led initiative promoting living, working, and weirdness in Louisville." }
         ]
     },
     "Local Business": {
@@ -982,7 +969,8 @@ export const wikiData = {
             { name: "Tinseltown", },
             { name: "Cinemark", note: "Mall St. Matthews" },
             { name: "Cinemark", note: "Preston Crossings" },
-            { name: "AMC Stonybrook", }
+            { name: "AMC Stonybrook", },
+	    { name: "RIP Baxter Avenue Theater. Forever in our Hearts.", }
         ]
     },
     "Day Trips": {

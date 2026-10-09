@@ -53,7 +53,9 @@ export const RisoShader = {
 
         void main() {
             vec2 frag = vUv * uRes;
-            vec3 col = toSRGB(texture2D(tDiffuse, vUv).rgb);
+            vec4 src = texture2D(tDiffuse, vUv);
+            vec3 col = toSRGB(src.rgb);
+            float clean = 1.0 - clamp(src.a, 0.0, 1.0);                 // alpha < 1 = print clean (billboard ads)
             vec2 off = vec2(1.4, -1.1) * (uDot / 6.0) / uRes;           // misregistration
             vec3 colB = toSRGB(texture2D(tDiffuse, vUv + off).rgb);
 
@@ -83,13 +85,22 @@ export const RisoShader = {
             vec3 riso = mix(outL, outD, uNight);
             riso += (grain - 0.5) * 0.045;
 
-            gl_FragColor = vec4(mix(col, riso, uAmount), 1.0);
+            gl_FragColor = vec4(mix(col, riso, uAmount * (1.0 - 0.85 * clean)), 1.0);
         }`
 };
 
 // sRGB hex -> raw vec3 (the shader works in display space)
 export function hexVec(THREE, hex) {
     return new THREE.Vector3(((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255);
+}
+
+// Opt a material out of most of the halftone (it writes alpha 0 as a marker).
+// Use on opaque materials only.
+export function printClean(material) {
+    material.onBeforeCompile = (sh) => {
+        sh.fragmentShader = sh.fragmentShader.replace('#include <dithering_fragment>', '#include <dithering_fragment>\n\tgl_FragColor.a = 0.0;');
+    };
+    return material;
 }
 
 export function makeRisoPass(T, { dot = 6, paperL = 0xf2eee3, inkL = 0x141414, paperD = 0x11110f, inkD = 0xefe9dc } = {}) {

@@ -7,7 +7,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { makeRisoPass } from './riso.js';
+import { makeRisoPass, printClean } from './riso.js';
+import { ADS, loadAds, makeHouseAds, drawHouseAds } from '../ads.js';
 import { fleurGeometry, batGeometry, beam, mergeBeams, makeSteamboat, softDotTexture, windowTextures, towerBox } from './shapes.js';
 
 function mulberry32(a) {
@@ -21,6 +22,7 @@ function mulberry32(a) {
 
 const lerp = (a, b, t) => a + (b - a) * t;
 const damp = (a, b, k, dt) => lerp(a, b, 1 - Math.exp(-k * dt));
+const easeInOutCubic = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const easeOutBack = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
 
 export function createHero({ canvas, container, night = false, neon = false, compact = false, reducedMotion = false, on = {} }) {
@@ -76,7 +78,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     scene.add(rimLight);
 
     // ---------------- SUN / MOON ----------------
-    const orbPos = new THREE.Vector3(-34, 30, -110);
+    const orbPos = new THREE.Vector3(-27, 30, -110);
     const sun = new THREE.Mesh(new THREE.CircleGeometry(6.5, 40), new THREE.MeshBasicMaterial({ color: 0xeaff00, transparent: true, fog: false }));
     sun.position.copy(orbPos);
     scene.add(sun);
@@ -174,6 +176,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     addTower(3.4, -10.2, 3.4, 3.4, 3.0);
     occupied.push({ x: 6.2, z: -8.6, w: 2, d: 2 });          // the bat
     occupied.push({ x: -7.5, z: -9.6, w: 11.4, d: 6.8 });    // Yum! Center
+    occupied.push({ x: -20.5, z: -12, w: 2.4, d: 2.4 });     // billboard pole
 
     // Fill buildings, tallest near downtown
     const clear = (x, z, w, d) => occupied.every(o => Math.abs(o.x - x) > (o.w + w) / 2 + .3 || Math.abs(o.z - z) > (o.d + d) / 2 + .3);
@@ -210,6 +213,145 @@ export function createHero({ canvas, container, night = false, neon = false, com
         trees.setMatrixAt(i, tm);
     }
     scene.add(trees);
+
+    // ---------------- THE BILLBOARD ----------------
+    // Parody ads from /ads (see js/ads.js). Tri-vision slats flip to the next ad every ADS.seconds.
+    const BB_W = 14, BB_H = BB_W * ADS.height / ADS.width, SLATS = 14, SLAT_W = BB_W / SLATS;
+    const SLAT_R = SLAT_W / (2 * Math.sqrt(3));              // prism inradius (circumradius is 2x)
+    const TRI = Math.PI * 2 / 3;
+    const BB_SPOTS = {
+        wide: { x: -20.5, y: 0.2, z: -12, faceY: 16, scale: 1 },
+        tall: { x: -6, y: 0.2, z: -34, faceY: 30, scale: 1.3 },
+    };
+    const billboard = new THREE.Group();
+    const bbFace = new THREE.Group();
+    billboard.add(bbFace);
+    scene.add(billboard);
+
+    // three sides per slat; every slat's side p shares one canvas, sliced by UV
+    const bbSides = [0, 1, 2].map(() => {
+        const c = document.createElement('canvas');
+        c.width = ADS.width;
+        c.height = ADS.height;
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        return { ctx: c.getContext('2d'), tex, mat: printClean(new THREE.MeshBasicMaterial({ map: tex, fog: false })) };
+    });
+    const bbSlats = [];
+    for (let j = 0; j < SLATS; j++) {
+        const slat = new THREE.Group();
+        slat.position.x = -BB_W / 2 + SLAT_W * (j + .5);
+        for (let p = 0; p < 3; p++) {
+            const g = new THREE.PlaneGeometry(SLAT_W * 1.004, BB_H);
+            const uv = g.attributes.uv;
+            for (let i = 0; i < uv.count; i++) uv.setX(i, (j + uv.getX(i)) / SLATS);
+            const m = new THREE.Mesh(g, bbSides[p].mat);
+            m.rotation.y = p * TRI;
+            m.position.set(Math.sin(p * TRI) * SLAT_R, 0, Math.cos(p * TRI) * SLAT_R);
+            slat.add(m);
+        }
+        bbFace.add(slat);
+        bbSlats.push({ g: slat, from: 0, to: 0 });
+    }
+
+    // frame, catwalk, lamps
+    const bbDark = new THREE.MeshStandardMaterial({ color: 0x1b1b1b, roughness: .6, metalness: .35, flatShading: true });
+    const bbSteel = new THREE.MeshStandardMaterial({ color: 0x585e63, roughness: .55, metalness: .45, flatShading: true });
+    const lampMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a, emissive: 0xfff1c2, emissiveIntensity: .15 });
+    const bbBox = (w, h, d, x, y, z, mat) => {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+        m.position.set(x, y, z);
+        bbFace.add(m);
+        return m;
+    };
+    const DEPTH = SLAT_R * 3 + .5, ZC = -SLAT_R * .5, FRONT = ZC + DEPTH / 2;
+    bbBox(BB_W + .3, BB_H + .3, .3, 0, 0, -SLAT_R * 2 - .2, bbDark);                 // back panel
+    bbBox(BB_W + 1, .5, DEPTH, 0, BB_H / 2 + .25, ZC, bbDark);                       // bezel
+    bbBox(BB_W + 1, .5, DEPTH, 0, -BB_H / 2 - .25, ZC, bbDark);
+    bbBox(.5, BB_H + 1, DEPTH, -BB_W / 2 - .25, 0, ZC, bbDark);
+    bbBox(.5, BB_H + 1, DEPTH, BB_W / 2 + .25, 0, ZC, bbDark);
+    const plateC = document.createElement('canvas');
+    plateC.width = 256; plateC.height = 32;
+    const plateX = plateC.getContext('2d');
+    const paintPlate = () => {
+        plateX.fillStyle = '#eaff00'; plateX.fillRect(0, 0, 256, 32);
+        plateX.fillStyle = '#141414'; plateX.font = '700 19px "Space Mono", monospace'; plateX.textAlign = 'center'; plateX.textBaseline = 'middle';
+        plateX.fillText('\u269C WIKI OUTDOOR', 128, 17);
+        plateTex.needsUpdate = true;
+    };
+    const plateTex = new THREE.CanvasTexture(plateC);
+    plateTex.colorSpace = THREE.SRGBColorSpace;
+    paintPlate();
+    const plate = new THREE.Mesh(new THREE.PlaneGeometry(3.2, .4), printClean(new THREE.MeshBasicMaterial({ map: plateTex, fog: false })));
+    plate.position.set(0, -BB_H / 2 - .25, FRONT + .01);
+    bbFace.add(plate);
+    const catY = -BB_H / 2 - .62;
+    bbBox(BB_W + .6, .1, 1.3, 0, catY, FRONT + .5, bbSteel);                        // catwalk
+    bbBox(BB_W + .6, .06, .06, 0, catY + .62, FRONT + 1.1, bbSteel);                 // rail
+    for (let k = 0; k <= 6; k++) bbBox(.06, .62, .06, -BB_W / 2 + k * BB_W / 6, catY + .31, FRONT + 1.1, bbSteel);
+    bbBox(BB_W * .62, .45, .45, 0, catY - .35, ZC, bbSteel);                         // header beam
+    for (let k = 0; k < 4; k++) {
+        const x = -BB_W / 2 + BB_W * (k + .5) / 4;
+        bbBox(.06, .06, 1.1, x, catY + .1, FRONT + 1.6, bbSteel);                    // lamp arm
+        bbBox(.55, .22, .32, x, catY + .24, FRONT + 2.15, lampMat).rotation.x = -.6;
+    }
+    const bbPole = new THREE.Mesh(new THREE.CylinderGeometry(.42, .55, 1, 10).translate(0, .5, 0), bbSteel);
+    billboard.add(bbPole);
+    const bbHit = bbBox(BB_W + 1, BB_H + 1, DEPTH, 0, 0, ZC, new THREE.MeshBasicMaterial({ visible: false }));
+
+    let bbSpot = null;
+    function placeBillboard(portrait) {
+        const s = BB_SPOTS[portrait ? 'tall' : 'wide'];
+        if (bbSpot === s) return;
+        bbSpot = s;
+        billboard.position.set(s.x, s.y, s.z);
+        billboard.scale.setScalar(s.scale);
+        const localY = (s.faceY - s.y) / s.scale;
+        bbFace.position.y = localY;
+        bbPole.scale.y = Math.max(.1, localY + catY - .58);
+        billboard.rotation.y = Math.atan2(-s.x, 40 - s.z) * .9;                     // angle it at the viewer
+    }
+
+    const houseAds = makeHouseAds();
+    const bb = { ads: houseAds, idx: 0, side: 0, timer: 0, flip: -1, shown: null };
+    function paintSide(side, img) {
+        const { ctx, tex } = bbSides[side];
+        const W = ADS.width, H = ADS.height;
+        const k = Math.min(W / img.width, H / img.height);      // letterbox, never stretch
+        const w = img.width * k, h = img.height * k;
+        ctx.fillStyle = '#141414';
+        ctx.fillRect(0, 0, W, H);
+        ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h);
+        tex.needsUpdate = true;
+    }
+    paintSide(0, houseAds[0]);
+    bb.shown = houseAds[0];
+    function nextAd(force = false) {
+        if (bb.flip >= 0) return;
+        const i = (bb.idx + 1) % bb.ads.length;
+        const img = bb.ads[i];
+        bb.timer = 0;
+        if (!force && img === bb.shown) return;
+        bb.idx = i;
+        bb.side = (bb.side + 1) % 3;
+        paintSide(bb.side, img);
+        bb.shown = img;
+        bbSlats.forEach(s => { s.from = s.g.rotation.y; s.to = s.from - TRI; });
+        if (reducedMotion) bbSlats.forEach(s => { s.g.rotation.y = s.to; });
+        else bb.flip = 0;
+    }
+    loadAds().then(imgs => {
+        if (!imgs.length) return;
+        bb.ads = imgs;
+        bb.idx = imgs.length - 1;       // next flip lands on ad #1
+        bb.timer = ADS.seconds;         // ...right away
+    });
+    document.fonts?.ready.then(() => {
+        drawHouseAds(houseAds);
+        paintPlate();
+        if (houseAds.includes(bb.shown)) paintSide(bb.side, bb.shown);
+    });
 
     // Neon outlines (only seen when the neon switch is on)
     const edges = new THREE.LineSegments(mergeGeometries(edgeGeos), new THREE.LineBasicMaterial({ color: 0xff3ea5, transparent: true, opacity: 0, fog: false }));
@@ -425,6 +567,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         camera.position.set(target.x + S.pxS * 2.6, target.y + 1.4 - S.pyS * 1.2 + (portrait ? 2 : 0), target.z + dist);
         camera.lookAt(target);
         camera.updateProjectionMatrix();
+        placeBillboard(portrait);
     }
 
     function resize() {
@@ -444,6 +587,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const ndc = new THREE.Vector2();
     const clickables = [
         { obj: bridgeHit, fn: () => clickBridge() },
+        { obj: bbHit, fn: () => nextAd(true) },
         { obj: belleHit, fn: () => clickBelle() },
         { obj: batHit, fn: () => clickBat() },
         { obj: fleur, fn: () => clickFleur() },
@@ -678,6 +822,23 @@ export function createHero({ canvas, container, night = false, neon = false, com
             sp.s.material.opacity = Math.max(0, sp.life);
             if (sp.life <= 0) sp.s.visible = false;
         });
+
+        // billboard: flip every ADS.seconds (only counts while the hero is on screen)
+        bb.timer += dt;
+        if (bb.timer >= ADS.seconds) nextAd();
+        if (bb.flip >= 0) {
+            bb.flip += dt;
+            let done = true;
+            bbSlats.forEach((s, j) => {
+                const t = Math.min(1, Math.max(0, (bb.flip - j * .055) / .75));
+                if (t < 1) done = false;
+                s.g.rotation.y = s.from + (s.to - s.from) * easeInOutCubic(t);
+            });
+            if (done) bb.flip = -1;
+        }
+        lampMat.emissiveIntensity = lerp(.15, 2.4, N);
+        const adLevel = 1 - X * .3;
+        bbSides.forEach(sd => sd.mat.color.setScalar(adLevel));
 
         // Pope Lick eyes blink + drift
         const blink = (T % 5.3) < .12 ? .1 : 1;
