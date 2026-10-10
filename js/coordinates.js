@@ -129,6 +129,12 @@ export const manualCoords = {
     "Carmichael's Kids": null,                                // no verified address yet: no pin, no lookup
     "Louisville Rowing Club": null,                           // club, launches vary
     "Saraga International Grocery": [38.25024, -85.57870],     // addr: 200 N HURSTBOURNE PKWY, LOUISVILLE, KY, 40222
+    "High Foods": [38.14299, -85.62357],                       // addr: 7407 FEGENBUSH LN, LOUISVILLE, KY, 40228
+    "The Service Station": [38.22649, -85.75464],              // addr: 208 E BURNETT AVE, LOUISVILLE, KY, 40208
+    "Wavy Kitchen": [38.21298, -85.76252],                     // addr: 2520 S 3RD ST, LOUISVILLE, KY, 40208
+    "Insomnia Cookies": [38.24097, -85.72495],                 // addr: 948 BAXTER AVE, LOUISVILLE, KY, 40204
+    "Highlands Tap Room": [38.23908, -85.72233],               // addr: 1058 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "The Deuce": [38.19301, -85.72848],                        // addr: 4101 PRESTON HWY, LOUISVILLE, KY, 40213
     "Granville Pub": [38.22445, -85.76042],                    // addr: 1601 S 3RD ST, LOUISVILLE, KY, 40208
     "Dizzy Whizz": [38.23721, -85.75756],                      // addr: 217 W SAINT CATHERINE ST, LOUISVILLE, KY, 40203
     "KingFish": [38.28113, -85.69944],                         // OSM: Kingfish Restaurant, 3021, River Road, Metro Council District 9, Louisville, Kentucky, 40207
