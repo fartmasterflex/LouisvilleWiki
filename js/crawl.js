@@ -11,6 +11,7 @@ const STREET_FACTOR = 1.25;       // straight-line → street-grid walking estim
 const RECENT_KEY = 'louCrawlRecent';
 const RECENT_MAX = 12;            // bars shown lately get pushed to the back of the line
 const RECENT_WEIGHT = .12;
+const NOT_ON_CRAWL = new Set(["Bud's Tavern", "Stooges"]);   // on the Bars list, never on a crawl
 
 // Label a crawl by whichever of these its middle is closest to
 const HOODS = [
@@ -41,6 +42,7 @@ async function buildPool() {
     if (pool) return pool;
     const { manualCoords } = await import('./coordinates.js');
     const bars = realItems('Bars')
+        .filter(i => !NOT_ON_CRAWL.has(i.name))
         .map(i => ({ name: i.name, c: manualCoords[i.name] }))
         .filter(b => Array.isArray(b.c))
         .map(b => ({ name: b.name, lat: b.c[0], lng: b.c[1] }));

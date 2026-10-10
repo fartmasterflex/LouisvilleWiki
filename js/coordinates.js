@@ -300,7 +300,7 @@ export const manualCoords = {
     "Frankfort Ave Beer Depot": [38.25428, -85.67549],         // addr: 3204 FRANKFORT AVE, LOUISVILLE, KY, 40206
     "High Horse": [38.25310, -85.73778],                       // addr: 810 E MARKET ST, LOUISVILLE, KY, 40206
     "Kaiju": [38.23267, -85.73706],                            // OSM: Kaiju, 1004, East Oak Street, Germantown, Louisville, Kentucky, 40204
-    "Left Field Lounge": null,                                 // unverified, could not find it
+    "Left Field Lounge": [38.22405, -85.69131],                // addr: 2282 BARDSTOWN RD, LOUISVILLE, KY, 40205
     "Nachbar": [38.23057, -85.73627],                          // addr: 969 CHARLES ST, LOUISVILLE, KY, 40204
     "Shenanigans": [38.22719, -85.70830],                      // OSM: Shenanigans Bar & Grill, 1611, Norris Place, Highlands, Louisville, Kentucky, 40205, United 
     "Spring Street Bar": [38.25149, -85.71889],                // addr: 300 S SPRING ST, LOUISVILLE, KY, 40206
