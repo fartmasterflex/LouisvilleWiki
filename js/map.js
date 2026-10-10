@@ -32,7 +32,8 @@ let lastNominatim = 0;
 let geoChain = Promise.resolve();
 
 function cached(name) {
-    if (manualCoords[name]) return { lat: manualCoords[name][0], lng: manualCoords[name][1] };
+    // null in coordinates.js = "no single location" (a club, a city-wide thing): skip the pin, don't geocode
+    if (name in manualCoords) return manualCoords[name] ? { lat: manualCoords[name][0], lng: manualCoords[name][1] } : null;
     if (geoCache[name] !== undefined) return geoCache[name];
     return undefined;
 }

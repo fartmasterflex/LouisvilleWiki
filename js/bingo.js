@@ -29,7 +29,6 @@ const defaultBingoItems = [
     "See the Witch's Tree on 6th & Park",
     "Stand inside the Water Tower",
     "Visit the Thomas Edison House",
-    "Find the Castleman statue pedestal",
     "Walk through St. James Court",
 
     // === ONLY IN LOUISVILLE MOMENTS ===
@@ -59,7 +58,7 @@ const defaultBingoItems = [
     "Bowl at Vernon Lanes",
     "Kayak on Floyds Fork",
     "Read a LEO Weekly cover-to-cover",
-    "Attend a First Friday Trolley Hop",
+    "Ride the F.A.T. Friday Trolley Hop",
     "Pet a dog at a brewery taproom",
     "Watch the sunset from the Big Four Bridge",
     "See Thunder Over Louisville live"

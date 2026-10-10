@@ -387,14 +387,12 @@ export function sayIt() {
 // HIDDEN GEMS + BOAT RACE
 // -----------------------------------------------
 const hiddenGems = [
-    { name: "Hillerich & Bradsby Factory Tour", note: "See Louisville Sluggers get made by hand. Free tour, wildly underrated." },
-    { name: "Butchertown Market", note: "Tiny indoor market tucked off Story Ave. Worth the detour every time." },
-    { name: "Cave Hill Cemetery", note: "Final resting place of Colonel Sanders & George Rogers Clark. Also genuinely beautiful." },
+    { name: "Hillerich & Bradsby Factory Tour", note: "Watch Louisville Sluggers get made on the factory floor. Admission (about $24) comes with a mini bat, and the giant bat out front is free." },
+    { name: "Butchertown Market", note: "Sprawling old industrial building on Story Ave full of local shops, with Cellar Door Chocolates as the anchor. Worth the detour every time." },
+    { name: "Cave Hill Cemetery", note: "Final resting place of Muhammad Ali, Colonel Sanders & George Rogers Clark. Also genuinely beautiful." },
     { name: "Louisville Waterfront Park at Dawn", note: "The Big Four Bridge at sunrise with nobody on it is a different city entirely." },
     { name: "Iroquois Amphitheater", note: "Outdoor concerts in a hollow in the middle of the park. Great overlook of the city." },
-    { name: "Shawnee Park Boat Ramp", note: "Underrated West End park with a direct Ohio River view and real history." },
-    { name: "Hadley Pottery", note: "Handmade Louisville pottery since 1940. The rooster mugs are iconic." },
-    { name: "Mellwood Arts Center", note: "Massive converted industrial building full of artist studios. First Fridays only." },
+    { name: "Hadley Pottery", note: "Handmade Louisville pottery since 1940, known for its whimsical blue folk designs. Nearly closed in 2022 before a local buyer saved it." },
 ];
 
 export function openHiddenGems() {

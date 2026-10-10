@@ -4,10 +4,10 @@ import { initCrawlMap, geocodeLocation } from './map.js';
 import { sfx } from './audio.js';
 
 const diveNeighborhoods = {
-    "Germantown / Schnitzelburg": ["Nachbar", "Seidenfaden's", "The Merryweather", "Hauck's Corner", "Four Pegs"],
+    "Germantown / Schnitzelburg": ["Nachbar", "Seidenfaden's", "The Merryweather", "The Pearl"],
     "Highlands": ["Bambi Bar", "The Outlook Inn", "Hideaway Saloon", "Left Field Lounge", "Kern's Korner", "Barret Bar"],
-    "Clifton / Crescent Hill": ["Mellwood Tavern", "Frankfort Ave Beer Depot", "Spring Street Bar", "High Horse"],
-    "Old Louisville / Downtown": ["Mag Bar", "Granville Pub", "Third Street Dive", "Air Devils Inn"]
+    "Clifton / Crescent Hill": ["Mellwood Tavern", "Frankfort Ave Beer Depot", "Dive Bar on Frankfort"],
+    "Old Louisville / Downtown": ["Mag Bar", "Granville Pub", "Third Street Dive"]
 };
 
 let run = 0;
