@@ -509,8 +509,52 @@ export function createHero({ canvas, container, night = false, neon = false, com
     let ledMode = 0;
     const LED_MODES = ['rainbow', 'cards', 'divided', 'sparkle', 'gold'];
 
+    // ---------------- SIX MILE ISLAND ----------------
+    // Moved downriver of the bridge so it stays on screen; the Belle turns around here, like the Great Steamboat Race
+    const islandSandMat = new THREE.MeshStandardMaterial({ color: 0xd8c9a0, flatShading: true, roughness: 1 });
+    const islandGrassMat = new THREE.MeshStandardMaterial({ color: 0x6f8f5a, flatShading: true, roughness: 1 });
+    const islandTreeMat = new THREE.MeshStandardMaterial({ color: 0x4d6b45, flatShading: true });
+    const island = new THREE.Group();
+    island.position.set(14.5, 0, 3.4);
+    const sand = new THREE.Mesh(new THREE.CylinderGeometry(1, 1.15, .5, 14), islandSandMat);
+    sand.scale.set(2.3, 1, 1.2);
+    sand.position.y = .12;
+    const grass = new THREE.Mesh(new THREE.CylinderGeometry(.8, 1, .45, 12), islandGrassMat);
+    grass.scale.set(2.1, 1, 1.05);
+    grass.position.y = .5;
+    island.add(sand, grass);
+    [[-1.2, .1, .9], [-.4, -.3, 1.25], [.5, .2, 1.05], [1.3, -.15, .8], [.05, .45, .7]].forEach(([x, z, s]) => {
+        const t = new THREE.Mesh(treeGeo, islandTreeMat);
+        t.scale.setScalar(s);
+        t.position.set(x, .7 + .8 * s, z);
+        island.add(t);
+    });
+    scene.add(island);
+    const islandHit = new THREE.Mesh(new THREE.BoxGeometry(5.6, 3.4, 3.2), new THREE.MeshBasicMaterial({ visible: false }));
+    islandHit.position.set(14.5, 1.2, 3.4);
+    scene.add(islandHit);
+
     // ---------------- THE BELLE ----------------
-    // lane z=2 threads between the bridge piers; the raised deck clears the stacks
+    // A loop: upriver on lane z=2, U-turn short of Six Mile Island, back downriver on z=6.5, U-turn off screen left
+    const BELLE_PATH = { xL: -36, xR: 6.5, z0: 2, z1: 6.5 };
+    BELLE_PATH.r = (BELLE_PATH.z1 - BELLE_PATH.z0) / 2;
+    BELLE_PATH.run = BELLE_PATH.xR - BELLE_PATH.xL;
+    BELLE_PATH.arc = Math.PI * BELLE_PATH.r;
+    BELLE_PATH.len = 2 * (BELLE_PATH.run + BELLE_PATH.arc);
+    let belleS = 32;     // starts at x=-4 heading upriver
+    const belleP = new THREE.Vector3();   // (x, z, heading)
+    function bellePose(s, out) {
+        const P = BELLE_PATH, zc = P.z0 + P.r;
+        s = ((s % P.len) + P.len) % P.len;
+        if (s < P.run) return out.set(P.xL + s, P.z0, 0);
+        s -= P.run;
+        if (s < P.arc) { const a = s / P.r; return out.set(P.xR + P.r * Math.sin(a), zc - P.r * Math.cos(a), -a); }
+        s -= P.arc;
+        if (s < P.run) return out.set(P.xR - s, P.z1, -Math.PI);
+        s -= P.run;
+        const a = s / P.r;
+        return out.set(P.xL - P.r * Math.sin(a), zc + P.r * Math.cos(a), -Math.PI - a);
+    }
     const belle = makeSteamboat({ scale: 1.1 });
     belle.position.set(-4, 0.15, 2);
     scene.add(belle);
@@ -552,6 +596,50 @@ export function createHero({ canvas, container, night = false, neon = false, com
     fleurTube.visible = false;
     fleur.add(fleurTube);
     let fleurSpin = 0;
+
+    // ---------------- GALLOPALOOZA HORSE ----------------
+    // A painted horse statue on the riverfront lawn, right of the title. Click it and it rears.
+    const horseMat = new THREE.MeshStandardMaterial({ color: 0xd7263d, flatShading: true, roughness: .5 });
+    const maneMat = new THREE.MeshStandardMaterial({ color: 0xeaff00, flatShading: true, roughness: .6 });
+    const hoofMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, flatShading: true });
+    const plinthMat = new THREE.MeshStandardMaterial({ color: 0xd9d4c7, flatShading: true });
+    const horseSpot = new THREE.Group();
+    horseSpot.position.set(9.3, 0.2, -6.5);
+    horseSpot.rotation.y = -0.35;           // three-quarter view toward the camera
+    horseSpot.scale.setScalar(1.15);
+    scene.add(horseSpot);
+    const plinth = new THREE.Mesh(new THREE.BoxGeometry(1.9, .36, .8), plinthMat);
+    plinth.position.y = .18;
+    horseSpot.add(plinth);
+    // rears from the hind hooves
+    const horseRear = new THREE.Group();
+    horseRear.position.set(-.55, .36, 0);
+    horseSpot.add(horseRear);
+    const horse = new THREE.Group();
+    horse.position.x = .55;
+    horseRear.add(horse);
+    const hPart = (geo, mat, x, y, z = 0, rz = 0) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.z = rz; horse.add(m); return m; };
+    hPart(new THREE.CapsuleGeometry(.27, .95, 3, 8).rotateZ(Math.PI / 2), horseMat, 0, 1.0);
+    hPart(new THREE.BoxGeometry(.3, .72, .26), horseMat, .66, 1.36, 0, -.55);
+    hPart(new THREE.BoxGeometry(.5, .22, .22), horseMat, .98, 1.66, 0, -.45);
+    hPart(new THREE.BoxGeometry(.08, .62, .1), maneMat, .56, 1.48, 0, -.55);
+    hPart(new THREE.ConeGeometry(.12, .7, 6), maneMat, -.78, .86, 0, -.5);
+    [-.06, .06].forEach(z => hPart(new THREE.ConeGeometry(.045, .16, 4), horseMat, .84, 1.86, z, -.3));
+    const horseLegs = [[.42, .14], [.42, -.14], [-.42, .14], [-.42, -.14]].map(([x, z]) => {
+        const leg = new THREE.Group();
+        leg.position.set(x, .78, z);
+        const shin = new THREE.Mesh(new THREE.BoxGeometry(.11, .7, .11), horseMat);
+        shin.position.y = -.35;
+        const hoof = new THREE.Mesh(new THREE.BoxGeometry(.13, .1, .13), hoofMat);
+        hoof.position.y = -.73;
+        leg.add(shin, hoof);
+        horse.add(leg);
+        return leg;
+    });
+    const horseHit = new THREE.Mesh(new THREE.BoxGeometry(3, 3.2, 1.8), new THREE.MeshBasicMaterial({ visible: false }));
+    horseHit.position.y = 1.2;
+    horseSpot.add(horseHit);
+    const horseAnim = { t: -1 };
 
     // ---------------- POPE LICK TRESTLE ----------------
     const hillMat = new THREE.MeshStandardMaterial({ color: 0xbfc7ae, flatShading: true });
@@ -669,6 +757,8 @@ export function createHero({ canvas, container, night = false, neon = false, com
         { obj: bridgeHit, fn: () => clickBridge() },
         { obj: bbHit, fn: () => nextAd(true) },
         { obj: belleHit, fn: () => clickBelle() },
+        { obj: horseHit, fn: () => clickHorse() },
+        { obj: islandHit, fn: () => on.egg?.('island') },
         { obj: batHit, fn: () => clickBat() },
         { obj: fleur, fn: () => clickFleur() },
         { obj: water, fn: () => skipStone(lastPoint), quiet: true },
@@ -726,6 +816,11 @@ export function createHero({ canvas, container, night = false, neon = false, com
         belleToot = 1.6;
         for (let i = 0; i < 7; i++) setTimeout(() => puff(true), i * 110);
         on.egg?.('belle');
+    }
+    function clickHorse() {
+        if (horseAnim.t >= 0) return;
+        horseAnim.t = 0;
+        on.egg?.('horse');
     }
     function clickBat() {
         if (batSwing.t >= 0) return;
@@ -792,6 +887,9 @@ export function createHero({ canvas, container, night = false, neon = false, com
         waterMat.roughness = lerp(.32, .14, X);
         groundMat.color.copy(C.groundD).lerp(C.groundN, N);
         hillMat.color.setHex(0xbfc7ae).lerp(C.groundN, N);
+        islandSandMat.color.setHex(0xd8c9a0).lerp(C.groundN, N * .45);
+        islandGrassMat.color.setHex(0x6f8f5a).lerp(C.groundN, N * .35);
+        islandTreeMat.color.setHex(0x4d6b45).lerp(C.groundN, N * .25);
         waterMat.color.copy(C.waterD).lerp(C.waterN, S.night).lerp(C.waterX, X);
         steelMat.color.copy(C.steelD).lerp(C.steelN, N);
         hemi.intensity = lerp(1.7, .32, N);
@@ -838,10 +936,11 @@ export function createHero({ canvas, container, night = false, neon = false, com
         });
         clouds.forEach(c => { c.position.x += c.userData.speed * dt * k; if (c.position.x > 120) c.position.x = -120; });
 
-        // Belle cruising upriver
-        belle.position.x += dt * 1.25 * k;
-        if (belle.position.x > 58) belle.position.x = -58;
-        belle.position.y = .15 + Math.sin(T * 1.6) * .07;
+        // Belle looping up to Six Mile Island and back
+        belleS += dt * 1.25 * k;
+        bellePose(belleS, belleP);
+        belle.position.set(belleP.x, .15 + Math.sin(T * 1.6) * .07, belleP.y);
+        belle.rotation.y = belleP.z;
         belle.rotation.z = Math.sin(T * 1.1) * .018;
         belle.rotation.x = Math.sin(T * .9) * .012;
         belle.userData.wheel.rotation.z -= dt * 2.4 * k;
@@ -849,6 +948,16 @@ export function createHero({ canvas, container, night = false, neon = false, com
         puffTimer -= dt;
         if (puffTimer <= 0) { puff(false); puffTimer = .45 + Math.random() * .3; }
         belleToot = Math.max(0, belleToot - dt);
+
+        // horse: rear up, paw the air, settle (1.6s)
+        if (horseAnim.t >= 0) {
+            horseAnim.t += dt;
+            const u = Math.min(1, horseAnim.t / 1.6);
+            const lift = Math.sin(u * Math.PI);
+            horseRear.rotation.z = lift * .62;
+            horseLegs[0].rotation.z = horseLegs[1].rotation.z = lift * (.9 + Math.sin(horseAnim.t * 16) * .45);
+            if (u >= 1) { horseAnim.t = -1; horseRear.rotation.z = 0; horseLegs[0].rotation.z = horseLegs[1].rotation.z = 0; }
+        }
         puffs.forEach(p => {
             if (p.life <= 0) return;
             p.life -= dt;

@@ -146,33 +146,34 @@ export async function openCategoryMap(categoryKey) {
 onModalClose('categoryMapModal', () => { catToken++; });
 
 // ---------------------------------------------------------------
-// DIVE BAR CRAWL MAP
+// ROUTE MAPS (bar crawl, history walk)
 // ---------------------------------------------------------------
-let crawlMap = null;
+const routeMaps = {};
 
-export async function initCrawlMap(barNames) {
+export async function initCrawlMap(names, elId = 'crawlMap') {
     try { await loadLeaflet(); } catch (e) { return; }
-    const el = document.getElementById('crawlMap');
+    const el = document.getElementById(elId);
     if (!el) return;
-    if (crawlMap) { crawlMap.remove(); crawlMap = null; }
-    crawlMap = L.map('crawlMap', { zoomControl: false, attributionControl: true }).setView(LOU, 13);
-    L.tileLayer(TILE_URL, TILE_OPTS).addTo(crawlMap);
-    crawlMap.getContainer().classList.add('map-dark');
-    setTimeout(() => crawlMap && crawlMap.invalidateSize(), 250);
+    if (routeMaps[elId]) routeMaps[elId].remove();
+    const map = routeMaps[elId] = L.map(elId, { zoomControl: false, attributionControl: true }).setView(LOU, 13);
+    const live = () => routeMaps[elId] === map;
+    L.tileLayer(TILE_URL, TILE_OPTS).addTo(map);
+    map.getContainer().classList.add('map-dark');
+    setTimeout(() => live() && map.invalidateSize(), 250);
 
     const pts = [];
-    for (let i = 0; i < barNames.length; i++) {
-        if (!barNames[i]) continue;
-        const c = await geocodeLocation(barNames[i]);
-        if (!c || !crawlMap) continue;
+    for (let i = 0; i < names.length; i++) {
+        if (!names[i]) continue;
+        const c = await geocodeLocation(names[i]);
+        if (!c || !live()) continue;
         L.marker([c.lat, c.lng], { icon: pinIcon(i + 1) })
-            .bindTooltip(esc(barNames[i]), { permanent: true, direction: 'top', offset: [0, -12], className: 'crawl-tooltip' })
-            .addTo(crawlMap);
+            .bindTooltip(esc(names[i]), { permanent: true, direction: 'top', offset: [0, -12], className: 'crawl-tooltip' })
+            .addTo(map);
         pts.push([c.lat, c.lng]);
     }
-    if (!crawlMap) return;
-    if (pts.length > 1) L.polyline(pts, { color: '#eaff00', weight: 4, dashArray: '2, 9', lineCap: 'round' }).addTo(crawlMap);
-    if (pts.length) crawlMap.fitBounds(pts, { padding: [50, 50], maxZoom: 16 });
+    if (!live()) return;
+    if (pts.length > 1) L.polyline(pts, { color: '#eaff00', weight: 4, dashArray: '2, 9', lineCap: 'round' }).addTo(map);
+    if (pts.length) map.fitBounds(pts, { padding: [50, 50], maxZoom: 16 });
 }
 
 window.openCategoryMap = openCategoryMap;

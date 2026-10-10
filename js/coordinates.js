@@ -558,4 +558,55 @@ export const manualCoords = {
     "Riverside Farmers Market": [38.09666, -85.89492],         // addr: 7410 MOORMAN RD, LOUISVILLE, KY, 40272
     "Beulah Church Farmers Market": [38.14985, -85.58729],     // addr: 6704 BARDSTOWN RD, LOUISVILLE, KY, 40291
 
+    // ===== CHURCH PICNICS & FISH FRIES =====
+    "Ascension Picnic": [38.23322, -85.61764],                 // addr: 4600 LYNNBROOK DR, LOUISVILLE, KY, 40220
+    "St. Edward Picnic": [38.19481, -85.58112],                // addr: 9608 SUE HELEN DR, JEFFERSONTOWN, KY, 40299
+    "St. Peter the Apostle Picnic": [38.12158, -85.86805],     // addr: 5431 JOHNSONTOWN RD, LOUISVILLE, KY, 40272
+    "St. Bernard Picnic": [38.14701, -85.62281],               // addr: 7500 TANGELO DR, LOUISVILLE, KY, 40228
+    "Most Blessed Sacrament Picnic": [38.19590, -85.78292],    // addr: 3509 TAYLOR BLVD, LOUISVILLE, KY, 40215
+    "Our Lady of Mount Carmel Picnic": [38.14565, -85.77515],  // addr: 5505 NEW CUT RD, LOUISVILLE, KY, 40214
+    "St. Lawrence Picnic": [38.17297, -85.83198],              // addr: 1925 LEWISTON DR, LOUISVILLE, KY, 40216
+    "St. Paul Picnic": [38.14969, -85.83632],                  // OSM: Saint Paul Catholic Church, 6901, Dixie Highway, Louisville
+    "St. Raphael Picnic": [38.21532, -85.67709],               // addr: 2141 LANCASHIRE AVE, LOUISVILLE, KY, 40205
+    "St. Albert the Great Picnic": [38.27121, -85.62161],      // addr: 1395 GIRARD DR, LOUISVILLE, KY, 40222
+    "Holy Family Picnic": [38.20249, -85.71063],               // addr: 3926 POPLAR LEVEL RD, LOUISVILLE, KY, 40213
+    "St. Martha Picnic": [38.20184, -85.64142],                // addr: 2825 KLONDIKE LN, LOUISVILLE, KY, 40218
+    "St. Gabriel Picnic": [38.16566, -85.60001],               // addr: 5505 BARDSTOWN RD, LOUISVILLE, KY, 40291
+    "St. Agnes Picnic": [38.22098, -85.71024],                 // addr: 1920 NEWBURG RD, LOUISVILLE, KY, 40205
+    "St. Rita Picnic": [38.12621, -85.67997],                  // addr: 8709 PRESTON HWY, LOUISVILLE, KY, 40219
+    "Holy Trinity Picnic": [38.26365, -85.65352],              // addr: 501 CHERRYWOOD RD, LOUISVILLE, KY, 40207
+    "St. Joe's Picnic": [38.25481, -85.69030],                 // addr: 2823 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Good Shepherd Picnic": [38.27617, -85.80516],             // addr: 3511 RUDD AVE, LOUISVILLE, KY, 40212
+    "St. Agnes Fish Fry": [38.22098, -85.71024],               // same spot as St. Agnes Picnic
+    "St. Albert the Great Fish Fry": [38.27121, -85.62161],    // same spot as St. Albert the Great Picnic
+    "Ascension Fish Fry": [38.23322, -85.61764],               // same spot as Ascension Picnic
+    "St. Athanasius Fish Fry": [38.13856, -85.65234],          // addr: 5915 OUTER LOOP, LOUISVILLE, KY, 40219
+    "St. Augustine Fish Fry": [38.24776, -85.77348],           // addr: 1310 W BROADWAY, LOUISVILLE, KY, 40203
+    "Holy Family Fish Fry": [38.20249, -85.71063],             // same spot as Holy Family Picnic
+    "LPM's Fish Frynder": null,                                // online guide, no single location
+
+    // ===== WEIRD LOUISVILLE =====
+    "The Witches' Tree": [38.23178, -85.76427],                // OSM: node where S 6th St meets W Park Ave
+    "Pope Lick Trestle": [38.19196, -85.48836],                // OSM: Norfolk Southern viaduct over Pope Lick Creek
+    "Hunter S. Thompson's Boyhood Home": [38.23976, -85.71073], // addr: 2437 RANSDELL AVE, LOUISVILLE, KY, 40204
+    "Gallopalooza Horses": null,                               // scattered around town
+    "The World's Largest Bat": [38.25686, -85.76371],          // same spot as Louisville Slugger Museum & Factory
+    "Caufield's Vampire Bat": [38.25768, -85.76679],           // addr: 1006 W MAIN ST, LOUISVILLE, KY, 40202
+    "The Thinker": [38.21505, -85.76015],                      // OSM: Grawemeyer Hall, 2301 South 3rd Street
+    "Daniel Boone Statue": [38.23554, -85.70365],              // OSM: Daniel Boone statue (artwork), Cherokee Park
+    "Lincoln Memorial at Waterfront Park": [38.26206, -85.73967], // OSM: Lincoln Memorial, Louisville Loop
+    "Cave Hill's Famous Graves": [38.24368, -85.72626],        // same spot as Cave Hill Cemetery
+
+    // ===== GOLDEN HOUR & NIGHT SKY =====
+    "Iroquois Park North Overlook": [38.16739, -85.78582],     // OSM: North Scenic Overlook, Iroquois Park
+    "Big Four Bridge at Sunset": [38.26526, -85.73889],        // same spot as The Big Four Bridge
+    "Big Four Station Park": [38.27087, -85.74212],            // OSM: Big Four Station, Jeffersonville, IN
+    "Shawnee Park Riverbank": [38.26533, -85.82866],           // OSM: Shawnee Park, 4501
+    "Louisville Astronomical Society Star Parties": [38.28007, -85.55713], // OSM: E.P. "Tom" Sawyer State Park
+
+    // ===== SNOW DAY =====
+    "Dog Hill (Cherokee Park)": [38.23939, -85.70391],          // OSM: where Alexander Rd meets Scenic Loop
+    "Joe Creason Park": [38.21030, -85.70325],                 // addr: 1297 TREVILIAN WAY, LOUISVILLE, KY, 40213
+    "George Rogers Clark Park": [38.21570, -85.73000],         // addr: 1024 THRUSTON AVE, LOUISVILLE, KY, 40217
+
 };

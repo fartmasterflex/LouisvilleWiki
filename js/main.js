@@ -2,9 +2,13 @@
 // Main entry: router, global event wiring, 3D hero boot.
 import { initTheme, toggleTheme, currentTheme, renderHome, renderCategory, onBeenClick, surprisePick, pickAgain, toggleFilter, clearFilters, sortTable, toggleCol, onDiningText } from './ui.js';
 import { keyOfSlug } from './data.js';
+// Namespace imports for exports newer than 2026-10-10f, so a cached ui.js/data.js can't break module linking
+import * as uiNs from './ui.js';
+import * as dataNs from './data.js';
 import { bindSearch } from './search.js';
 import { openBracketSetup, initBracket } from './bracket.js';
 import { openCrawlGenerator, generateCrawl } from './crawl.js';
+import { openHistoryWalk, generateWalk } from './walk.js';
 import { openSlotMachine, initSlot } from './slot.js';
 import { openBingo, initBingo } from './bingo.js';
 import { openCategoryMap } from './map.js';
@@ -17,7 +21,7 @@ import { openModal, closeModal, topModal, prefersReducedMotion } from './utils.j
 let hero = null;
 
 // ---------------------------------------------------------------
-// ROUTER  (#/  ·  #/c/<slug>  ·  #/c/<slug>/<itemIndex>)
+// ROUTER  (#/  ·  #/c/<slug>  ·  #/c/<slug>/<itemIndex>  ·  #/p/<quick-list>)
 // ---------------------------------------------------------------
 let homeScroll = 0;
 let lastRoute = null;
@@ -26,6 +30,9 @@ function route() {
     const h = location.hash || '#/';
     const m = h.match(/^#\/c\/([^/]+)(?:\/([^/]+))?/);
     const key = m ? keyOfSlug(decodeURIComponent(m[1])) : null;
+    const pm = h.match(/^#\/p\/([^/]+)/);
+    const PRESETS = dataNs.PRESETS || {};
+    const preset = pm && PRESETS[pm[1]] && uiNs.renderPreset ? pm[1] : null;
     const wasHome = lastRoute === 'home';
     // first paint: jump straight to the right hero size instead of animating
     if (lastRoute === null) {
@@ -33,7 +40,15 @@ function route() {
         requestAnimationFrame(() => requestAnimationFrame(() => document.body.classList.remove('no-hero-anim')));
     }
 
-    if (key) {
+    if (preset) {
+        if (wasHome) homeScroll = scrollY;
+        document.body.classList.add('is-compact');
+        hero?.setCompact(true);
+        uiNs.renderPreset(preset);
+        scrollTo({ top: 0, behavior: 'instant' });
+        document.title = `${PRESETS[preset].title} · The Louisville Wiki`;
+        lastRoute = 'p/' + preset;
+    } else if (key) {
         if (wasHome) homeScroll = scrollY;
         document.body.classList.add('is-compact');
         hero?.setCompact(true);
@@ -58,7 +73,7 @@ function route() {
 // ---------------------------------------------------------------
 // TOOLS / COMMUNITY
 // ---------------------------------------------------------------
-const TOOLS = { bracket: openBracketSetup, crawl: openCrawlGenerator, slot: openSlotMachine, bingo: openBingo };
+const TOOLS = { bracket: openBracketSetup, crawl: openCrawlGenerator, slot: openSlotMachine, bingo: openBingo, walk: openHistoryWalk };
 
 let giscusLoaded = false;
 function openGiscus() {
@@ -144,6 +159,7 @@ function bindStatic() {
     });
     document.getElementById('pickAgainBtn').addEventListener('click', pickAgain);
     document.getElementById('crawlAgainBtn').addEventListener('click', generateCrawl);
+    document.getElementById('walkAgainBtn').addEventListener('click', generateWalk);
 
     const soundBtn = document.getElementById('soundBtn');
     const paintSound = () => {

@@ -42,11 +42,17 @@ const EMOJI = {
     "Day Trips": "🚗",
     "Farmers Markets": "🧺",
     "Neighborhoods": "🏘️",
-    "Louisville History Timeline": "⏳"
+    "Louisville History Timeline": "⏳",
+    "Eats & Lingo": "🗣️",
+    "Church Picnics & Fish Fries": "🐟",
+    "Weird Louisville": "🦇",
+    "Golden Hour & Night Sky": "🌅",
+    "Lost Louisville": "🕯️",
+    "Snow Day": "❄️"
 };
 
 // Categories without a sensible map view
-export const NO_MAP = new Set(["Dining Directory", "Louisville History Timeline", "Notable Annual Events", "Louisville Media", "Neighborhoods"]);
+export const NO_MAP = new Set(["Dining Directory", "Louisville History Timeline", "Notable Annual Events", "Louisville Media", "Neighborhoods", "Eats & Lingo", "Lost Louisville"]);
 
 export const MONTHS = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "Year-Round"];
 
@@ -131,3 +137,27 @@ export function randomEntry() {
 export function eventsInMonth(m) {
     return realItems("Notable Annual Events").filter(i => i.monthIndex === m);
 }
+
+// ---------------------------------------------------------------
+// GATHERED LISTS  (#/p/<id>) — built from entries across the wiki, shown as
+// cards in the Every List grid. "free" collects every entry tagged free: true.
+// ---------------------------------------------------------------
+export const PRESETS = {
+    free: {
+        title: "Free Louisville",
+        emoji: "🆓",
+        desc: "Everything on the wiki that costs nothing to get into. Parks, libraries, legends, sunsets and a summer of parish picnics.",
+        test: (item) => item.free,
+    },
+};
+
+// [{ header, cat, entries: [{ cat, idx, item }] }], one section per category
+export function presetSections(id) {
+    const p = PRESETS[id];
+    if (!p) return [];
+    return categoryKeys
+        .map(cat => ({ header: cat, cat, entries: (wikiData[cat].items || []).map((item, idx) => ({ cat, idx, item })).filter(e => e.item.name && !e.item.header && p.test(e.item)) }))
+        .filter(s => s.entries.length);
+}
+
+export const presetCount = (id) => presetSections(id).reduce((n, s) => n + s.entries.length, 0);

@@ -5,7 +5,7 @@ import { sfx } from './audio.js';
 
 export const SECRETS = [
     { id: 'fleur', emoji: '⚜️', name: 'Fleur Storm', hint: 'The title likes attention. Give it three.' },
-    { id: 'derby', emoji: '🏇', name: 'And They’re Off', hint: 'Credit the author. Three times.' },
+    { id: 'derby', emoji: '🏇', name: 'And They’re Off', hint: 'A painted horse is loose on the riverfront. Give it a pat.' },
     { id: 'boat', emoji: '🚢', name: 'Stowaway', hint: 'Something is docked at the very bottom.' },
     { id: 'gems', emoji: '💎', name: 'Hidden Gems', hint: 'Beat Cincinnati on the water.' },
     { id: 'weird', emoji: '🤪', name: 'Kept It Weird', hint: 'Take the footer’s advice.' },
@@ -22,6 +22,7 @@ export const SECRETS = [
     { id: 'cincy', emoji: '🙃', name: 'Wrong City', hint: 'Type the name of the enemy.' },
     { id: 'skipper', emoji: '🪨', name: 'Six Skipper', hint: 'Skip a stone across the Ohio. Six or better.' },
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
+    { id: 'highschool', emoji: '🏫', name: 'Two Degrees', hint: 'Type the first thing every Louisvillian asks you. Just the two key words.' },
     { id: 'console', emoji: '🧑‍💻', name: 'View Source', hint: 'Developers: check your console.' },
     { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' }
 ];

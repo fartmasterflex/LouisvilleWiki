@@ -4,38 +4,44 @@ import { state } from './state.js';
 import { openModal, onModalClose, rand, gSearch, escapeHtml as esc } from './utils.js';
 import { sfx } from './audio.js';
 
-// Curated activities — things reliably available on any given night out
+// Curated activities: local, mostly free, reliably there on any given night out. No chains.
 const curatedActivities = [
     "Walk the Big Four Bridge",
+    "Watch the Big Four light show from the Great Lawn",
     "Explore NuLu",
     "Stroll through Old Louisville",
-    "Visit the Waterfront Park",
+    "Find the Witches' Tree at 6th & Park",
+    "Walk St. James Court",
     "Tour Whiskey Row",
     "Check out the 21c Museum Hotel art",
     "Bowl at Vernon Lanes",
     "Catch a live set at Zanzabar",
-    "Swing at Topgolf",
+    "Pinball league night at Zanzabar",
     "Ride the Belle of Louisville (seasonal)",
-    "Walk through Cave Hill Cemetery at dusk",
-    "Explore Paristown Pointe murals",
-    "Axe throwing at Flying Axes",
+    "Walk Cave Hill Cemetery before the gates close",
+    "Catch the sunset at the Iroquois Park overlook",
+    "Visit the Thinker at UofL",
+    "Spot the giant vampire bat on Caufield's",
+    "Free Shakespeare in Central Park (summer)",
+    "Star party with the Louisville Astronomical Society",
+    "Dig for records at Guestroom",
+    "Browse Carmichael's Bookstore",
+    "Skate (or watch) at David Armstrong Extreme Park",
     "Trivia night at a local bar",
-    "Escape room downtown",
-    "Walk St. James Court",
     "Pickleball at GoodBounce",
     "Tiki drinks & mini golf at South Seas",
-    "Pinball at Tilt",
-    "Karaoke at Noraebar",
-    "Dueling pianos at Howl at the Moon",
-    "Rooftop drinks at 8UP",
     "Arcade games at Recbar"
 ];
 
-const names = (key) => (wikiData[key]?.items || []).filter(i => i.name && !i.header).map(i => i.name);
+// Chains and corporate spots stay off the reels even when a list carries them
+// (and the slot never sends anyone to the Pope Lick trestle at night)
+const NOT_ON_REELS = new Set(["Topgolf", "Waffle House", "Insomnia Cookies", "Pope Lick Trestle"]);
+
+const names = (key) => (wikiData[key]?.items || []).filter(i => i.name && !i.header && !NOT_ON_REELS.has(i.name)).map(i => i.name);
 
 function pools() {
     return [
-        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville")],
+        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville"), ...names("Weird Louisville")],
         names("Dining Directory"),
         [...names("Late Night & 24/7"), ...names("Bars")],
     ];

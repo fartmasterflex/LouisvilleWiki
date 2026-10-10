@@ -1,6 +1,11 @@
 // --- js/ui.js ---
 // Home + category rendering, dining table, been-there stamps, surprise picks.
 import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, COMPANIONS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
+// Namespace import: if GitHub Pages serves a cached data.js from before quick lists, this degrades instead of blanking the page
+import * as dataNs from './data.js';
+const PRESETS = dataNs.PRESETS || {};
+const presetSections = (id) => dataNs.presetSections?.(id) || [];
+const presetCount = (id) => dataNs.presetCount?.(id) || 0;
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
 import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
@@ -61,14 +66,25 @@ export function renderHome() {
         </a>`;
     };
 
-    const featured = PINNED.filter(k => wikiData[k]);
-    const companions = Object.values(COMPANIONS).filter(k => wikiData[k]);
-    const rest = orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k));
-    const featuredCard = (k, i) => {
-        const sub = COMPANIONS[k];
-        if (!sub || !wikiData[sub]) return card(k, i, true);
-        return `<div class="card-wrap">${card(k, i, true)}<a class="companion-btn" href="${catHref(sub)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(sub)}</span><span><b>${esc(sub)}</b><small>${countOf(sub)} neighborhoods and how they got that way →</small></span></a></div>`;
+    // Gathered lists (Free Louisville) ride in the grid like any other list
+    const presetCard = (id, i) => {
+        const p = PRESETS[id], n = presetCount(id);
+        return `
+        <a class="cat-card" href="#/p/${id}" style="--i:${i}" data-tilt>
+            <span class="cc-count">${n} ${n === 1 ? 'ENTRY' : 'ENTRIES'}</span>
+            <span class="cc-emoji" aria-hidden="true">${p.emoji}</span>
+            <span class="cc-name">${esc(p.title)}</span>
+            <span class="cc-desc">${esc(p.desc)}</span>
+        </a>`;
     };
+
+    const featured = PINNED.filter(k => wikiData[k]);
+    // companions (Neighborhoods) live inside their parent's page only
+    const companions = Object.values(COMPANIONS).filter(k => wikiData[k]);
+    const rest = [
+        ...orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k)).map(k => ({ name: k, html: (i) => card(k, i, false) })),
+        ...Object.keys(PRESETS).map(id => ({ name: PRESETS[id].title, html: (i) => presetCard(id, i) })),
+    ].sort((a, b) => a.name.localeCompare(b.name));
     const nFound = foundCount();
 
     content().innerHTML = `
@@ -110,9 +126,8 @@ export function renderHome() {
 
         <div class="section-head">
             <h2 class="section-title">The <span class="hl">Directory</span></h2>
-            <span class="scrawl">← the good stuff</span>
         </div>
-        <div class="featured-grid">${featured.map((k, i) => featuredCard(k, i)).join('')}</div>
+        <div class="featured-grid">${featured.map((k, i) => card(k, i, true)).join('')}</div>
         <div class="divider"></div>
 
         <div class="section-head">
@@ -148,6 +163,13 @@ export function renderHome() {
                 <span class="tc-desc">Only-in-Louisville moments. Your card remembers you. Five in a row wins.</span>
                 <span class="tc-cta">GET A CARD →</span>
             </button>
+            <button type="button" class="tool-card" data-action="tool" data-tool="walk" style="--i:4">
+                <span class="tc-badge">ON FOOT</span>
+                <span class="tc-emoji">🏛️</span>
+                <span class="tc-name">History Walk</span>
+                <span class="tc-desc">Four old landmarks and local oddities, one stroll under 2 miles, with the stories on the way.</span>
+                <span class="tc-cta">TAKE A WALK →</span>
+            </button>
         </div>
 
         <div class="divider"></div>
@@ -156,7 +178,7 @@ export function renderHome() {
             <h2 class="section-title">Every <span class="hl">List</span></h2>
             <span class="scrawl">all ${rest.length} of them, A to Z</span>
         </div>
-        <div class="cat-grid">${rest.map((k, i) => card(k, i + 4, false)).join('')}</div>
+        <div class="cat-grid">${rest.map((r, i) => r.html(i + 4)).join('')}</div>
 
         <div class="divider"></div>
 
@@ -281,6 +303,8 @@ function typeLabel(type, key) {
     return { table: 'sortable table', ranked: 'ranked by age', alpha: 'a → z', events: 'calendar', custom: 'curated list' }[type] || 'list';
 }
 
+const freeTag = (item) => item.free ? '<span class="free-tag" title="Free to get in">FREE</span>' : '';
+
 function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {}) {
     const been = isBeen(cat, item.name);
     const site = item.url ? item.url : gLucky(item.name);
@@ -290,7 +314,7 @@ function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {})
         <div class="entry-main">
             ${rank !== null ? `<span class="rank">#${rank}</span>` : ''}
             <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>
-            ${meta ? `<span class="entry-meta">${meta}</span>` : ''}
+            ${meta ? `<span class="entry-meta">${meta}</span>` : ''}${freeTag(item)}
             ${item.note ? `<p class="entry-note">${esc(item.note)}</p>` : ''}
         </div>
         <div class="entry-actions">
@@ -351,7 +375,7 @@ function renderRanked(key, data) {
             <div class="yr">${esc(item.year || '—')}</div>
             <div class="entry-main">
                 ${rank ? `<span class="rank">#${rank}</span>` : ''}
-                <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>
+                <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}
                 ${item.note ? `<p class="entry-note">${esc(item.note)}</p>` : ''}
                 ${age !== null ? `<span class="age">${age} years & counting</span>` : ''}
             </div>
@@ -393,7 +417,7 @@ function renderEvents(key, data) {
             <h3>${MONTHS[m] || 'Sometime'} <small>${byMonth[m].length} EVENT${byMonth[m].length > 1 ? 'S' : ''}</small></h3>
             <ul>${byMonth[m].map(({ item, idx }) => `
                 <li id="e-${slugOf(key)}-${idx}" class="entry-lite">
-                    <a href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>
+                    <a href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}
                     <a class="btn-site" href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener">↗</a>
                 </li>`).join('')}
             </ul>
@@ -416,6 +440,41 @@ function renderTimeline(key, data) {
         </li>`;
     });
     return html + '</ol>';
+}
+
+// ---------------------------------------------------------------
+// GATHERED LISTS  (#/p/<id>) — entries pulled from across the wiki
+// ---------------------------------------------------------------
+export function renderPreset(id) {
+    const p = PRESETS[id];
+    if (!p) return renderHome();
+    state.currentCategory = '';
+    const sections = presetSections(id);
+    const n = sections.reduce((s, x) => s + x.entries.length, 0);
+    let i = 0;
+    const list = sections.map(s => `
+        <li class="entry-header"><h3><a href="${catHref(s.cat)}">${emojiOf(s.cat)} ${esc(s.header)} →</a></h3></li>
+        ${s.entries.map(e => entryHTML(e.cat, e.item, e.idx, { i: i++ })).join('')}`).join('');
+
+    content().innerHTML = `
+    <div class="view cat-page">
+        <nav class="crumbs" aria-label="Breadcrumb">
+            <a class="back-btn" href="#/">← INDEX</a>
+            <span class="crumb-trail">/ ${esc(p.title)}</span>
+        </nav>
+
+        <header class="cat-hero">
+            <div class="ch-emoji" aria-hidden="true">${p.emoji}</div>
+            <h2 class="cat-title">${esc(p.title)}</h2>
+            <div class="cat-sub">
+                <span class="stamp ink">${n} entries</span>
+                <span class="stamp">from ${sections.length} lists</span>
+            </div>
+        </header>
+        <p class="cat-desc">${esc(p.desc)}</p>
+
+        <div class="cat-body"><ul class="entries">${list}</ul></div>
+    </div>`;
 }
 
 // ---------------------------------------------------------------

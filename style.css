@@ -191,29 +191,6 @@ select:focus-visible { outline: none; }
 .wiki-title:hover .t-lou .ch:nth-child(odd) { transform: translateY(-.03em) rotate(-2deg); }
 .wiki-title:hover .t-lou .ch:nth-child(even) { transform: translateY(.02em) rotate(2deg); }
 
-.hero-stickers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 18px;
-    align-items: center;
-}
-
-.sticker {
-    border: 2px solid var(--ink);
-    font: 700 .92rem/1 var(--f-mono);
-    padding: 7px 11px;
-    cursor: pointer;
-    user-select: none;
-    box-shadow: 3px 3px 0 var(--shadow);
-    transition: transform .2s var(--spring), box-shadow .15s;
-}
-
-.sticker:active { transform: translate(2px, 2px) !important; box-shadow: 1px 1px 0 var(--shadow); }
-
-.sticker-author { background: var(--ink); color: var(--paper); transform: rotate(-1.5deg); }
-.sticker-author:hover { transform: rotate(-3deg) scale(1.04); }
-
 @keyframes wobble {
     0% { transform: rotate(1.8deg) scale(1); }
     30% { transform: rotate(-6deg) scale(1.12); }
@@ -327,7 +304,6 @@ body.is-compact .hero { height: 176px; min-height: 176px; }
 body.is-compact .wiki-title { font-size: clamp(2rem, 5.4vw, 3.4rem); }
 body.is-compact .hero-hint { opacity: 0; pointer-events: none; transform: translateY(8px); }
 body.is-compact .hero-overlay { bottom: 18px; }
-body.is-compact .hero-stickers { margin-top: 10px; }
 body.is-compact .title-link { cursor: pointer; }
 
 /* ── Neon title: WIKI becomes a lime tube; LOUISVILLE stays solid ── */
@@ -598,10 +574,6 @@ main { outline: none; min-height: 50vh; }
     margin-bottom: 34px;
 }
 
-/* A list that rides along under a featured card (Neighborhoods under the Timeline) */
-.card-wrap { display: flex; flex-direction: column; gap: 12px; }
-.card-wrap .cat-card { flex: 1; }
-.companion-btn,
 .companion-banner {
     display: flex;
     align-items: center;
@@ -614,13 +586,9 @@ main { outline: none; min-height: 50vh; }
     text-decoration: none;
     transition: transform .2s var(--spring), box-shadow .2s;
 }
-.companion-btn:hover,
 .companion-banner:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); }
-.companion-btn .cb-emoji,
 .companion-banner .cb-emoji { font-size: 1.7rem; line-height: 1; }
-.companion-btn b,
 .companion-banner b { display: block; font: 400 1.05rem/1.05 var(--f-display); text-transform: uppercase; }
-.companion-btn small,
 .companion-banner small { display: block; font-size: .72rem; margin-top: 3px; }
 .companion-banner { margin: 0 0 22px; padding: 16px 18px; }
 .companion-banner b { font-size: 1.3rem; }
@@ -760,7 +728,7 @@ main { outline: none; min-height: 50vh; }
 /* Tools */
 .tool-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 22px;
 }
 
@@ -2227,7 +2195,6 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
    ===================================================================== */
 [data-theme="dark"] .hero { border-bottom: 1px solid var(--neon-1); box-shadow: 0 1px 12px rgba(255, 79, 163, .4); }
 [data-theme="dark"] .hero-hint { background: rgba(4, 6, 13, .7); color: #cfe9f5; border: 1px solid rgba(47, 212, 255, .6); border-radius: 4px; }
-[data-theme="dark"] .sticker-author { background: rgba(4, 6, 13, .72); color: var(--ink); border: 1px solid var(--line); border-radius: 4px; box-shadow: none; }
 [data-theme="dark"] .round-btn,
 [data-theme="dark"] #neon-switch { background: #1a2036; border: 1.5px solid #3a4670; box-shadow: none; }
 
@@ -2296,9 +2263,54 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
 [data-theme="dark"] .hero-fallback { background: radial-gradient(circle at 78% 26%, #f5f1e4 0 3.5%, transparent 3.8%), linear-gradient(180deg, #03050f 0%, #141638 100%); }
 [data-theme="dark"] .hero-fallback::after { background: #0f1528; }
 
-[data-theme="dark"] .companion-btn,
 [data-theme="dark"] .companion-banner { background: var(--paper-2); color: var(--ink); border: 1.5px solid var(--neon-lime); border-radius: 12px; box-shadow: 0 0 14px -2px rgba(217, 255, 58, .3), 5px 6px 0 rgba(0, 0, 0, .55); }
-[data-theme="dark"] .companion-btn b,
 [data-theme="dark"] .companion-banner b { color: var(--neon-lime); }
-[data-theme="dark"] .companion-btn:hover,
 [data-theme="dark"] .companion-banner:hover { box-shadow: 0 0 6px var(--neon-lime), 0 0 24px -2px var(--neon-lime), 5px 9px 0 rgba(0, 0, 0, .55); }
+
+/* =====================================================================
+   FREE TAGS, HISTORY WALK, TWO DEGREES
+   ===================================================================== */
+.free-tag {
+    display: inline-block;
+    vertical-align: 2px;
+    margin-left: 8px;
+    padding: 1px 6px;
+    font: 700 .6rem/1.4 var(--f-mono);
+    letter-spacing: .12em;
+    color: #111;
+    background: var(--highlight);
+    border: 1.5px solid var(--ink);
+}
+.entry-lite .free-tag { margin-left: 6px; vertical-align: 1px; }
+
+.entry-header h3 a { color: inherit; text-decoration: none; }
+.entry-header h3 a:hover { text-decoration: underline; }
+
+.walk-stops {
+    list-style: none;
+    margin: 0;
+    padding: 10px 0;
+    display: grid;
+    gap: 9px;
+    border-top: 2px dashed #111;
+    border-bottom: 2px dashed #111;
+    text-align: left;
+}
+.walk-stop b { font: 700 1rem var(--f-mono); text-transform: uppercase; }
+.walk-stop .walk-year { font: 700 .72rem var(--f-mono); border: 1.5px solid #111; padding: 0 5px; vertical-align: 2px; }
+.walk-stop small { display: block; font-size: .78rem; line-height: 1.35; margin-top: 2px; }
+.walk-stop.pop { animation: popIn .4s var(--spring) both; }
+
+.hs-box { text-align: center; box-shadow: 10px 10px 0 var(--red); }
+.hs-box .modal-title { margin: 6px 0 14px; }
+.hs-box .dropdown-tool { width: 100%; }
+.hs-answer { min-height: 3.2em; margin-top: 14px; font-size: 1rem; line-height: 1.45; }
+.hs-answer p { margin: 0; }
+.hs-answer.pop { animation: popIn .45s var(--spring) both; }
+
+@media (max-width: 1020px) {
+    .tool-grid .tool-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }
+}
+
+[data-theme="dark"] .free-tag { background: transparent; color: var(--neon-lime); border: 1px solid var(--neon-lime); border-radius: 3px; text-shadow: 0 0 6px rgba(217, 255, 58, .45); }
+[data-theme="dark"] .hs-box { box-shadow: 0 0 0 1.5px var(--neon-1), 0 0 30px -4px rgba(255, 79, 163, .5); }

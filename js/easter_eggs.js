@@ -276,6 +276,59 @@ export function cincy() {
 }
 
 // -----------------------------------------------
+// TWO DEGREES (type "highschool"): the only question that matters here
+// -----------------------------------------------
+const NOT_FROM_HERE = "I'm not from here";
+const ACROSS_RIVER = "Across the river (Indiana)";
+const SCHOOLS = [
+    "Assumption", "Atherton", "Ballard", "Brown School", "Butler", "Central", "Christian Academy", "DeSales", "Doss",
+    "duPont Manual", "Eastern", "Fairdale", "Fern Creek", "Holy Cross", "Iroquois", "Jeffersontown", "Kentucky Country Day",
+    "Louisville Collegiate", "Louisville Male", "Mercy Academy", "Moore", "Pleasure Ridge Park", "Presentation Academy",
+    "Sacred Heart Academy", "Seneca", "Shawnee", "Southern", "St. Francis", "St. Xavier", "Trinity", "Valley", "Waggener", "Western",
+];
+const SCHOOL_LINES = {
+    "duPont Manual": "A Crimson! So you have opinions about the Male game. Male and Manual have been at it since 1893.",
+    "Louisville Male": "A Bulldog! So you have opinions about the Manual game. Male and Manual have been at it since 1893.",
+    "St. Xavier": "A Tiger. You've networked three classmates into jobs since breakfast, and you still talk about the Trinity game.",
+    "Trinity": "A Shamrock. Somewhere a state-championship trophy just glowed, and you still talk about the St. X game.",
+    "Sacred Heart Academy": "A Valkyrie! You have run into four classmates at a church picnic this summer alone.",
+    "Assumption": "A Rocket! You have run into four classmates at a church picnic this summer alone.",
+    "Mercy Academy": "A Jaguar! You have run into four classmates at a church picnic this summer alone.",
+    "Presentation Academy": "Presentation! Tippy says hi. You have run into four classmates at a church picnic this summer alone.",
+    [NOT_FROM_HERE]: "Not from here? That's fine. We'll just ask where you go to church instead.",
+    [ACROSS_RIVER]: "Across the river! So you've already been asked this four times today. Welcome back over the bridge.",
+};
+const SMALL_WORLD_LINES = [
+    "{s}? Then we have at least four mutual friends and one shared ex.",
+    "{s}! Small world. Well, small city.",
+    "Oh, {s}. Say no more. I know exactly which church picnic you hit first.",
+];
+
+export function whatHighSchool() {
+    const sel = document.getElementById('hsSelect');
+    const ans = document.getElementById('hsAnswer');
+    if (!sel || !ans) return;
+    if (!sel.options.length) {
+        sel.innerHTML = `<option value="">Pick one…</option>` +
+            [...SCHOOLS, ACROSS_RIVER, NOT_FROM_HERE].map(s => `<option>${escapeHtml(s)}</option>`).join('');
+        sel.addEventListener('change', () => {
+            const s = sel.value;
+            if (!s) { ans.innerHTML = ''; return; }
+            const line = SCHOOL_LINES[s] || rand(SMALL_WORLD_LINES).replace('{s}', s);
+            ans.innerHTML = `<p>${escapeHtml(line)}</p>`;
+            ans.classList.remove('pop');
+            void ans.offsetWidth;
+            ans.classList.add('pop');
+            sfx.pop();
+            unlock('highschool');
+        });
+    }
+    sel.value = '';
+    ans.innerHTML = '';
+    openModal('hsModal');
+}
+
+// -----------------------------------------------
 // 502 BAD GATEWAY (type "502")
 // -----------------------------------------------
 export function badGateway() {
@@ -534,6 +587,13 @@ export function onHeroEgg(id, payload) {
         case 'pope':
             popeLick();
             break;
+        case 'horse':
+            churchill();
+            break;
+        case 'island':
+            sfx.pop();
+            toast('<b>Six Mile Island</b><br><small>An 81-acre state nature preserve you can only reach by boat. The Great Steamboat Race turns around here every Derby Festival.</small>', { emoji: '🏝️', duration: 4200 });
+            break;
         case 'splash':
             sfx.tick();
             break;
@@ -603,21 +663,12 @@ export function initEasterEggs() {
         if (titleClicks >= 3) { titleClicks = 0; fleurRain(); }
     });
 
-    // subtitle x3
-    let subClicks = 0, subTimer = null;
-    document.getElementById('subtitleBtn')?.addEventListener('click', () => {
-        subClicks++;
-        clearTimeout(subTimer);
-        subTimer = setTimeout(() => { subClicks = 0; }, 900);
-        if (subClicks >= 3) { subClicks = 0; churchill(); }
-    });
-
     document.getElementById('neon-switch')?.addEventListener('click', toggleNeon);
     document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
 
     // typed words + konami
-    const WORDS = { gonzo, ali, bourbon, cincinnati: cincy, cincy, '502': badGateway, derby: churchill, popelick: popeLick, thunder, fleur: fleurRain };
+    const WORDS = { gonzo, ali, bourbon, cincinnati: cincy, cincy, '502': badGateway, derby: churchill, popelick: popeLick, thunder, fleur: fleurRain, highschool: whatHighSchool, 'high school': whatHighSchool };
     Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
     const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let kIdx = 0, buf = '';
