@@ -598,6 +598,33 @@ main { outline: none; min-height: 50vh; }
     margin-bottom: 34px;
 }
 
+/* A list that rides along under a featured card (Neighborhoods under the Timeline) */
+.card-wrap { display: flex; flex-direction: column; gap: 12px; }
+.card-wrap .cat-card { flex: 1; }
+.companion-btn,
+.companion-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--highlight);
+    color: #111;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--shadow);
+    text-decoration: none;
+    transition: transform .2s var(--spring), box-shadow .2s;
+}
+.companion-btn:hover,
+.companion-banner:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); }
+.companion-btn .cb-emoji,
+.companion-banner .cb-emoji { font-size: 1.7rem; line-height: 1; }
+.companion-btn b,
+.companion-banner b { display: block; font: 400 1.05rem/1.05 var(--f-display); text-transform: uppercase; }
+.companion-btn small,
+.companion-banner small { display: block; font-size: .72rem; margin-top: 3px; }
+.companion-banner { margin: 0 0 22px; padding: 16px 18px; }
+.companion-banner b { font-size: 1.3rem; }
+
 .cat-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
@@ -2268,3 +2295,10 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
 /* the flat placeholder shown while the 3D city loads */
 [data-theme="dark"] .hero-fallback { background: radial-gradient(circle at 78% 26%, #f5f1e4 0 3.5%, transparent 3.8%), linear-gradient(180deg, #03050f 0%, #141638 100%); }
 [data-theme="dark"] .hero-fallback::after { background: #0f1528; }
+
+[data-theme="dark"] .companion-btn,
+[data-theme="dark"] .companion-banner { background: var(--paper-2); color: var(--ink); border: 1.5px solid var(--neon-lime); border-radius: 12px; box-shadow: 0 0 14px -2px rgba(217, 255, 58, .3), 5px 6px 0 rgba(0, 0, 0, .55); }
+[data-theme="dark"] .companion-btn b,
+[data-theme="dark"] .companion-banner b { color: var(--neon-lime); }
+[data-theme="dark"] .companion-btn:hover,
+[data-theme="dark"] .companion-banner:hover { box-shadow: 0 0 6px var(--neon-lime), 0 0 24px -2px var(--neon-lime), 5px 9px 0 rgba(0, 0, 0, .55); }

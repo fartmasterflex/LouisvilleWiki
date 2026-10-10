@@ -1,6 +1,6 @@
 // --- js/ui.js ---
 // Home + category rendering, dining table, been-there stamps, surprise picks.
-import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
+import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, COMPANIONS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
 import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
@@ -62,7 +62,13 @@ export function renderHome() {
     };
 
     const featured = PINNED.filter(k => wikiData[k]);
-    const rest = orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS);
+    const companions = Object.values(COMPANIONS).filter(k => wikiData[k]);
+    const rest = orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k));
+    const featuredCard = (k, i) => {
+        const sub = COMPANIONS[k];
+        if (!sub || !wikiData[sub]) return card(k, i, true);
+        return `<div class="card-wrap">${card(k, i, true)}<a class="companion-btn" href="${catHref(sub)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(sub)}</span><span><b>${esc(sub)}</b><small>${countOf(sub)} neighborhoods and how they got that way →</small></span></a></div>`;
+    };
     const nFound = foundCount();
 
     content().innerHTML = `
@@ -106,7 +112,7 @@ export function renderHome() {
             <h2 class="section-title">The <span class="hl">Directory</span></h2>
             <span class="scrawl">← the good stuff</span>
         </div>
-        <div class="featured-grid">${featured.map((k, i) => card(k, i, true)).join('')}</div>
+        <div class="featured-grid">${featured.map((k, i) => featuredCard(k, i)).join('')}</div>
         <div class="divider"></div>
 
         <div class="section-head">
@@ -215,6 +221,10 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
     else if (data.type === 'events') body = renderEvents(key, data);
     else if (key === 'Louisville History Timeline') body = renderTimeline(key, data);
     else body = renderSections(key, data, key === 'Neighborhoods' ? 'hood-grid' : '');
+    const sub = COMPANIONS[key];
+    const parent = Object.keys(COMPANIONS).find(k => COMPANIONS[k] === key);
+    if (sub && wikiData[sub]) body = `<a class="companion-banner" href="${catHref(sub)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(sub)}</span><span><b>Explore the ${esc(sub)}</b><small>The history continues street by street: ${countOf(sub)} neighborhoods →</small></span></a>` + body;
+    if (parent && wikiData[parent]) body = `<a class="companion-banner" href="${catHref(parent)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(parent)}</span><span><b>Part of the ${esc(parent)}</b><small>← Back to the full timeline</small></span></a>` + body;
 
     content().innerHTML = `
     <div class="view cat-page">

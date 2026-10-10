@@ -8,6 +8,8 @@ export { wikiData };
 export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks", "Louisville History Timeline"];
 // Shown as its own button in the "happening" strip instead of a card
 export const ANNUAL_EVENTS = "Notable Annual Events";
+// Lists that live under a featured card instead of in the big grid
+export const COMPANIONS = { "Louisville History Timeline": "Neighborhoods" };
 
 // Presentation only — content lives in library_data.js
 const EMOJI = {
