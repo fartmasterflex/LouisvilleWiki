@@ -2318,18 +2318,8 @@ body.gonzo #app { animation: hue 2.4s linear infinite; }
 #dorkModal.open .dork-word { animation: dorkSlam .5s var(--spring) both; }
 @keyframes dorkSlam { from { transform: scale(2.6) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-4deg); opacity: 1; } }
 
-/* Food Coma: the page dozes off */
-#app.coma,
-#hero.coma { animation: doze 4.8s ease-in-out both; }
-@keyframes doze {
-    0% { filter: none; }
-    25%, 80% { filter: blur(3px) brightness(.55) saturate(.5); }
-    100% { filter: none; }
-}
-.coma-overlay { background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, .55) 100%); animation: comaFade 4.8s ease-in-out both; }
-@keyframes comaFade { 0%, 100% { opacity: 0; } 20%, 85% { opacity: 1; } }
-.coma-z { position: absolute; bottom: 10%; font: 400 1em var(--f-display); color: var(--highlight); text-shadow: 3px 3px 0 #111; animation: zFloat 2.6s ease-out infinite both; }
-@keyframes zFloat { from { transform: translate(0, 0) rotate(-10deg); opacity: 0; } 20% { opacity: 1; } to { transform: translate(60px, -60vh) rotate(14deg); opacity: 0; } }
+/* Dainty Champ: the stick (a short dowel) that gets whacked across the page */
+.dainty-stick { position: absolute; left: 0; top: 0; width: 96px; height: 18px; border-radius: 9px; background: linear-gradient(#d9a066, #9a6636); border: 2px solid #3a2410; box-shadow: 2px 2px 0 rgba(0, 0, 0, .35); will-change: transform; }
 
 @media (max-width: 1020px) {
     .tool-grid .tool-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }

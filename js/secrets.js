@@ -11,22 +11,23 @@ export const SECRETS = [
     { id: 'weird', emoji: '🤪', name: 'Kept It Weird', hint: 'Take the footer’s advice.' },
     { id: 'neon', emoji: '💡', name: 'Open Late', hint: 'Every good dive has a switch by the door.' },
     { id: 'cardinal', emoji: '🐦', name: 'State Bird', hint: 'Sit still a minute. Then be quick.' },
-    { id: 'thunder', emoji: '🎆', name: 'Thunder', hint: 'Night sky. Something streaks by. Catch it.' },
+    { id: 'thunder', emoji: '🎆', name: 'Thunder', hint: 'Type the fireworks show that kicks off Derby season.' },
     { id: 'gonzo', emoji: '🦇', name: 'Bat Country', hint: 'Type the good doctor’s brand of journalism.' },
     { id: 'ali', emoji: '🦋', name: 'The Greatest', hint: 'Type the Champ’s name. Then catch one.' },
     { id: 'bourbon', emoji: '🥃', name: 'Neat', hint: 'Type what sleeps in the rickhouse.' },
     { id: 'pope', emoji: '🐐', name: 'The Trestle', hint: 'At night, look under the bridge on the hill.' },
     { id: 'bridge', emoji: '🌈', name: 'Light Show', hint: 'The Big Four likes to be poked.' },
     { id: 'belle', emoji: '📯', name: 'All Aboard', hint: 'Say hi to the old steamboat.' },
+    { id: 'star', emoji: '🌠', name: 'Make a Wish', hint: 'Night sky. Something streaks by. Catch it.' },
     { id: 'skipper', emoji: '🪨', name: 'Six Skipper', hint: 'Skip a stone across the Ohio. Six or better.' },
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
     { id: 'highschool', emoji: '🏫', name: 'Two Degrees', hint: 'The city is clickable. Go on, click a building.' },
     { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' },
-    { id: 'coma', emoji: '😴', name: 'Food Coma', hint: 'Type the open-faced sandwich (no space). Try to stay awake.' },
-    // The super secret: counts toward the total but never gets a slot on the vault grid. The vault only whispers about it.
-    { id: 'console', emoji: '🧑‍💻', name: 'The Back Room', hidden: true },
+    { id: 'dainty', emoji: '🪵', name: 'Dainty Champ', hint: 'Type Schnitzelburg’s favorite street game.' },
 ];
-const BACK_ROOM = SECRETS.find(s => s.hidden);
+
+// The super secret: not on the vault grid and not in the count. The vault only whispers about it.
+const BACK_ROOM = { id: 'console', emoji: '🧑‍💻', name: 'The Back Room' };
 
 const KEY = 'louSecrets';
 let found = store.get(KEY, {}) || {};
@@ -37,12 +38,12 @@ export const foundCount = () => SECRETS.filter(s => found[s.id]).length;
 export const onSecretsChange = (fn) => listeners.add(fn);
 
 export function unlock(id) {
-    const s = SECRETS.find(x => x.id === id);
+    const s = SECRETS.find(x => x.id === id) || (id === BACK_ROOM.id ? BACK_ROOM : null);
     if (!s || found[id]) return false;
     found[id] = Date.now();
     store.set(KEY, found);
     const n = foundCount();
-    const line = s === BACK_ROOM ? `not on any list. tell no one. (${n}/${SECRETS.length})` : `${n}/${SECRETS.length} secrets found`;
+    const line = s === BACK_ROOM ? 'not on any list. tell no one.' : `${n}/${SECRETS.length} secrets found`;
     setTimeout(() => {
         sfx.secret();
         toast(`<b>${escapeHtml(s.name)}</b><br><small>${line}</small>`, { kicker: s === BACK_ROOM ? 'SUPER SECRET' : 'SECRET FOUND', emoji: s.emoji, secret: true, duration: 4200 });
@@ -73,7 +74,7 @@ export function renderStickerBook() {
     const grid = document.getElementById('stickerGrid');
     if (!grid) return;
     const n = foundCount();
-    grid.innerHTML = SECRETS.filter(s => !s.hidden).map((s, i) => {
+    grid.innerHTML = SECRETS.map((s, i) => {
         const f = !!found[s.id];
         const rot = ((i * 37) % 7) - 3;
         const reopen = f && s.id === 'gems' ? ' data-open-gems role="button" tabindex="0" title="Open the Hidden Gems again"' : '';

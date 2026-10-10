@@ -146,7 +146,7 @@ export async function churchill() {
 }
 
 // -----------------------------------------------
-// THUNDER OVER LOUISVILLE (type "thunder", or catch the shooting star)
+// THUNDER OVER LOUISVILLE (type "thunder")
 // -----------------------------------------------
 let thunderOn = false;
 export async function thunder() {
@@ -299,30 +299,26 @@ export function whatHighSchool() {
 }
 
 // -----------------------------------------------
-// FOOD COMA (type "hotbrown"): the page dozes off, Mornay Mutual has you covered
+// DAINTY CHAMP (type "dainty"): Schnitzelburg's street game. Whack the stick, see how far it flies.
 // -----------------------------------------------
-export function foodComa() {
-    const app = document.getElementById('app');
-    if (!app || app.classList.contains('coma')) return;
-    unlock('coma');
-    const o = overlay('coma-overlay');
-    banner(o, 'Food coma 😴<small>MORNAY MUTUAL HAS YOU COVERED</small>', 4300);
-    for (let i = 0; i < 7; i++) {
-        const z = document.createElement('div');
-        z.className = 'coma-z';
-        z.textContent = 'z';
-        z.style.cssText = `left:${20 + Math.random() * 60}%;font-size:${28 + Math.random() * 40}px;animation-delay:${i * .45}s;`;
-        o.appendChild(z);
-    }
-    const hero = document.getElementById('hero');
-    app.classList.add('coma');
-    hero?.classList.add('coma');
+export function dainty() {
+    if (document.querySelector('.dainty-overlay')) return;
+    const feet = 18 + Math.floor(Math.random() * 75);
+    const o = overlay('dainty-overlay');
+    const stick = document.createElement('div');
+    stick.className = 'dainty-stick';
+    o.appendChild(stick);
+    sfx.crack();
+    stick.animate([
+        { transform: 'translate(8vw, 70vh) rotate(0deg)' },
+        { transform: `translate(${45 + feet * .4}vw, ${18 - feet * .1}vh) rotate(900deg)`, offset: .55 },
+        { transform: `translate(${60 + feet * .45}vw, 78vh) rotate(1440deg)` },
+    ], { duration: 1500, easing: 'cubic-bezier(.2, .7, .4, 1)', fill: 'forwards' });
     setTimeout(() => {
-        app.classList.remove('coma');
-        hero?.classList.remove('coma');
-        o.remove();
-        toast('You slept through the whole afternoon. Worth it.', { kicker: 'GOOD MORNING', emoji: '🥪' });
-    }, 4800);
+        banner(o, `WHACK! ${feet} feet<small>${feet >= 70 ? 'SCHNITZELBURG LEGEND' : feet >= 45 ? 'RESPECTABLE. HAVE A BEER.' : 'THE REGULARS ARE TRYING NOT TO LAUGH'}</small>`, 2600);
+        unlock('dainty');
+    }, 1100);
+    setTimeout(() => o.remove(), 4200);
 }
 
 // -----------------------------------------------
@@ -583,6 +579,8 @@ const SKIP_BRAG = [
     'The Belle’s captain saluted.',
     'Your granddad would be proud.',
 ];
+const WISHES = ['No construction on Bardstown Road.', 'A parking spot in NuLu.', 'Derby tickets. Good ones.', 'A Hot Brown that doesn’t put you to sleep.', 'The Watterson, but empty.', 'Cards AND Cats both win. (impossible)', 'Spring that lasts longer than a week.'];
+
 export function onHeroEgg(id, payload) {
     switch (id) {
         case 'bridge':
@@ -602,9 +600,9 @@ export function onHeroEgg(id, payload) {
             fleurRain();
             break;
         case 'star':
-            // make a wish: you get Thunder Over Louisville
             sfx.ding();
-            thunder();
+            unlock('star');
+            toast(`Wish granted: ${rand(WISHES)}`, { kicker: 'SHOOTING STAR', emoji: '🌠' });
             break;
         case 'pope':
             popeLick();
@@ -692,8 +690,8 @@ export function initEasterEggs() {
     document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
 
-    // typed words (Thunder also comes from catching the shooting star; Two Degrees from clicking the city)
-    const WORDS = { gonzo, ali, bourbon, thunder, hotbrown: foodComa, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
+    // typed words (Two Degrees comes from clicking the city)
+    const WORDS = { gonzo, ali, bourbon, thunder, dainty, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
     Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
     let buf = '';
     document.addEventListener('keydown', (e) => {
