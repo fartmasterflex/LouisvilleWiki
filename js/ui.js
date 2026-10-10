@@ -6,6 +6,8 @@ import * as dataNs from './data.js';
 const PRESETS = dataNs.PRESETS || {};
 const presetSections = (id) => dataNs.presetSections?.(id) || [];
 const presetCount = (id) => dataNs.presetCount?.(id) || 0;
+// Lists shown inside a parent list's page (a cached older data.js stores a single name, not an array)
+const companionsOf = (key) => [].concat(COMPANIONS[key] || []).filter(k => wikiData[k]);
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
 import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
@@ -79,8 +81,8 @@ export function renderHome() {
     };
 
     const featured = PINNED.filter(k => wikiData[k]);
-    // companions (Neighborhoods) live inside their parent's page only
-    const companions = Object.values(COMPANIONS).filter(k => wikiData[k]);
+    // companions (Neighborhoods, Lost Louisville, …) live inside their parent's page only
+    const companions = Object.keys(COMPANIONS).flatMap(companionsOf);
     const rest = [
         ...orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k)).map(k => ({ name: k, html: (i) => card(k, i, false) })),
         ...Object.keys(PRESETS).map(id => ({ name: PRESETS[id].title, html: (i) => presetCard(id, i) })),
@@ -243,10 +245,11 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
     else if (data.type === 'events') body = renderEvents(key, data);
     else if (key === 'Louisville History Timeline') body = renderTimeline(key, data);
     else body = renderSections(key, data, key === 'Neighborhoods' ? 'hood-grid' : '');
-    const sub = COMPANIONS[key];
-    const parent = Object.keys(COMPANIONS).find(k => COMPANIONS[k] === key);
-    if (sub && wikiData[sub]) body = `<a class="companion-banner" href="${catHref(sub)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(sub)}</span><span><b>Explore the ${esc(sub)}</b><small>The history continues street by street: ${countOf(sub)} neighborhoods →</small></span></a>` + body;
-    if (parent && wikiData[parent]) body = `<a class="companion-banner" href="${catHref(parent)}"><span class="cb-emoji" aria-hidden="true">${emojiOf(parent)}</span><span><b>Part of the ${esc(parent)}</b><small>← Back to the full timeline</small></span></a>` + body;
+    const subs = companionsOf(key);
+    const parent = Object.keys(COMPANIONS).find(k => companionsOf(k).includes(key));
+    const banner = (href, emoji, title, line) => `<a class="companion-banner" href="${href}"><span class="cb-emoji" aria-hidden="true">${emoji}</span><span><b>${esc(title)}</b><small>${esc(line)}</small></span></a>`;
+    if (subs.length) body = `<div class="companion-row">${subs.map(s => banner(catHref(s), emojiOf(s), s, (dataNs.COMPANION_NOTES?.[s] || (n => `${n} entries →`))(countOf(s)))).join('')}</div>` + body;
+    if (parent && wikiData[parent]) body = `<div class="companion-row">${banner(catHref(parent), emojiOf(parent), `Part of ${parent}`, `← Back to ${parent}`)}</div>` + body;
 
     content().innerHTML = `
     <div class="view cat-page">

@@ -290,38 +290,6 @@ export const wikiData = {
             { name: "Beechmont Bakeshop", location: "South Louisville", cuisine: "Bakery & Breakfast", dish: "Rotating breads & pastries inside Foxing Books (1314 Bluegrass Ave)", url: "https://www.google.com/maps/search/?api=1&query=Beechmont+Bakeshop+Louisville+KY", price: "$" }
         ]
     },
-    "Late Night & 24/7": {
-        description: "Where to go when the bars close or the insomnia kicks in. Late hours shift, so call before a 3 AM trek.",
-        type: "custom",
-        items: [
-            { header: "The 24/7 Legends" },
-            { name: "Burger Boy Diner", note: "Old Louisville. The undisputed king of 24/7 diner food." },
-            { name: "Burger Girl Diner", note: "Frankfort Ave. The sister diner to Burger Boy, also open around the clock." },
-            { name: "High Foods", note: "Fegenbush Ln. Smash burgers, wings and breakfast, 24 hours a day." },
-            { name: "Waffle House", note: "Bardstown Rd & Crittenden Drive are late-night cultural experiences." },
-            { header: "Late-Night Food (Open Past 1 AM)" },
-            { name: "Spinelli's Pizzeria", note: "Baxter Ave & S 4th St. NY-style slices until about 5 AM; St. Matthews keeps shorter hours." },
-            { name: "The Service Station", note: "Old Louisville (E Burnett). Southern comfort food in an old gas station, until 4 AM Fri & Sat." },
-            { name: "Highlands Tap Room", note: "Bardstown Rd. Bar grill serving 11 AM to 4 AM, every day." },
-            { name: "Spring Street Bar", note: "Irish Hill. Wings and chili cheese fries until 2 AM; the bar runs to 4." },
-            { name: "Wavy Kitchen", note: "S 3rd St by UofL. Open until 2:30 AM most nights." },
-            { name: "Pizza Donisi", note: "Old Louisville. Slices until 2 AM (1 AM Wed & Thu), right next to Mag Bar." },
-            { name: "Insomnia Cookies", note: "Baxter Ave & Cardinal Blvd. Warm cookies until 3 AM Thu to Sat, 1 AM other nights." },
-            { header: "4 AM Bars" },
-            { name: "Mag Bar", note: "Old Louisville. Cheap beer, punk rock, malört, and a 4 AM last call every night." },
-            { name: "Nachbar", note: "Germantown. Dark, friendly, great jukebox. 3 PM to 4 AM daily." },
-            { name: "The Pearl", note: "Germantown. Drink wheel, jukebox, weekend DJs. 4 PM to 4 AM daily." },
-            { name: "Third Street Dive", note: "Downtown. Punk-rock dive with shows most nights." },
-            { name: "Hideaway Saloon", note: "Highlands. Video games, cheap drinks, upstairs view." },
-            { name: "Joe's Older Than Dirt", note: "Lyndon. Since 1937, open until 4 AM every day; kitchen until midnight." },
-            { name: "The Outlook Inn", note: "Highlands. A classic, gritty stop. 4 AM on Fri & Sat, 2 AM other nights." },
-            { name: "Seidenfaden's", note: "Germantown. Classic neighborhood dive. 4 AM on Fri & Sat." },
-            { name: "Zanzabar", note: "Schnitzelburg. Pinball and live music until 4 AM Fri & Sat, 2 AM other nights." },
-            { name: "The Deuce", note: "Preston Hwy. No-frills dive, open until 4 AM Tue to Sat." },
-            { name: "Big Bar", note: "Highlands. Tiny, chandeliered gay bar, open until about 3:30 AM." },
-            { name: "Chill Bar Highlands", note: "Bardstown Rd. Big patio, open until about 3:30 AM." }
-        ]
-    },
     "Museums & Galleries": {
         description: "The intersection of fine art, weird history, and local makers.",
         type: "custom",
@@ -371,6 +339,7 @@ export const wikiData = {
             { name: "Louisville Slugger Field", note: "Home of the Bats. Cheap seats, river views, and Thirsty Thursdays." },
             { header: "Entertainment & Oddities" },
             { name: "Louisville Mega Cavern", note: "A massive former limestone quarry. Ziplines, a ropes course, and holiday lights, all underground." },
+            { name: "Idlewild Butterfly Farm" },
             { name: "Vernon Lanes", note: "Oldest bowling alley in KY (bowling here since about 1918). Reopened in 2022: great food, historic lanes." },
             { name: "Recbar", note: "Jeffersontown. Massive arcade bar with 130+ vintage cabinets and pinball machines." },
             { name: "Kentucky Kingdom", note: "The amusement and water park at the fairgrounds. Ride the Flying Fox, the new suspended coaster." },
@@ -379,8 +348,8 @@ export const wikiData = {
             { name: "Iroquois Amphitheater", note: "Outdoor concerts in a hollow of Iroquois Park." }
         ]
     },
-    "Thrift, Vintage & Digging": {
-        description: "For sustainable shoppers, weirdos, and collectors.",
+    "Shops & Digging": {
+        description: "Vintage racks, flea markets, record bins and things made here. For collectors, weirdos and anyone avoiding the mall.",
         type: "custom",
         items: [
             { header: "Curated Vintage & Boutiques" },
@@ -394,11 +363,34 @@ export const wikiData = {
             { name: "Mellwood Antiques & Interiors", note: "Huge antique mall perfect for mid-century modern hunting." },
             { name: "Tickled Pink Memorabilia Mall", note: "Classic, dusty, packed-to-the-brim antique mall." },
             { name: "Louisville Antique Market", note: "845 E Jefferson. Three floors of dealers in an old NuLu building." },
-            { name: "Peddler's Malls", note: "Basically indoor yard sales. High trash-to-treasure ratio." }
+            { name: "Peddler's Malls", note: "Basically indoor yard sales. High trash-to-treasure ratio." },
+            { header: "Records & Music" },
+            { name: "Better Days Records" },
+            { name: "Guestroom Records" },
+            { name: "Matt Anthony's Record Shop" },
+            { name: "Surface Noise" },
+            { name: "Mom's Music" },
+            { name: "Planet of the Tapes" },
+            { header: "Made Here" },
+            { name: "Bourbon Barrel Foods" },
+            { name: "Cellar Door Chocolates" },
+            { name: "Hadley Pottery" },
+            { name: "Louisville Stoneware" },
+            { name: "Work the Metal" },
+            { name: "Leatherhead" },
+            { header: "Odds & Ends" },
+            { name: "Caufield's Novelty" },
+            { name: "The Great Escape" },
+            { name: "Home Skateshop" },
+            { name: "Swag's Sport Shoes" },
+            { name: "Natural Mystic" },
+            { name: "Keith's Hardware" },
+            { name: "Oscars Hardware" },
+            { name: "Preston Arts Center" }
         ]
     },
     "Active Louisville": {
-        description: "How to burn off the bourbon and Hot Browns.",
+        description: "How to burn off the bourbon and Hot Browns: trails, climbing, paddling, golf, and the bike shops that keep you rolling.",
         type: "custom",
         items: [
             { header: "Parks & Trails" },
@@ -417,7 +409,40 @@ export const wikiData = {
             { name: "GoodBounce Pickleball Yard", note: "Open-play and league pickleball with a bar attached." },
             { header: "Waterways" },
             { name: "Paddling Floyds Fork", note: "Rent a kayak from Blue Moon Canoe & Kayak and float down the scenic creek." },
-            { name: "Harrods Creek", note: "A slow, beautiful creek feeding into the Ohio River. Rent a kayak from Nachand." }
+            { name: "Harrods Creek", note: "A slow, beautiful creek feeding into the Ohio River. Rent a kayak from Nachand." },
+            { header: "Ball Golf Courses" },
+            { name: "Bobby Nichols (Waverly Park)" },
+            { name: "Charlie Vettiner Park" },
+            { name: "Cherokee Park" },
+            { name: "Crescent Hill Park" },
+            { name: "Iroquois Park" },
+            { name: "Long Run Park" },
+            { name: "Quail Chase" },
+            { name: "Seneca Park" },
+            { name: "Shawnee Park" },
+            { name: "Sun Valley Park" },
+            { header: "Disc Golf Courses" },
+            { name: "Bullitt County Disc Golf Course" },
+            { name: "Arrowhead Disc Golf Course", note: "Valley Station. 27 wooded holes on private land; request one of the free daily parking passes from the owners first" },
+            { name: "Charlie Vettiner Park" },
+            { name: "Highview Park Disc Golf Course", note: "Opened 2025. Two wooded loops" },
+            { name: "Iroquois Park" },
+            { name: "Lapping Park", note: "Clarksville" },
+            { name: "Ryan's Course at Red Orchard Park", note: "Shelbyville" },
+            { name: "Wendell Moore Disc Golf Course" },
+            { header: "Bike Shops" },
+            { name: "Falls City Community BikeWorks!", note: "Volunteer Based Community Shop" },
+            { name: "Bardstown Road Bicycle Co.", note: "Highlands shop at 1051 Bardstown Rd for about 30 years. Sales, repairs, rentals" },
+            { name: "CycleSmiths" },
+            { name: "Grit Cycling" },
+            { name: "Middletown Cycling" },
+            { name: "N+1 Bikes" },
+            { name: "On Your Left Cycles" },
+            { name: "Parkside Bikes" },
+            { name: "Pedal Power", note: "Beargrass Christian Church's bike ministry: refurbishes ~600 bikes a year for people who need them" },
+            { name: "Scheller's Fitness & Cycling", note: "Local bike and fitness chain: Preston Hwy flagship plus a St. Matthews store" },
+            { name: "Shifty Business Cycleworks" },
+            { name: "Vic's Classic Bikes" }
         ]
     },
     "Clubs & Activities": {
@@ -600,6 +625,7 @@ export const wikiData = {
             { name: "Caperton Swamp", note: "River Road. A rare urban wetland with a one-mile loop through woods and ponds. Feels impossibly wild for the city.", free: true },
             { name: "Thurman-Hutchins Park", note: "River Road riverfront trails. Excellent birdwatching and quiet riverside hiking.", free: true },
             { name: "Beargrass Creek State Nature Preserve", note: "Woods and creek trails tucked behind Joe Creason Park, next to the Louisville Nature Center.", free: true },
+            { name: "Louisville Nature Center" },
             { name: "Big Rock", note: "Cherokee Park. A giant boulder in Beargrass Creek; the city's favorite creek-wading spot.", free: true },
             { name: "Hogan's Fountain", note: "Cherokee Park. Art deco fountain and pavilion at the top of the hill.", free: true },
             { name: "Fairmount Falls", note: "Jefferson Memorial Forest. A seasonal waterfall at the end of a short hike, best after rain.", free: true },
@@ -609,10 +635,11 @@ export const wikiData = {
             { name: "Otter Creek Outdoor Recreation Area", note: "Meade County, about 45 min. Mountain biking and bluffs over the Ohio." }
         ]
     },
-    "Grocery": {
-        description: "Local Provisions.",
-        type: "alpha",
+    "Groceries & Markets": {
+        description: "Local provisions, international grocers and farmers markets. Shop local whenever you can.",
+        type: "custom",
         items: [
+            { header: "Grocers & Specialty Markets" },
             { name: "Lotsa Pasta", note: "Lexington Rd. Italian specialty mini-grocery: fresh pasta, imports and a deli counter" },
             { name: "Paul's Fruit Market" },
             { name: "Rainbow Blossom" },
@@ -633,7 +660,23 @@ export const wikiData = {
             { name: "Lanceta Trading", note: "Filipino" },
             { name: "My Tindahan", note: "Filipino" },
             { name: "Haymarket by Ashbourne Farms", note: "Farm market & cafe on River Rd" },
-            { name: "Saraga International Grocery", note: "Opened Sept 2026 in the old Lucky's at the Forum Center (Hurstbourne). Groceries from 50+ countries plus a food court" }
+            { name: "Saraga International Grocery", note: "Opened Sept 2026 in the old Lucky's at the Forum Center (Hurstbourne). Groceries from 50+ countries plus a food court" },
+            { header: "Farmers Markets: Saturday Staples" },
+            { name: "Bardstown Road Farmers Market", note: "Highlands (1722 Bardstown Rd). Saturdays year-round in the church lots. The city's best-loved market.", free: true },
+            { name: "Douglass Loop Farmers Market", note: "Belknap (2005 Douglass Blvd). Saturdays 10 to 2, spring through mid-December.", free: true },
+            { name: "St. Matthews Farmers Market", note: "Beargrass Christian Church (4100 Shelbyville Rd). Saturday mornings, May through September.", free: true },
+            { name: "Jeffersontown Farmers Market", note: "J-Town Pavilion on Watterson Trail. Saturday mornings through October.", free: true },
+            { name: "Old Louisville Farmers Market", note: "Central Park (6th & Park). Every other Saturday morning, May through November.", free: true },
+            { name: "South End Community & Artisan Market", note: "Iroquois Park. Saturday mornings, mid-May through October.", free: true },
+            { name: "East End Farmers Market", note: "Factory Lane. Tuesdays and Saturdays, plus a winter Saturday market.", free: true },
+            { header: "Farmers Markets: Weeknights & Sundays" },
+            { name: "Phoenix Hill/NuLu Farmers Market", note: "1007 E. Jefferson St. Tuesday afternoons, May through October.", free: true },
+            { name: "Crescent Hill Community Market", note: "Crescent Hill United Methodist (201 S. Peterson Ave). Thursdays 3 to 6, June through October.", free: true },
+            { name: "Gray Street Farmers Market", note: "Downtown medical campus. Thursday lunchtime, June through September.", free: true },
+            { name: "West End Farmers Market", note: "California Park (1600 St. Catherine St). Every other Sunday afternoon, bringing fresh food to the West End. Support this one.", free: true },
+            { name: "Riverside Farmers Market", note: "Riverside, the Farnsley-Moremen Landing. Sunday mornings in summer.", free: true },
+            { name: "Beulah Church Farmers Market", note: "Fern Creek. Year-round: Mondays in season, indoor Saturdays in winter.", free: true },
+            { name: "Logan Street Market", note: "Shelby Park. Not a farmers market: a year-round indoor market hall with local makers and food stalls.", free: true }
         ]
     },
     "Music Venues": {
@@ -657,10 +700,11 @@ export const wikiData = {
             { name: "Stevie Ray's Blues Bar" }
         ]
     },
-    "Theatre / The Stage": {
-        description: "Live Performances.",
-        type: "alpha",
+    "Stage & Screen": {
+        description: "Live theatre, music, comedy and dance, plus the movie houses still standing (and a few that are not).",
+        type: "custom",
         items: [
+            { header: "Theatre, Music & Comedy" },
             { name: "Actors Theatre of Louisville" },
             { name: "The Louisville Ballet" },
             { name: "KY Opera" },
@@ -682,34 +726,20 @@ export const wikiData = {
             { name: "Commonwealth Theatre Center" },
             { name: "The Bard's Town" },
             { name: "Louisville Improvisors" },
-            { name: "CenterStage", note: "Musicals at the JCC" }
-        ]
-    },
-    "Golf & Disc Golf": {
-        description: "Fore!",
-        type: "custom",
-        items: [
-            { header: "Ball Golf Courses" },
-            { name: "Bobby Nichols (Waverly Park)" },
-            { name: "Charlie Vettiner Park" },
-            { name: "Cherokee Park" },
-            { name: "Crescent Hill Park" },
-            { name: "Iroquois Park" },
-            { name: "Long Run Park" },
-            { name: "Quail Chase" },
-            { name: "Seneca Park" },
-            { name: "Shawnee Park" },
-            { name: "Sun Valley Park" },
-            { header: "Disc Golf Courses" },
-            { name: "Bullitt County Disc Golf Course" },
-            { name: "Arrowhead Disc Golf Course", note: "Valley Station. 27 wooded holes on private land; request one of the free daily parking passes from the owners first" },
-            { name: "Charlie Vettiner Park" },
-            { name: "Highview Park Disc Golf Course", note: "Opened 2025. Two wooded loops" },
-            { name: "Iroquois Park" },
-            { name: "Lapping Park", note: "Clarksville" },
-            { name: "Louisville Champions Park" },
-            { name: "Ryan's Course at Red Orchard Park", note: "Shelbyville" },
-            { name: "Wendell Moore Disc Golf Course" }
+            { name: "CenterStage", note: "Musicals at the JCC" },
+            { header: "Movie Theaters & Drive-Ins" },
+            { name: "Sauerbeck Family Drive-In", note: "La Grange" },
+            { name: "Georgetown Drive-In", note: "Georgetown, IN" },
+            { name: "Speed Cinema", note: "Indie/Art films at Speed Museum" },
+            { name: "Floyd Theater", note: "UofL's student-run cinema in the Student Activities Center. Cheap tickets" },
+            { name: "Xscape Blankenbaker 14" },
+            { name: "Cinemark Tinseltown" },
+            { name: "Cinemark Mall St. Matthews" },
+            { name: "Cinemark Preston Crossings" },
+            { name: "AMC Stonybrook", },
+            { name: "RIP Baxter Avenue Theatres (1996-2025). Forever in our Hearts." },
+            { name: "RIP Village 8 (closed 2022)." },
+            { name: "RIP Preston Drive-In (1949-1980s). Long gone, now demolished." }
         ]
     },
     "Notable Annual Events": {
@@ -758,20 +788,19 @@ export const wikiData = {
             { name: "F.A.T. Friday Trolley Hop", month: "Monthly", monthIndex: 13 }
         ]
     },
-    "Bars": {
-        description: "Dives, pubs and cocktail bars. Cheap drinks, dim lights, good company.",
-        type: "alpha",
+    "Bars & Late Night": {
+        description: "Dives, pubs and cocktail bars, plus where to go when they close. Late hours shift, so call before a 3 AM trek.",
+        type: "custom",
         items: [
+            { header: "Bars" },
             { name: "21st in Germantown" },
             { name: "Air Devils Inn" },
             { name: "Bambi Bar" },
             { name: "Bar Vetti" },
             { name: "Barret Bar" },
-            { name: "Big Bar" },
             { name: "Big Rock Bar & Brew" },
             { name: "Bud's Tavern" },
             { name: "Canary Club" },
-            { name: "Chill Bar Highlands" },
             { name: "Clifton Tavern" },
             { name: "Dive Bar on Frankfort" },
             { name: "Flanagan's Ale House" },
@@ -780,7 +809,6 @@ export const wikiData = {
             { name: "Galaxie" },
             { name: "Garage Bar" },
             { name: "Granville Pub" },
-            { name: "Hideaway Saloon" },
             { name: "High Horse" },
             { name: "Holy Grale" },
             { name: "Irish Rover" },
@@ -788,23 +816,41 @@ export const wikiData = {
             { name: "Kaiju" },
             { name: "Kern's Korner" },
             { name: "Left Field Lounge" },
-            { name: "Mag Bar" },
             { name: "Mellwood Tavern" },
             { name: "Merle's Whiskey Kitchen" },
             { name: "The Merryweather" },
             { name: "Molly Malone's" },
-            { name: "Nachbar" },
             { name: "O'Shea's Irish Pub" },
-            { name: "The Outlook Inn" },
-            { name: "The Pearl" },
-            { name: "Seidenfaden's" },
             { name: "Shenanigans" },
             { name: "Sidebar at Whiskey Row" },
-            { name: "Spring Street Bar" },
             { name: "Stooges" },
-            { name: "Third Street Dive" },
             { name: "Whirling Tiger" },
-            { name: "Zanzabar" }
+            { header: "4 AM Bars (Some or All Nights)" },
+            { name: "Mag Bar", note: "Old Louisville. Cheap beer, punk rock, malört, and a 4 AM last call every night." },
+            { name: "Nachbar", note: "Germantown. Dark, friendly, great jukebox. 3 PM to 4 AM daily." },
+            { name: "The Pearl", note: "Germantown. Drink wheel, jukebox, weekend DJs. 4 PM to 4 AM daily." },
+            { name: "Third Street Dive", note: "Downtown. Punk-rock dive with shows most nights." },
+            { name: "Hideaway Saloon", note: "Highlands. Video games, cheap drinks, upstairs view." },
+            { name: "Joe's Older Than Dirt", note: "Lyndon. Since 1937, open until 4 AM every day; kitchen until midnight." },
+            { name: "The Outlook Inn", note: "Highlands. A classic, gritty stop. 4 AM on Fri & Sat, 2 AM other nights." },
+            { name: "Seidenfaden's", note: "Germantown. Classic neighborhood dive. 4 AM on Fri & Sat." },
+            { name: "Zanzabar", note: "Schnitzelburg. Pinball and live music until 4 AM Fri & Sat, 2 AM other nights." },
+            { name: "The Deuce", note: "Preston Hwy. No-frills dive, open until 4 AM Tue to Sat." },
+            { name: "Big Bar", note: "Highlands. Tiny, chandeliered gay bar, open until about 3:30 AM." },
+            { name: "Chill Bar Highlands", note: "Bardstown Rd. Big patio, open until about 3:30 AM." },
+            { name: "Spring Street Bar", note: "Irish Hill. Wings and chili cheese fries until 2 AM; the bar runs to 4." },
+            { header: "Late-Night Food (Open Past 1 AM)" },
+            { name: "Spinelli's Pizzeria", note: "Baxter Ave & S 4th St. NY-style slices until about 5 AM; St. Matthews keeps shorter hours." },
+            { name: "The Service Station", note: "Old Louisville (E Burnett). Southern comfort food in an old gas station, until 4 AM Fri & Sat." },
+            { name: "Highlands Tap Room", note: "Bardstown Rd. Bar grill serving 11 AM to 4 AM, every day." },
+            { name: "Wavy Kitchen", note: "S 3rd St by UofL. Open until 2:30 AM most nights." },
+            { name: "Pizza Donisi", note: "Old Louisville. Slices until 2 AM (1 AM Wed & Thu), right next to Mag Bar." },
+            { name: "Insomnia Cookies", note: "Baxter Ave & Cardinal Blvd. Warm cookies until 3 AM Thu to Sat, 1 AM other nights." },
+            { header: "The 24/7 Legends" },
+            { name: "Burger Boy Diner", note: "Old Louisville. The undisputed king of 24/7 diner food." },
+            { name: "Burger Girl Diner", note: "Frankfort Ave. The sister diner to Burger Boy, also open around the clock." },
+            { name: "High Foods", note: "Fegenbush Ln. Smash burgers, wings and breakfast, 24 hours a day." },
+            { name: "Waffle House", note: "Bardstown Rd & Crittenden Drive are late-night cultural experiences." }
         ]
     },
     "Breweries & Distilleries": {
@@ -923,31 +969,6 @@ export const wikiData = {
             { name: "The Southern Baptist Theological Seminary" }
         ]
     },
-    "Libraries": {
-        description: "Books & Tools.",
-        type: "custom",
-        items: [
-            { name: "Louisville Tool Library", note: "Borrow a power drill or a ladder like you borrow a book. Not an LFPL branch." },
-            { name: "LFPL Main Branch", free: true },
-            { name: "Bon Air", free: true },
-            { name: "Crescent Hill", free: true },
-            { name: "Fern Creek", note: "New $19M branch, set to open in early 2027", free: true },
-            { name: "Fairdale", free: true },
-            { name: "Highlands-Shelby Park", note: "Closed Aug 2026 for the Mid City Mall redevelopment; a new branch is planned on the site.", free: true },
-            { name: "Iroquois", free: true },
-            { name: "Jeffersontown", free: true },
-            { name: "Middletown", free: true },
-            { name: "Newburg", free: true },
-            { name: "Northeast Regional", free: true },
-            { name: "Parkland", note: "Historic 1908 Carnegie branch at 28th & Virginia, being restored", free: true },
-            { name: "Shawnee", free: true },
-            { name: "Shively", free: true },
-            { name: "South Central Regional", free: true },
-            { name: "Southwest Regional", free: true },
-            { name: "St. Matthews", free: true },
-            { name: "Western", free: true }
-        ]
-    },
     "Louisville Media": {
         description: "Local news, indie radio, podcasts, and blogs.",
         type: "custom",
@@ -978,64 +999,11 @@ export const wikiData = {
             { name: "WXOX 97.1 / ARTxFM", note: "Incredible experimental, volunteer-run freeform community radio." },
         ]
     },
-    "Local Business": {
-        description: "Non-Dining Oddities & Shops.",
-        type: "alpha",
-        items: [
-            { name: "Barret Babes" },
-            { name: "Better Days Records" },
-            { name: "Bourbon Barrel Foods" },
-            { name: "Cellar Door Chocolates" },
-            { name: "Caufield's Novelty" },
-            { name: "Fat Rabbit Thrift" },
-            { name: "Fleur de Flea" },
-            { name: "Guestroom Records" },
-            { name: "Hadley Pottery" },
-            { name: "Home Skateshop" },
-            { name: "Idlewild Butterfly Farm" },
-            { name: "Keith's Hardware" },
-            { name: "Leatherhead" },
-            { name: "Logan Street Market" },
-            { name: "Louisville Antique Market" },
-            { name: "Louisville Stoneware" },
-            { name: "Louisville Nature Center" },
-            { name: "LVL1 Hackerspace" },
-            { name: "Matt Anthony's Record Shop" },
-            { name: "Mom's Music" },
-            { name: "Natural Mystic" },
-            { name: "Oscars Hardware" },
-            { name: "Planet of the Tapes" },
-            { name: "Preston Arts Center" },
-            { name: "Surface Noise" },
-            { name: "Swag's Sport Shoes" },
-            { name: "The Great Escape" },
-            { name: "Tickled Pink Memorabilia Mall" },
-            { name: "Waverly Hills Sanatorium" },
-            { name: "Work the Metal" }
-        ]
-    },
-    "Bike Shops": {
-        description: "Rubber side down.",
+    "Books & Libraries": {
+        description: "Read local. Indie bookstores, every LFPL branch, and a library that lends power drills.",
         type: "custom",
         items: [
-            { name: "Falls City Community BikeWorks!", note: "Volunteer Based Community Shop" },
-            { name: "Bardstown Road Bicycle Co.", note: "Highlands shop at 1051 Bardstown Rd for about 30 years. Sales, repairs, rentals" },
-            { name: "CycleSmiths" },
-            { name: "Grit Cycling" },
-            { name: "Middletown Cycling" },
-            { name: "N+1 Bikes" },
-            { name: "On Your Left Cycles" },
-            { name: "Parkside Bikes" },
-            { name: "Pedal Power", note: "Beargrass Christian Church's bike ministry: refurbishes ~600 bikes a year for people who need them" },
-            { name: "Scheller's Fitness & Cycling", note: "Local bike and fitness chain: Preston Hwy flagship plus a St. Matthews store" },
-            { name: "Shifty Business Cycleworks" },
-            { name: "Vic's Classic Bikes" }
-        ]
-    },
-    "Bookstores": {
-        description: "Read local.",
-        type: "alpha",
-        items: [
+            { header: "Bookstores" },
             { name: "A Novel Romance" },
             { name: "Butcher Cabin Books" },
             { name: "Carmichael's Bookstore" },
@@ -1044,25 +1012,27 @@ export const wikiData = {
             { name: "Paul Wheeldon's Second Hand Books", note: "Shares a Frankfort Ave shop with Matt Anthony's records" },
             { name: "Set & Setting" },
             { name: "The Rosewater", note: "Beechmont. Volunteer-run used bookstore with pay-what-you-can prices and open mics" },
-            { name: "Yer Mom's Book & Wine Cafe", note: "Coming to NuLu Marketplace" }
-        ]
-    },
-    "Cinema & Drive-Ins": {
-        description: "Silver Screens",
-        type: "alpha",
-        items: [
-            { name: "Sauerbeck Family Drive-In", note: "La Grange" },
-            { name: "Georgetown Drive-In", note: "Georgetown, IN" },
-            { name: "Speed Cinema", note: "Indie/Art films at Speed Museum" },
-            { name: "Floyd Theater", note: "UofL's student-run cinema in the Student Activities Center. Cheap tickets" },
-            { name: "Xscape Blankenbaker 14" },
-            { name: "Cinemark Tinseltown" },
-            { name: "Cinemark Mall St. Matthews" },
-            { name: "Cinemark Preston Crossings" },
-            { name: "AMC Stonybrook", },
-	    { name: "RIP Baxter Avenue Theatres (1996-2025). Forever in our Hearts." },
-            { name: "RIP Village 8 (closed 2022)." },
-            { name: "RIP Preston Drive-In (1949-1980s). Long gone, now demolished." }
+            { name: "Yer Mom's Book & Wine Cafe", note: "Coming to NuLu Marketplace" },
+            { header: "Libraries" },
+            { name: "Louisville Tool Library", note: "Borrow a power drill or a ladder like you borrow a book. Not an LFPL branch." },
+            { name: "LFPL Main Branch", free: true },
+            { name: "Bon Air", free: true },
+            { name: "Crescent Hill", free: true },
+            { name: "Fern Creek", note: "New $19M branch, set to open in early 2027", free: true },
+            { name: "Fairdale", free: true },
+            { name: "Highlands-Shelby Park", note: "Closed Aug 2026 for the Mid City Mall redevelopment; a new branch is planned on the site.", free: true },
+            { name: "Iroquois", free: true },
+            { name: "Jeffersontown", free: true },
+            { name: "Middletown", free: true },
+            { name: "Newburg", free: true },
+            { name: "Northeast Regional", free: true },
+            { name: "Parkland", note: "Historic 1908 Carnegie branch at 28th & Virginia, being restored", free: true },
+            { name: "Shawnee", free: true },
+            { name: "Shively", free: true },
+            { name: "South Central Regional", free: true },
+            { name: "Southwest Regional", free: true },
+            { name: "St. Matthews", free: true },
+            { name: "Western", free: true }
         ]
     },
     "Day Trips": {
@@ -1099,28 +1069,6 @@ export const wikiData = {
             { header: "2–3 Hours" },
             { name: "Nashville, TN", note: "3 hrs south. If you've never been. Honky tonks, fantastic food scene, Ryman Auditorium." },
             { name: "Land Between the Lakes", note: "3 hrs southwest. 170,000 acres of national recreation area on twin lakes. Fantastic for stargazing." },
-        ]
-    },
-    "Farmers Markets": {
-        description: "Local produce, craft food, and community. Shop local whenever you can.",
-        type: "custom",
-        items: [
-            { header: "Saturday Staples" },
-            { name: "Bardstown Road Farmers Market", note: "Highlands (1722 Bardstown Rd). Saturdays year-round in the church lots. The city's best-loved market.", free: true },
-            { name: "Douglass Loop Farmers Market", note: "Belknap (2005 Douglass Blvd). Saturdays 10 to 2, spring through mid-December.", free: true },
-            { name: "St. Matthews Farmers Market", note: "Beargrass Christian Church (4100 Shelbyville Rd). Saturday mornings, May through September.", free: true },
-            { name: "Jeffersontown Farmers Market", note: "J-Town Pavilion on Watterson Trail. Saturday mornings through October.", free: true },
-            { name: "Old Louisville Farmers Market", note: "Central Park (6th & Park). Every other Saturday morning, May through November.", free: true },
-            { name: "South End Community & Artisan Market", note: "Iroquois Park. Saturday mornings, mid-May through October.", free: true },
-            { name: "East End Farmers Market", note: "Factory Lane. Tuesdays and Saturdays, plus a winter Saturday market.", free: true },
-            { header: "Weeknights & Sundays" },
-            { name: "Phoenix Hill/NuLu Farmers Market", note: "1007 E. Jefferson St. Tuesday afternoons, May through October.", free: true },
-            { name: "Crescent Hill Community Market", note: "Crescent Hill United Methodist (201 S. Peterson Ave). Thursdays 3 to 6, June through October.", free: true },
-            { name: "Gray Street Farmers Market", note: "Downtown medical campus. Thursday lunchtime, June through September.", free: true },
-            { name: "West End Farmers Market", note: "California Park (1600 St. Catherine St). Every other Sunday afternoon, bringing fresh food to the West End. Support this one.", free: true },
-            { name: "Riverside Farmers Market", note: "Riverside, the Farnsley-Moremen Landing. Sunday mornings in summer.", free: true },
-            { name: "Beulah Church Farmers Market", note: "Fern Creek. Year-round: Mondays in season, indoor Saturdays in winter.", free: true },
-            { name: "Logan Street Market", note: "Shelby Park. Not a farmers market: a year-round indoor market hall with local makers and food stalls.", free: true },
         ]
     },
     "Neighborhoods": {

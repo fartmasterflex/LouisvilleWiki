@@ -8,39 +8,43 @@ export { wikiData };
 export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks", "Louisville History Timeline"];
 // Shown as its own button in the "happening" strip instead of a card
 export const ANNUAL_EVENTS = "Notable Annual Events";
-// Lists that live under a featured card instead of in the big grid
-export const COMPANIONS = { "Louisville History Timeline": "Neighborhoods" };
+// Lists that live inside another list's page (a banner at the top) instead of in the big grid
+export const COMPANIONS = {
+    "Louisville History Timeline": ["Neighborhoods", "Lost Louisville"],
+    "Notable Annual Events": ["Church Picnics & Fish Fries"],
+    "Dining Directory": ["Eats & Lingo"],
+};
+// Banner line for each companion, given its entry count
+export const COMPANION_NOTES = {
+    "Neighborhoods": (n) => `The history continues street by street: ${n} neighborhoods →`,
+    "Lost Louisville": (n) => `${n} places we still give directions by →`,
+    "Church Picnics & Fish Fries": (n) => `${n} parish picnics and Lenten fish fries →`,
+    "Eats & Lingo": () => `Hot Browns, Modjeskas, and what "the Watterson" means →`,
+};
 
 // Presentation only — content lives in library_data.js
 const EMOJI = {
     "Dining Directory": "🍽️",
     "Oldest Restaurants": "🥘",
     "Oldest Landmarks": "🏛️",
-    "Late Night & 24/7": "🌙",
+    "Bars & Late Night": "🍺",
+    "Shops & Digging": "🛍️",
+    "Books & Libraries": "📚",
+    "Stage & Screen": "🎭",
+    "Groceries & Markets": "🧺",
     "Museums & Galleries": "🖼️",
     "Attractions & Outings": "🎡",
-    "Thrift, Vintage & Digging": "🧥",
     "Active Louisville": "🚴",
     "Clubs & Activities": "🎳",
     "Parks": "🌳",
-    "Grocery": "🥕",
     "Music Venues": "🎸",
-    "Theatre / The Stage": "🎭",
-    "Golf & Disc Golf": "⛳",
     "Notable Annual Events": "📅",
-    "Bars": "🍺",
     "Breweries & Distilleries": "🥃",
     "Coffee": "☕",
     "Sports": "🏟️",
     "Education": "🎓",
-    "Libraries": "📚",
     "Louisville Media": "📰",
-    "Local Business": "🛍️",
-    "Bike Shops": "🚲",
-    "Bookstores": "📖",
-    "Cinema & Drive-Ins": "🎬",
     "Day Trips": "🚗",
-    "Farmers Markets": "🧺",
     "Neighborhoods": "🏘️",
     "Louisville History Timeline": "⏳",
     "Eats & Lingo": "🗣️",
@@ -64,8 +68,15 @@ export const orderedKeys = [...PINNED.filter(k => wikiData[k]), ...categoryKeys.
 const slugToKey = {};
 const keyToSlug = {};
 categoryKeys.forEach(k => { const s = slugify(k); slugToKey[s] = k; keyToSlug[k] = s; });
-// old links from before a category was renamed
-const RENAMED = { 'dive-bars': 'Bars' };
+// old links from before a category was renamed or merged
+const RENAMED = {
+    'dive-bars': 'Bars & Late Night', 'bars': 'Bars & Late Night', 'late-night-and-24-7': 'Bars & Late Night',
+    'thrift-vintage-and-digging': 'Shops & Digging', 'local-business': 'Shops & Digging',
+    'bookstores': 'Books & Libraries', 'libraries': 'Books & Libraries',
+    'theatre-the-stage': 'Stage & Screen', 'cinema-and-drive-ins': 'Stage & Screen',
+    'grocery': 'Groceries & Markets', 'farmers-markets': 'Groceries & Markets',
+    'golf-and-disc-golf': 'Active Louisville', 'bike-shops': 'Active Louisville',
+};
 for (const [s, k] of Object.entries(RENAMED)) if (wikiData[k] && !slugToKey[s]) slugToKey[s] = k;
 
 export const slugOf = (key) => keyToSlug[key] || slugify(key);

@@ -37,13 +37,20 @@ const curatedActivities = [
 // (and the slot never sends anyone to the Pope Lick trestle at night)
 const NOT_ON_REELS = new Set(["Topgolf", "Waffle House", "Insomnia Cookies", "Pope Lick Trestle"]);
 
-const names = (key) => (wikiData[key]?.items || []).filter(i => i.name && !i.header && !NOT_ON_REELS.has(i.name)).map(i => i.name);
+// Names from a list, optionally skipping whole sections (by header)
+function names(key, skipSections = []) {
+    let skip = false;
+    return (wikiData[key]?.items || []).filter(i => {
+        if (i.header) { skip = skipSections.includes(i.header); return false; }
+        return !skip && i.name && !NOT_ON_REELS.has(i.name);
+    }).map(i => i.name);
+}
 
 function pools() {
     return [
-        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville"), ...names("Weird Louisville")],
+        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville", ["Ball Golf Courses", "Disc Golf Courses", "Bike Shops"]), ...names("Weird Louisville")],
         names("Dining Directory"),
-        [...names("Late Night & 24/7"), ...names("Bars")],
+        names("Bars & Late Night"),
     ];
 }
 

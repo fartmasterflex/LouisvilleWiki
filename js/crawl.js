@@ -1,8 +1,8 @@
 // --- js/crawl.js ---
-// Bar Crawl: three bars from the "Bars" list that you can actually walk between.
+// Bar Crawl: three bars from "Bars & Late Night" (its bar sections only) that you can actually walk between.
 // The whole route (bar 1 → 2 → 3) is capped at MAX_MILES of estimated walking.
 import { openModal, rand, store } from './utils.js';
-import { wikiData, realItems } from './data.js';
+import { wikiData } from './data.js';
 import { initCrawlMap } from './map.js';
 import { sfx } from './audio.js';
 
@@ -12,6 +12,16 @@ const RECENT_KEY = 'louCrawlRecent';
 const RECENT_MAX = 12;            // bars shown lately get pushed to the back of the line
 const RECENT_WEIGHT = .12;
 const NOT_ON_CRAWL = new Set(["Bud's Tavern", "Stooges"]);   // on the Bars list, never on a crawl
+const BAR_LIST = 'Bars & Late Night';
+const isBarSection = (header) => /\bbars\b/i.test(header);  // "Bars", "4 AM Bars…" (not the diners or late-night food)
+
+function barItems() {
+    let inBars = false;
+    return (wikiData[BAR_LIST]?.items || []).filter(i => {
+        if (i.header) { inBars = isBarSection(i.header); return false; }
+        return inBars && i.name;
+    });
+}
 
 // Label a crawl by whichever of these its middle is closest to
 const HOODS = [
@@ -41,7 +51,7 @@ function miles(a, b) {
 async function buildPool() {
     if (pool) return pool;
     const { manualCoords } = await import('./coordinates.js');
-    const bars = realItems('Bars')
+    const bars = barItems()
         .filter(i => !NOT_ON_CRAWL.has(i.name))
         .map(i => ({ name: i.name, c: manualCoords[i.name] }))
         .filter(b => Array.isArray(b.c))
@@ -113,7 +123,7 @@ export async function generateCrawl() {
     try {
         const p = await buildPool();
         if (my !== run) return;
-        if (!p.triples.length || !wikiData.Bars) throw new Error('no walkable trios');
+        if (!p.triples.length || !wikiData[BAR_LIST]) throw new Error('no walkable trios');
         crawl = pickCrawl(p);
     } catch (e) {
         hoodEl.textContent = 'Somewhere';

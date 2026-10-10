@@ -590,7 +590,8 @@ main { outline: none; min-height: 50vh; }
 .companion-banner .cb-emoji { font-size: 1.7rem; line-height: 1; }
 .companion-banner b { display: block; font: 400 1.05rem/1.05 var(--f-display); text-transform: uppercase; }
 .companion-banner small { display: block; font-size: .72rem; margin-top: 3px; }
-.companion-banner { margin: 0 0 22px; padding: 16px 18px; }
+.companion-banner { padding: 16px 18px; }
+.companion-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 0 0 22px; }
 .companion-banner b { font-size: 1.3rem; }
 
 .cat-grid {

@@ -5,7 +5,7 @@ import { openModal, closeModal, toast, shuffle, escapeHtml as esc, loadScript } 
 import { sfx } from './audio.js';
 import { celebrate } from './easter_eggs.js';
 
-const EXCLUDED = ['Clubs & Activities', 'Louisville Media', 'Local Business', 'Louisville History Timeline', 'Golf & Disc Golf', 'Eats & Lingo'];
+const EXCLUDED = ['Clubs & Activities', 'Louisville Media', 'Louisville History Timeline', 'Eats & Lingo'];
 
 export function openBracketSetup() {
     const select = document.getElementById('bracketCategoryDropdown');

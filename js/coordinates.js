@@ -458,8 +458,6 @@ export const manualCoords = {
     // ===== LOCAL BUSINESS =====
     "Better Days Records": [38.23956, -85.73055],              // addr: 921 BARRET AVE, LOUISVILLE, KY, 40204
     "Caufield's Novelty": [38.25768, -85.76679],               // addr: 1006 W MAIN ST, LOUISVILLE, KY, 40202
-    "Fat Rabbit Thrift": [38.23661, -85.72850],                // OSM: Fat Rabbit Thrift & Vintage, Barret Avenue, Louisville, Kentucky, 40204
-    "Fleur de Flea": [38.23974, -85.73673],                    // OSM: Fleur de Flea Vintage Market, Swan Street, Louisville, Kentucky, 40204
     "Guestroom Records": [38.25657, -85.71635],                // OSM: Guestroom Records, Frankfort Avenue, Clifton, Metro Council District 9, Louisville, Kentucky
     "Home Skateshop": [38.23389, -85.71264],                   // addr: 1363 BARDSTOWN RD, LOUISVILLE, KY, 40204
     "Idlewild Butterfly Farm": [38.23516, -85.73970],          // addr: 1100 LOGAN ST, LOUISVILLE, KY, 40204
