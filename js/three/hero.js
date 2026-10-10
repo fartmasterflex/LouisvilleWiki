@@ -760,7 +760,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const ndc = new THREE.Vector2();
     const clickables = [
         { obj: bridgeHit, fn: () => clickBridge() },
-        { obj: bbHit, fn: () => nextAd(true) },
+        { obj: bbHit, fn: () => clickBillboard() },
         { obj: belleHit, fn: () => clickBelle() },
         { obj: horseHit, fn: () => clickHorse() },
         { obj: islandHit, fn: () => on.egg?.('island') },
@@ -822,6 +822,12 @@ export function createHero({ canvas, container, night = false, neon = false, com
         belleToot = 1.6;
         for (let i = 0; i < 7; i++) setTimeout(() => puff(true), i * 110);
         on.egg?.('belle');
+    }
+    // Only click-flips count toward reading every ad (auto-rotation doesn't)
+    function clickBillboard() {
+        const before = bb.idx;
+        nextAd(true);
+        if (bb.idx !== before) on.egg?.('ad', { idx: bb.idx, total: bb.ads.length });
     }
     function clickHorse() {
         if (horseAnim.t >= 0) return;

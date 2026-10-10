@@ -23,7 +23,7 @@ export const SECRETS = [
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
     { id: 'highschool', emoji: '🏫', name: 'Two Degrees', hint: 'The city is clickable. Go on, click a building.' },
     { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' },
-    { id: 'dainty', emoji: '🪵', name: 'Dainty Champ', hint: 'Type Schnitzelburg’s favorite street game.' },
+    { id: 'ads', emoji: '🪧', name: 'Ad Nauseam', hint: 'Read every billboard in town. Click through all of them.' },
 ];
 
 // The super secret: not on the vault grid and not in the count. The vault only whispers about it.

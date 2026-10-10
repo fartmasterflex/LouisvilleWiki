@@ -299,26 +299,16 @@ export function whatHighSchool() {
 }
 
 // -----------------------------------------------
-// DAINTY CHAMP (type "dainty"): Schnitzelburg's street game. Whack the stick, see how far it flies.
+// AD NAUSEAM (click the billboard through every ad). Auto-rotation doesn't count.
 // -----------------------------------------------
-export function dainty() {
-    if (document.querySelector('.dainty-overlay')) return;
-    const feet = 18 + Math.floor(Math.random() * 75);
-    const o = overlay('dainty-overlay');
-    const stick = document.createElement('div');
-    stick.className = 'dainty-stick';
-    o.appendChild(stick);
-    sfx.crack();
-    stick.animate([
-        { transform: 'translate(8vw, 70vh) rotate(0deg)' },
-        { transform: `translate(${45 + feet * .4}vw, ${18 - feet * .1}vh) rotate(900deg)`, offset: .55 },
-        { transform: `translate(${60 + feet * .45}vw, 78vh) rotate(1440deg)` },
-    ], { duration: 1500, easing: 'cubic-bezier(.2, .7, .4, 1)', fill: 'forwards' });
-    setTimeout(() => {
-        banner(o, `WHACK! ${feet} feet<small>${feet >= 70 ? 'SCHNITZELBURG LEGEND' : feet >= 45 ? 'RESPECTABLE. HAVE A BEER.' : 'THE REGULARS ARE TRYING NOT TO LAUGH'}</small>`, 2600);
-        unlock('dainty');
-    }, 1100);
-    setTimeout(() => o.remove(), 4200);
+const adsSeen = new Set();
+let adsTotal = 0;
+function readAd({ idx, total }) {
+    if (total !== adsTotal) { adsTotal = total; adsSeen.clear(); }
+    adsSeen.add(idx);
+    if (adsSeen.size >= total && unlock('ads')) {
+        setTimeout(() => toast('You read every billboard in town. Mornay Mutual would like a word.', { kicker: 'AD NAUSEAM', emoji: '🪧' }), 1400);
+    }
 }
 
 // -----------------------------------------------
@@ -607,6 +597,9 @@ export function onHeroEgg(id, payload) {
         case 'pope':
             popeLick();
             break;
+        case 'ad':
+            readAd(payload);
+            break;
         case 'horse':
             churchill();
             break;
@@ -652,6 +645,47 @@ function certificate() {
 // -----------------------------------------------
 // CONSOLE
 // -----------------------------------------------
+// The back room's own effect: green code-rain made of Louisville, then the lights come back on
+const RAIN_GLYPHS = ['⚜', '502'];
+function backRoom() {
+    if (document.querySelector('.backroom-overlay')) return;
+    const o = overlay('backroom-overlay');
+    if (!prefersReducedMotion()) {
+        const c = document.createElement('canvas');
+        o.appendChild(c);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = innerWidth, h = innerHeight, size = 18, colW = 36;   // columns wide enough for "502"
+        c.width = w * dpr; c.height = h * dpr;
+        const x = c.getContext('2d');
+        x.scale(dpr, dpr);
+        x.font = `700 ${size}px "Space Mono", monospace`;
+        x.textAlign = 'center';
+        x.shadowColor = '#39ff88';
+        const drops = Array.from({ length: Math.ceil(w / colW) }, () => -Math.random() * 12);
+        const t0 = performance.now();
+        let last = 0;
+        (function rain(now) {
+            if (!o.isConnected) return;
+            if (now - last > 45) {          // ~22 steps a second, like an old terminal
+                last = now;
+                x.shadowBlur = 0;
+                x.fillStyle = 'rgba(2, 8, 4, .18)';
+                x.fillRect(0, 0, w, h);
+                x.shadowBlur = 8;
+                drops.forEach((d, i) => {
+                    x.fillStyle = Math.random() > .9 ? '#c8ffdc' : '#39ff88';    // a few bright heads
+                    x.fillText(rand(RAIN_GLYPHS), i * colW + colW / 2, d * size);
+                    drops[i] = d * size > h && Math.random() > .97 ? 0 : d + 1;
+                });
+            }
+            if (now - t0 < 4600) requestAnimationFrame(rain);
+        })(t0);
+    }
+    banner(o, 'You found the back room 🧑‍💻<small>STAFF ONLY. TELL NO ONE.</small>', 3800);
+    setTimeout(() => o.classList.add('out'), 4400);
+    setTimeout(() => o.remove(), 5100);
+}
+
 function consoleEgg() {
     const art = [
         '        ⚜        ',
@@ -665,7 +699,7 @@ function consoleEgg() {
     window.louisville = {
         secret() {
             const fresh = unlock('console');
-            fleurRain();
+            backRoom();
             return fresh ? '⚜ secret unlocked. check the vault.' : '⚜ you already found this one, hacker.';
         },
         eggs: () => `${foundCount()}/${SECRETS.length} found. no spoilers here.`,
@@ -691,7 +725,7 @@ export function initEasterEggs() {
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
 
     // typed words (Two Degrees comes from clicking the city)
-    const WORDS = { gonzo, ali, bourbon, thunder, dainty, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
+    const WORDS = { gonzo, ali, bourbon, thunder, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
     Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
     let buf = '';
     document.addEventListener('keydown', (e) => {

@@ -2318,8 +2318,12 @@ body.gonzo #app { animation: hue 2.4s linear infinite; }
 #dorkModal.open .dork-word { animation: dorkSlam .5s var(--spring) both; }
 @keyframes dorkSlam { from { transform: scale(2.6) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-4deg); opacity: 1; } }
 
-/* Dainty Champ: the stick (a short dowel) that gets whacked across the page */
-.dainty-stick { position: absolute; left: 0; top: 0; width: 96px; height: 18px; border-radius: 9px; background: linear-gradient(#d9a066, #9a6636); border: 2px solid #3a2410; box-shadow: 2px 2px 0 rgba(0, 0, 0, .35); will-change: transform; }
+/* The back room: code-rain overlay */
+.backroom-overlay { background: rgba(3, 10, 6, .72); transition: opacity .6s ease; }
+.backroom-overlay canvas { display: block; width: 100%; height: 100%; }
+.backroom-overlay.out { opacity: 0; }
+.backroom-overlay .egg-banner { background: #0b1a10; color: #39ff88; border-color: #39ff88; font-family: var(--f-mono); }
+
 
 @media (max-width: 1020px) {
     .tool-grid .tool-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }
