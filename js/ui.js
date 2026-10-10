@@ -2,7 +2,7 @@
 // Home + category rendering, dining table, been-there stamps, surprise picks.
 import { wikiData, orderedKeys, PINNED, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
-import { gSearch, gLucky, escapeHtml as esc, hashTilt, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
+import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
 import { sfx } from './audio.js';
 
@@ -49,9 +49,8 @@ export function renderHome() {
         const data = wikiData[key];
         const n = countOf(key);
         const been = beenCount(key, data.items);
-        const rot = (hashTilt(key) * (featured ? 1.6 : 2.2)).toFixed(2);
         return `
-        <a class="cat-card ${featured ? 'featured tape' : ''}" href="${catHref(key)}" style="--rot:${rot}deg; --i:${i}" data-tilt>
+        <a class="cat-card ${featured ? 'featured' : ''}" href="${catHref(key)}" style="--i:${i}" data-tilt>
             ${featured ? '<span class="star-badge">★</span>' : ''}
             <span class="cc-count">${n} ${n === 1 ? 'ENTRY' : 'ENTRIES'}</span>
             <span class="cc-emoji" aria-hidden="true">${emojiOf(key)}</span>
@@ -90,7 +89,7 @@ export function renderHome() {
             </div>
         </section>` : ''}
 
-        <div class="cutline"><span class="scissors">✂</span> cut along the dotted line</div>
+        <div class="divider"></div>
 
         <div class="section-head">
             <h2 class="section-title">The <span class="hl">Directory</span></h2>
@@ -99,7 +98,7 @@ export function renderHome() {
         <div class="featured-grid">${featured.map((k, i) => card(k, i, true)).join('')}</div>
         <div class="cat-grid">${rest.map((k, i) => card(k, i + 3, false)).join('')}</div>
 
-        <div class="cutline"><span class="scissors">✂</span> procrastination station</div>
+        <div class="divider"></div>
 
         <div class="section-head">
             <h2 class="section-title">Generators <span class="hl">&amp; Tools</span></h2>
@@ -136,7 +135,7 @@ export function renderHome() {
             </button>
         </div>
 
-        <div class="cutline"><span class="scissors">✂</span> say hi</div>
+        <div class="divider"></div>
 
         <div class="section-head">
             <h2 class="section-title">Community</h2>
@@ -149,7 +148,7 @@ export function renderHome() {
             </button>
             <button type="button" class="big-link secrets" data-action="stickers">
                 <span class="bl-emoji">${nFound === SECRETS.length ? '🏅' : nFound ? '🔓' : '🔒'}</span>
-                <span><span class="bl-name">Secrets: <span data-secret-count>${nFound}/${SECRETS.length}</span></span><span class="bl-desc">This site is full of easter eggs. Your sticker book tracks the ones you've found.</span></span>
+                <span><span class="bl-name">Secrets: <span data-secret-count>${nFound}/${SECRETS.length}</span></span><span class="bl-desc">This site is full of easter eggs. The vault keeps track of the ones you've found.</span></span>
             </button>
         </div>
     </div>`;
@@ -589,25 +588,6 @@ export function surprisePick(cat = null) {
 }
 
 export function pickAgain() { surprisePick(lastPickSource); }
-
-// ---------------------------------------------------------------
-// TICKER
-// ---------------------------------------------------------------
-export function buildTicker() {
-    const t = document.getElementById('ticker');
-    if (!t) return;
-    const month = new Date().getMonth() + 1;
-    const ev = eventsInMonth(month).map(e => e.name);
-    const bits = [
-        'THE LOUISVILLE WIKI', 'VOL. 2', `${totalCount}+ PLACES & COUNTING`,
-        ...categoryKeys.filter(k => countOf(k) > 10).slice(0, 8).map(k => `${countOf(k)} ${k}`),
-        ev.length ? `THIS ${MONTHS[month]}: ${ev.join(' / ')}` : '',
-        'KEEP LOUISVILLE WEIRD', 'SAY IT RIGHT: LUH-VUL', 'NO CINCINNATI ALLOWED',
-        'PSST — THIS SITE HAS SECRETS', 'EST. 1778 AT THE FALLS OF THE OHIO', 'HOT BROWN > EVERYTHING'
-    ].filter(Boolean);
-    const run = bits.map(b => `<span>${esc(b)}</span><span class="star">✦</span>`).join('');
-    t.innerHTML = run + run;
-}
 
 // Legacy globals (bookmarklets / old inline handlers)
 Object.assign(window, { renderTOC: () => { location.hash = '#/'; }, renderList: (k) => { location.hash = catHref(k); }, sortTable, toggleCol, toggleTheme, toggleFilter, clearFilters });

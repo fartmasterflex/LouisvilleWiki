@@ -1,5 +1,5 @@
 // --- js/easter_eggs.js ---
-// Every secret on the site lives here. See secrets.js for the sticker book.
+// Every secret on the site lives here. See secrets.js for the vault.
 import { unlock, isFound, foundCount, SECRETS, onSecretsChange } from './secrets.js';
 import { sfx } from './audio.js';
 import { toast, openModal, closeModal, onModalClose, escapeHtml, rand, isTouch, prefersReducedMotion } from './utils.js';
@@ -352,37 +352,6 @@ export function toggleNeon() {
 // -----------------------------------------------
 // SAY IT RIGHT
 // -----------------------------------------------
-const SAYINGS = [
-    ['LUH-vul', 'how locals say it (mouth barely open)'],
-    ['LOO-uh-vul', 'close enough, you can stay'],
-    ['LOO-ee-ville', 'tourist detected'],
-    ['LOUIS-ville', 'definitely a sportscaster'],
-    ['LOO-vul', 'two bourbons in'],
-    ['LEWIS-ville', 'that’s a different town, bud'],
-];
-const heard = new Set([0]);
-let sayIdx = 0;
-export function sayIt() {
-    sayIdx = (sayIdx + 1) % SAYINGS.length;
-    heard.add(sayIdx);
-    const [word, who] = SAYINGS[sayIdx];
-    const el = document.getElementById('sayIt');
-    const btn = document.getElementById('sayItBtn');
-    if (el) el.textContent = word;
-    if (btn) {
-        btn.title = who;
-        btn.classList.remove('wobble');
-        void btn.offsetWidth;
-        btn.classList.add('wobble');
-    }
-    sfx.tick();
-    if (heard.size === SAYINGS.length) {
-        if (unlock('pronounce')) setTimeout(() => toast('For the record: it’s <b>LUH-vul</b>. Say it like your mouth is full of Hot Brown.', { kicker: 'PRONUNCIATION POLICE', emoji: '🗣️', duration: 5000 }), 1400);
-    } else {
-        toast(`<b>${word}</b> — ${who}`, { duration: 1800 });
-    }
-}
-
 // -----------------------------------------------
 // HIDDEN GEMS + BOAT RACE
 // -----------------------------------------------
@@ -528,6 +497,17 @@ function spawnCardinal() {
 const WISHES = ['No construction on Bardstown Road.', 'A parking spot in NuLu.', 'Derby tickets. Good ones.', 'A Hot Brown that doesn’t put you to sleep.', 'The Watterson, but empty.', 'Cards AND Cats both win. (impossible)', 'Spring that lasts longer than a week.'];
 const LED_NAMES = { rainbow: 'rainbow chase', cards: 'Cardinal red', divided: 'house divided (Cards vs. Cats)', sparkle: 'twinkle', gold: 'fleur gold' };
 
+const SKIP_MEH = [
+    'Plunk. The Ohio keeps it.',
+    'That one’s halfway to Jeffersonville. Straight down.',
+    'Flatter rock. Lower arm.',
+    'The catfish thank you for your donation.',
+];
+const SKIP_BRAG = [
+    'Indiana felt that one.',
+    'The Belle’s captain saluted.',
+    'Your granddad would be proud.',
+];
 export function onHeroEgg(id, payload) {
     switch (id) {
         case 'bridge':
@@ -554,6 +534,16 @@ export function onHeroEgg(id, payload) {
         case 'pope':
             popeLick();
             break;
+        case 'splash':
+            sfx.tick();
+            break;
+        case 'skip': {
+            const n = payload;
+            if (n >= 6 && unlock('skipper')) break;
+            sfx.pop();
+            toast(`<b>${n} skip${n === 1 ? '' : 's'}.</b> ${n >= 6 ? rand(SKIP_BRAG) : rand(SKIP_MEH)}`, { emoji: '🪨', duration: 2200 });
+            break;
+        }
     }
 }
 
@@ -593,7 +583,7 @@ function consoleEgg() {
         secret() {
             const fresh = unlock('console');
             fleurRain();
-            return fresh ? '⚜ secret unlocked. check your sticker book.' : '⚜ you already found this one, hacker.';
+            return fresh ? '⚜ secret unlocked. check the vault.' : '⚜ you already found this one, hacker.';
         },
         eggs: () => `${foundCount()}/${SECRETS.length} found. no spoilers here.`,
     };
@@ -622,7 +612,6 @@ export function initEasterEggs() {
         if (subClicks >= 3) { subClicks = 0; churchill(); }
     });
 
-    document.getElementById('sayItBtn')?.addEventListener('click', sayIt);
     document.getElementById('neon-switch')?.addEventListener('click', toggleNeon);
     document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);

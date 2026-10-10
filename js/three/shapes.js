@@ -73,6 +73,32 @@ export function fleurGeometry({ depth = 0.14, bevel = 0.035, curveSegments = 10 
     return g;
 }
 
+// The fleur's silhouette as line segments on both faces, lined up with
+// fleurGeometry() (same centering). Used as the neon-tube version.
+export function fleurOutline({ depth = 0.14, bevel = 0.035 } = {}) {
+    const loops = [];
+    Object.values(FLEUR_PARTS).forEach(part => {
+        loops.push(shapeFrom(part.cmds, 1).getPoints(14));
+        if (part.mirror) loops.push(shapeFrom(part.cmds, -1).getPoints(14));
+    });
+    const box = new THREE.Box2();
+    loops.flat().forEach(p => box.expandByPoint(p));
+    const c = box.getCenter(new THREE.Vector2());
+    const pos = [];
+    const zf = depth / 2 + bevel + .01;
+    for (const z of [zf, -zf]) {
+        loops.forEach(pts => {
+            for (let i = 0; i < pts.length; i++) {
+                const a = pts[i], b = pts[(i + 1) % pts.length];
+                pos.push(a.x - c.x, a.y - c.y, z, b.x - c.x, b.y - c.y, z);
+            }
+        });
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    return g;
+}
+
 // ---------------------------------------------------------------
 // LOUISVILLE SLUGGER (knob at y=0, barrel end at y=len)
 // ---------------------------------------------------------------

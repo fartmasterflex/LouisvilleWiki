@@ -1,5 +1,5 @@
 // --- js/three/boatrace.js ---
-// The Great Steamboat Race, in riso-printed 3D. Mash to paddle.
+// The Great Steamboat Race, in 3D. Mash to paddle.
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -127,7 +127,7 @@ export function createBoatRace(stage, cb) {
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     const riso = makeRisoPass({ THREE, ShaderPass }, { dot: 4.4 * DPR });
-    riso.uniforms.uAmount.value = .9;
+    riso.uniforms.uAmount.value = 0;     // no halftone; the pass just does the sRGB output
     riso.uniforms.uNight.value = night ? 1 : 0;
     composer.addPass(riso);
 

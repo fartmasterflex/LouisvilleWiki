@@ -1,7 +1,7 @@
 {
   "name": "The Louisville Wiki",
   "short_name": "Lou Wiki",
-  "description": "A zine-style wiki and generator for Louisville, KY.",
+  "description": "A wiki, directory and toybox for Louisville, KY.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f4f4f4",

@@ -55,6 +55,7 @@ export const RisoShader = {
             vec2 frag = vUv * uRes;
             vec4 src = texture2D(tDiffuse, vUv);
             vec3 col = toSRGB(src.rgb);
+            if (uAmount <= 0.0) { gl_FragColor = vec4(col, 1.0); return; }
             float clean = 1.0 - clamp(src.a, 0.0, 1.0);                 // alpha < 1 = print clean (billboard ads)
             vec2 off = vec2(1.4, -1.1) * (uDot / 6.0) / uRes;           // misregistration
             vec3 colB = toSRGB(texture2D(tDiffuse, vUv + off).rgb);

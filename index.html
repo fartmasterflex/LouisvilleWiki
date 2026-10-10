@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="A zine-style wiki, directory and toybox for Louisville, KY.">
+    <meta name="description" content="A wiki, directory and toybox for Louisville, KY.">
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#141414">
     <link rel="manifest" href="manifest.json">
@@ -45,20 +45,13 @@
 </head>
 
 <body>
-    <div class="grain" aria-hidden="true"></div>
-
-    <!-- MASTHEAD TICKER -->
-    <div class="ticker" aria-hidden="true">
-        <div class="ticker-track" id="ticker"></div>
-    </div>
 
     <!-- HERO: live 3D city + title -->
     <header id="hero" class="hero">
-        <canvas id="heroCanvas" aria-label="An interactive 3D print of the Louisville skyline"></canvas>
+        <canvas id="heroCanvas" aria-label="An interactive 3D Louisville skyline"></canvas>
         <div class="hero-fallback" aria-hidden="true"></div>
 
         <div class="hero-overlay">
-            <div class="masthead-meta">VOL. 2 &nbsp;·&nbsp; ISSUE №502 &nbsp;·&nbsp; <span id="issueDate"></span> &nbsp;·&nbsp; FREE — TAKE ONE</div>
             <h1 id="wikiTitle" class="wiki-title" data-text="Louisville Wiki">
                 <a href="#/" class="title-link" aria-label="The Louisville Wiki — home">
                     <span class="t-lou">Louisville</span>
@@ -67,7 +60,6 @@
             </h1>
             <div class="hero-stickers">
                 <button type="button" class="sticker sticker-author" id="subtitleBtn">by Fartmaster Flex</button>
-                <button type="button" class="sticker sticker-say" id="sayItBtn" title="how do you say it?">say it: <b id="sayIt">LUH-vul</b></button>
             </div>
         </div>
 
@@ -101,7 +93,7 @@
                 <button type="button" id="soundBtn" class="chip-btn" aria-pressed="true">🔊 sound on</button>
                 <a class="chip-btn" href="#/">⌂ index</a>
             </div>
-            <p class="colophon">Printed on a haunted Xerox in the 502. Made with bourbon, toner &amp; <span class="heart">♥</span>.
+            <p class="colophon">Made in the 502 with bourbon &amp; <span class="heart">♥</span>.
                 Not affiliated with anybody respectable.</p>
         </div>
     </footer>
@@ -243,12 +235,12 @@
         </div>
     </div>
 
-    <!-- Sticker Book (secrets) -->
+    <!-- The Vault (secrets) -->
     <div id="stickerBookModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="stickerTitle" hidden>
         <div class="modal-backdrop" data-close></div>
         <div class="modal-box wide scroll-box">
             <button type="button" class="modal-close" data-close aria-label="Close">×</button>
-            <h2 id="stickerTitle" class="modal-title">📒 The Sticker Book</h2>
+            <h2 id="stickerTitle" class="modal-title">🗝️ The Vault</h2>
             <p class="modal-sub" id="stickerSub">There's more on this site than meets the eye.</p>
             <div class="sticker-meter"><div class="sticker-meter-fill" id="stickerMeter"></div></div>
             <div id="stickerGrid" class="sticker-grid"></div>

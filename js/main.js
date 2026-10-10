@@ -1,6 +1,6 @@
 // --- js/main.js ---
 // Main entry: router, global event wiring, 3D hero boot.
-import { initTheme, toggleTheme, currentTheme, renderHome, renderCategory, buildTicker, onBeenClick, surprisePick, pickAgain, toggleFilter, clearFilters, sortTable, toggleCol, onDiningText } from './ui.js';
+import { initTheme, toggleTheme, currentTheme, renderHome, renderCategory, onBeenClick, surprisePick, pickAgain, toggleFilter, clearFilters, sortTable, toggleCol, onDiningText } from './ui.js';
 import { keyOfSlug } from './data.js';
 import { bindSearch } from './search.js';
 import { openBracketSetup, initBracket } from './bracket.js';
@@ -156,9 +156,6 @@ function bindStatic() {
     // letter spans for the title wiggle
     const lou = document.querySelector('.t-lou');
     if (lou) lou.innerHTML = [...lou.textContent.trim()].map(c => `<span class="ch">${c}</span>`).join('');
-
-    const d = new Date();
-    document.getElementById('issueDate').textContent = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
 }
 
 // ---------------------------------------------------------------
@@ -188,7 +185,7 @@ async function initHero() {
         setHero(hero);
         requestAnimationFrame(() => heroEl.classList.add('gl-ready'));
     } catch (e) {
-        console.warn('3D hero unavailable — showing the print version.', e);
+        console.warn('3D hero unavailable — showing the flat skyline.', e);
     }
 }
 
@@ -199,7 +196,6 @@ window.addEventListener('wiki:theme', (e) => hero?.setNight(e.detail === 'dark')
 // ---------------------------------------------------------------
 initTheme();
 bindStatic();
-buildTicker();
 initBracket();
 initSlot();
 initBingo();

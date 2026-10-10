@@ -1,5 +1,5 @@
 // --- js/three/hero.js ---
-// The masthead: a risograph-printed, clickable Louisville.
+// The masthead: a clickable 3D Louisville. Daylight by day; neon noir with the switch on.
 // Skyline + Ohio River + Big Four Bridge + the Belle + the Big Bat + a floating fleur.
 import * as THREE from 'three';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -9,7 +9,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { makeRisoPass, printClean } from './riso.js';
 import { ADS, loadAds, makeHouseAds, drawHouseAds } from '../ads.js';
-import { fleurGeometry, batGeometry, beam, mergeBeams, makeSteamboat, softDotTexture, windowTextures, towerBox } from './shapes.js';
+import { fleurGeometry, fleurOutline, batGeometry, beam, mergeBeams, makeSteamboat, softDotTexture, windowTextures, towerBox } from './shapes.js';
 
 function mulberry32(a) {
     return function () {
@@ -46,22 +46,23 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const C = {
         skyTopD: new THREE.Color(0xbfd6e2), skyHorD: new THREE.Color(0xf7f1e2),
         skyTopN: new THREE.Color(0x020309), skyHorN: new THREE.Color(0x1d1733),
-        skyTopX: new THREE.Color(0x0b0022), skyHorX: new THREE.Color(0x4a0c52),
-        fogD: new THREE.Color(0xeee8d8), fogN: new THREE.Color(0x0d0c14), fogX: new THREE.Color(0x1a0526),
+        skyTopX: new THREE.Color(0x03050f), skyHorX: new THREE.Color(0x1a1846),
+        fogD: new THREE.Color(0xeee8d8), fogN: new THREE.Color(0x0d0c14), fogX: new THREE.Color(0x0b1030),
         groundD: new THREE.Color(0xb9b3a4), groundN: new THREE.Color(0x14131a),
-        waterD: new THREE.Color(0xb3d2dc), waterN: new THREE.Color(0x0e1826), waterX: new THREE.Color(0x1a0b30),
+        waterD: new THREE.Color(0xb3d2dc), waterN: new THREE.Color(0x0e1826), waterX: new THREE.Color(0x060b1c),
         steelD: new THREE.Color(0x5b6166), steelN: new THREE.Color(0x1c1f24),
+        glowA: new THREE.Color(0xff4fa3), glowB: new THREE.Color(0x2fd4ff),
         tmp: new THREE.Color(), tmp2: new THREE.Color(),
     };
 
     // ---------------- SKY ----------------
-    const skyU = { uTop: { value: C.skyTopD.clone() }, uHor: { value: C.skyHorD.clone() } };
+    const skyU = { uTop: { value: C.skyTopD.clone() }, uHor: { value: C.skyHorD.clone() }, uGlowA: { value: C.glowA }, uGlowB: { value: C.glowB }, uGlow: { value: 0 } };
     const sky = new THREE.Mesh(
         new THREE.SphereGeometry(400, 32, 16),
         new THREE.ShaderMaterial({
             side: THREE.BackSide, depthWrite: false, fog: false, uniforms: skyU,
             vertexShader: `varying vec3 vP; void main(){ vP = (modelMatrix * vec4(position,1.)).xyz; gl_Position = projectionMatrix * viewMatrix * vec4(vP,1.); }`,
-            fragmentShader: `uniform vec3 uTop; uniform vec3 uHor; varying vec3 vP; void main(){ float h = normalize(vP).y; gl_FragColor = vec4(mix(uHor, uTop, smoothstep(-0.02, 0.45, h)), 1.); }`
+            fragmentShader: `uniform vec3 uTop; uniform vec3 uHor; uniform vec3 uGlowA; uniform vec3 uGlowB; uniform float uGlow; varying vec3 vP; void main(){ vec3 d = normalize(vP); float h = d.y; vec3 c = mix(uHor, uTop, smoothstep(-0.02, 0.45, h)); vec3 g = mix(uGlowA, uGlowB, smoothstep(-0.1, 0.5, d.x)); c += g * uGlow * (1. - smoothstep(0.0, 0.2, h)) * smoothstep(-0.06, 0.0, h); gl_FragColor = vec4(c, 1.); }`
         })
     );
     scene.add(sky);
@@ -121,6 +122,63 @@ export function createHero({ canvas, container, night = false, neon = false, com
     water.position.set(0, 0, 48);
     scene.add(water);
 
+    // A skipping stone + splash rings (click the river)
+    const stone = { m: new THREE.Mesh(new THREE.SphereGeometry(.22, 8, 6), new THREE.MeshStandardMaterial({ color: 0x8d8a84, roughness: .8, flatShading: true })), hops: null, i: 0, t: 0, n: 0 };
+    stone.m.scale.set(1, .45, 1);
+    stone.m.visible = false;
+    scene.add(stone.m);
+    const rings = [];
+    for (let i = 0; i < 10; i++) {
+        const m = new THREE.Mesh(new THREE.RingGeometry(.28, .4, 24).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, depthWrite: false, fog: false }));
+        m.visible = false;
+        scene.add(m);
+        rings.push({ m, life: 0 });
+    }
+    function ring(at) {
+        const r = rings.find(x => x.life <= 0) || rings[0];
+        r.m.position.set(at.x, .34, at.z);
+        r.life = 1;
+        r.m.visible = true;
+    }
+
+    // Neon reflections: soft coloured streaks on the river under the bright stuff.
+    // Additive and kept below the bloom threshold, so they shimmer without flaring.
+    const fadeC = document.createElement('canvas');
+    fadeC.width = 8; fadeC.height = 128;
+    const fx = fadeC.getContext('2d');
+    const fg = fx.createLinearGradient(0, 0, 0, 128);
+    fg.addColorStop(0, '#fff'); fg.addColorStop(.35, '#888'); fg.addColorStop(1, '#000');
+    fx.fillStyle = fg; fx.fillRect(0, 0, 8, 128);
+    const fadeTex = new THREE.CanvasTexture(fadeC);
+    const rr = mulberry32(77);           // own seed so the city layout (rnd) is unchanged
+    const ripC = document.createElement('canvas');
+    ripC.width = 32; ripC.height = 128;
+    const rx = ripC.getContext('2d');
+    for (let y = 0; y < 128; y += 2) {
+        const a = .25 + rr() * .75;
+        rx.fillStyle = `rgba(255,255,255,${a})`;
+        const w = 10 + rr() * 22;
+        rx.fillRect(16 - w / 2, y, w, 1 + Math.floor(rr() * 2));
+    }
+    const ripTex = new THREE.CanvasTexture(ripC);
+    ripTex.wrapT = THREE.RepeatWrapping;
+    const streaks = [];
+    [
+        [-16, 0xffc46b, .9], [-12.5, 0xff4fa3, 1.1], [-9, 0xffc46b, .8], [-4.5, 0x2fd4ff, 1], [-1, 0xffc46b, .9],
+        [.6, 0xff4fa3, .8], [4.2, 0xb06bff, .9], [7.5, 0xffc46b, .7], [15, 0xd9ff3a, 1.2],
+        [19, 0xff4fa3, 1.3], [24, 0xb06bff, 1.3], [29, 0x2fd4ff, 1.4], [-27, 0xffc46b, .8], [-22, 0x2fd4ff, .8],
+    ].forEach(([x, c, w], i) => {
+        const len = 9 + (i % 4) * 2.2;
+        const map = ripTex.clone();
+        map.offset.y = i * .37;
+        const m = new THREE.Mesh(new THREE.PlaneGeometry(w, len).rotateX(-Math.PI / 2),
+            new THREE.MeshBasicMaterial({ color: c, map, alphaMap: fadeTex, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, fog: false }));
+        m.position.set(x, .3, -7 + len / 2);
+        m.visible = false;
+        scene.add(m);
+        streaks.push({ m, base: .38 + (i % 3) * .1, ph: i * 1.7 });
+    });
+
     // ---------------- BUILDINGS ----------------
     const tex = windowTextures();
     const bMat = new THREE.MeshStandardMaterial({ map: tex.day, emissiveMap: tex.night, emissive: 0xffffff, emissiveIntensity: 0, flatShading: true, roughness: .9 });
@@ -128,14 +186,33 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const darkMat = bMat.clone(); darkMat.color = new THREE.Color(0x9aa0a6);
 
     const towerGeos = [];
-    const edgeGeos = [];
     const occupied = [];
-    const addTower = (x, z, w, h, d, { mat = null, lift = 0.2 } = {}) => {
+    const NEON = [0xff4fa3, 0x2fd4ff, 0xb06bff, 0xffb347, 0x3dffb0].map(h => new THREE.Color(h).multiplyScalar(1.9));
+    const neonPos = [], neonCol = [];
+    let neonIdx = 0;
+    const addNeon = (g, topOnly) => {
+        const e = new THREE.EdgesGeometry(g, 20), p = e.attributes.position;
+        let top = -Infinity;
+        for (let i = 0; i < p.count; i++) top = Math.max(top, p.getY(i));
+        const c = NEON[neonIdx++ % NEON.length];
+        for (let i = 0; i < p.count; i += 2) {
+            let y0 = p.getY(i), y1 = p.getY(i + 1);
+            if (topOnly && (y0 < top - .01 || y1 < top - .01)) {
+                // corner posts: keep just the top of the vertical edge, so the crown reads from below
+                const vertical = Math.abs(p.getX(i) - p.getX(i + 1)) < .01 && Math.abs(p.getZ(i) - p.getZ(i + 1)) < .01;
+                if (!vertical || Math.max(y0, y1) < top - .01) continue;
+                y0 = top; y1 = top - Math.min(1.3, Math.abs(p.getY(i) - p.getY(i + 1)) * .25);
+            }
+            neonPos.push(p.getX(i), y0, p.getZ(i), p.getX(i + 1), y1, p.getZ(i + 1));
+            neonCol.push(c.r, c.g, c.b, c.r, c.g, c.b);
+        }
+        e.dispose();
+    };
+    const addTower = (x, z, w, h, d, { mat = null, lift = 0.2, neon = true } = {}) => {
         const g = towerBox(w, h, d);
         g.translate(x, lift + h / 2, z);
         occupied.push({ x, z, w, d });
-        const e = new THREE.EdgesGeometry(g, 20);
-        edgeGeos.push(e);
+        if (neon) addNeon(g, true);
         if (mat) { const m = new THREE.Mesh(g, mat); scene.add(m); return m; }
         towerGeos.push(g);
         return null;
@@ -144,9 +221,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         const m = new THREE.Mesh(geo, mat);
         m.position.set(x, y, z);
         scene.add(m);
-        const e = new THREE.EdgesGeometry(geo, 20);
-        e.translate(x, y, z);
-        edgeGeos.push(e);
+        addNeon(geo.clone().translate(x, y, z), false);
         return m;
     };
 
@@ -189,7 +264,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         if (!clear(x, z, w, d)) continue;
         const core = Math.exp(-Math.pow((x + 3) / 13, 2));
         const h = 1.6 + core * (4 + rnd() * 9) + rnd() * 3.2 - Math.max(0, (-z - 30) * .1);
-        addTower(x, z, w, Math.max(1.4, h), d);
+        addTower(x, z, w, Math.max(1.4, h), d, { neon: h > 4.5 && i % 3 !== 2 });
         i++;
     }
     const city = new THREE.Mesh(mergeGeometries(towerGeos), bMat);
@@ -353,9 +428,11 @@ export function createHero({ canvas, container, night = false, neon = false, com
         if (houseAds.includes(bb.shown)) paintSide(bb.side, bb.shown);
     });
 
-    // Neon outlines (only seen when the neon switch is on)
-    const edges = new THREE.LineSegments(mergeGeometries(edgeGeos), new THREE.LineBasicMaterial({ color: 0xff3ea5, transparent: true, opacity: 0, fog: false }));
-    edgeGeos.forEach(g => g.dispose());
+    // Neon crown outlines (only seen when the neon switch is on)
+    const edgeGeo = new THREE.BufferGeometry();
+    edgeGeo.setAttribute('position', new THREE.Float32BufferAttribute(neonPos, 3));
+    edgeGeo.setAttribute('color', new THREE.Float32BufferAttribute(neonCol, 3));
+    const edges = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, fog: false, toneMapped: false }));
     edges.visible = false;
     scene.add(edges);
 
@@ -471,6 +548,9 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const fleurHome = new THREE.Vector3(15, 20.5, -30);
     fleur.position.copy(fleurHome);
     scene.add(fleur);
+    const fleurTube = new THREE.LineSegments(fleurOutline(), new THREE.LineBasicMaterial({ color: new THREE.Color(0xd9ff3a).multiplyScalar(2.2), transparent: true, opacity: 0, fog: false, toneMapped: false }));
+    fleurTube.visible = false;
+    fleur.add(fleurTube);
     let fleurSpin = 0;
 
     // ---------------- POPE LICK TRESTLE ----------------
@@ -546,10 +626,10 @@ export function createHero({ canvas, container, night = false, neon = false, com
     // ---------------- POST ----------------
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .85, .45, .22);
+    const bloom = new UnrealBloomPass(new THREE.Vector2(256, 256), .55, .25, 1.0);
     bloom.enabled = false;
     composer.addPass(bloom);
-    const riso = makeRisoPass({ THREE, ShaderPass }, { dot: 5.2 * DPR });
+    const riso = makeRisoPass({ THREE, ShaderPass }, { dot: 5.2 * DPR });  // halftone off (uAmount 0); still does the sRGB output
     composer.addPass(riso);
 
     // ---------------- CAMERA ----------------
@@ -591,21 +671,24 @@ export function createHero({ canvas, container, night = false, neon = false, com
         { obj: belleHit, fn: () => clickBelle() },
         { obj: batHit, fn: () => clickBat() },
         { obj: fleur, fn: () => clickFleur() },
+        { obj: water, fn: () => skipStone(lastPoint), quiet: true },
         { obj: sun, fn: () => on.toggleTheme?.(), when: () => S.night < .5 },
         { obj: moon, fn: () => on.toggleTheme?.(), when: () => S.night >= .5 },
         { obj: shootHit, fn: () => clickStar(), when: () => star.active },
         { obj: eyesHit, fn: () => clickEyes(), when: () => S.night > .6 },
     ];
 
-    function pick(e) {
+    let lastPoint = null;
+    function pick(e, hover = false) {
         const r = canvas.getBoundingClientRect();
         ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
         raycaster.setFromCamera(ndc, camera);
-        const live = clickables.filter(c => !c.when || c.when());
+        const live = clickables.filter(c => (!c.when || c.when()) && !(hover && c.quiet));
         const hits = raycaster.intersectObjects(live.map(c => c.obj), false);
         if (!hits.length) return null;
         // tiny, rare targets win even if a big hitbox (the bridge) is in front
         const hit = hits.find(h => h.object === eyesHit || h.object === shootHit) || hits[0];
+        lastPoint = hit.point;
         return live.find(c => c.obj === hit.object) || null;
     }
 
@@ -620,7 +703,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
                 hoverQueued = true;
                 requestAnimationFrame(() => {
                     hoverQueued = false;
-                    if (lastMove && lastMove.target === canvas) container.classList.toggle('gl-hover', !!pick(lastMove));
+                    if (lastMove && lastMove.target === canvas) container.classList.toggle('gl-hover', !!pick(lastMove, true));
                     else container.classList.remove('gl-hover');
                 });
             }
@@ -649,6 +732,24 @@ export function createHero({ canvas, container, night = false, neon = false, com
         batSwing.t = 0;
         batSwing.hit = false;
         on.egg?.('batswing');
+    }
+    function skipStone(at) {
+        if (stone.hops || !at) return;
+        // most throws are short; 6+ skips is roughly one in five
+        const n = 1 + Math.floor(Math.pow(Math.random(), 1.6) * 8);
+        const dir = new THREE.Vector3((Math.random() - .5) * .5, 0, -1).normalize();
+        stone.hops = [];
+        let p = new THREE.Vector3(at.x, .3, Math.max(at.z, -2)), len = 3.6, h = 1.3, d = .42;
+        for (let i = 0; i < n; i++) {
+            const q = p.clone().addScaledVector(dir, len);
+            if (q.z < -6.5) { stone.hops.push({ a: p, b: q.setZ(-6.5), h, d }); break; }
+            stone.hops.push({ a: p, b: q, h, d });
+            p = q; len *= .78; h *= .72; d *= .84;
+        }
+        stone.n = stone.hops.length;
+        stone.i = 0; stone.t = 0;
+        stone.m.visible = true;
+        ring(stone.hops[0].a);
     }
     function clickFleur() {
         fleurSpin = 1;
@@ -685,6 +786,10 @@ export function createHero({ canvas, container, night = false, neon = false, com
         skyU.uTop.value.copy(C.skyTopD).lerp(C.skyTopN, S.night).lerp(C.skyTopX, X);
         skyU.uHor.value.copy(C.skyHorD).lerp(C.skyHorN, S.night).lerp(C.skyHorX, X);
         scene.fog.color.copy(C.fogD).lerp(C.fogN, S.night).lerp(C.fogX, X);
+        scene.fog.near = lerp(70, 140, X);
+        scene.fog.far = lerp(260, 420, X);
+        skyU.uGlow.value = X * .22;
+        waterMat.roughness = lerp(.32, .14, X);
         groundMat.color.copy(C.groundD).lerp(C.groundN, N);
         hillMat.color.setHex(0xbfc7ae).lerp(C.groundN, N);
         waterMat.color.copy(C.waterD).lerp(C.waterN, S.night).lerp(C.waterX, X);
@@ -695,9 +800,9 @@ export function createHero({ canvas, container, night = false, neon = false, com
         sunLight.color.setHex(0xfff4d8).lerp(col.setHex(0x9fb6ff), N);
         rimLight.intensity = X * 2.2;
         rimLight.color.setHex(0x00c2ff);
-        const win = lerp(0, 1.25, N);
+        const win = lerp(0, 1.25, N) * (1 - X * .3);     // windows stay under the bloom threshold
         bMat.emissiveIntensity = pinkMat.emissiveIntensity = darkMat.emissiveIntensity = win;
-        bMat.emissive.setHex(0xffffff).lerp(col.setHex(0xff7ad0), X * .6);
+        bMat.emissive.setHex(0xffffff).lerp(col.setHex(0xffc46b), X * .55);
         pinkMat.emissive.copy(bMat.emissive);
         darkMat.emissive.copy(bMat.emissive);
         sun.material.opacity = 1 - S.night;
@@ -712,15 +817,25 @@ export function createHero({ canvas, container, night = false, neon = false, com
         clouds.forEach(c => { c.visible = N < .98; });
         edges.material.opacity = X;
         edges.visible = X > .01;
+        fleurTube.material.opacity = X;
+        fleurTube.visible = X > .01;
+        fleurMat.color.setHex(0xeaff00).lerp(col.setHex(0x1c2410), X * .85);
         bloom.enabled = X > .01;
-        bloom.strength = X * .85;
-        riso.uniforms.uAmount.value = 1 - X;
+        bloom.strength = X * .45;
+        riso.uniforms.uAmount.value = 0;
         riso.uniforms.uNight.value = S.night;
         eyeMat.opacity = Math.max(0, (N - .55) / .45);
         eyes.visible = eyeMat.opacity > .01;
 
         // water + clouds
         waterU.uTime.value = T * k;
+        const ref = X + S.night * (1 - X) * .3;
+        streaks.forEach(st => {
+            st.m.visible = ref > .01;
+            if (!st.m.visible) return;
+            st.m.material.opacity = ref * st.base * (.8 + .2 * Math.sin(T * 1.9 + st.ph));
+            st.m.material.map.offset.y -= dt * .08 * k;
+        });
         clouds.forEach(c => { c.position.x += c.userData.speed * dt * k; if (c.position.x > 120) c.position.x = -120; });
 
         // Belle cruising upriver
@@ -766,7 +881,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         fleur.rotation.y += dt * (.45 + fleurSpin * fleurSpin * 18) * k;
         fleur.position.y = fleurHome.y + Math.sin(T * .8) * .6;
         fleur.rotation.z = Math.sin(T * .6) * .06;
-        fleurMat.emissive.setHex(0x4a5200).lerp(col.setHex(0xb8c800), Math.max(X, fleurSpin));
+        fleurMat.emissive.setHex(0x4a5200).lerp(col.setHex(0xb8c800), fleurSpin).multiplyScalar(1 - X * .9);
 
         // bat swing
         if (batSwing.t >= 0) {
@@ -836,9 +951,38 @@ export function createHero({ canvas, container, night = false, neon = false, com
             });
             if (done) bb.flip = -1;
         }
-        lampMat.emissiveIntensity = lerp(.15, 2.4, N);
+        lampMat.emissiveIntensity = lerp(.15, 1.3, N);
         const adLevel = 1 - X * .3;
         bbSides.forEach(sd => sd.mat.color.setScalar(adLevel));
+
+        // skipping stone: hop along, a splash ring at every touchdown
+        if (stone.hops) {
+            stone.t += dt;
+            const hop = stone.hops[stone.i];
+            const u = Math.min(1, stone.t / hop.d);
+            stone.m.position.lerpVectors(hop.a, hop.b, u);
+            stone.m.position.y = .3 + Math.sin(u * Math.PI) * hop.h;
+            stone.m.rotation.y += dt * 14;
+            if (u >= 1) {
+                ring(hop.b);
+                on.egg?.('splash');
+                stone.i++;
+                stone.t = 0;
+                if (stone.i >= stone.hops.length) {
+                    stone.m.visible = false;
+                    stone.hops = null;
+                    on.egg?.('skip', stone.n);
+                }
+            }
+        }
+        rings.forEach(r => {
+            if (r.life <= 0) return;
+            r.life -= dt;
+            const a = 1 - r.life;
+            r.m.scale.setScalar(1 + a * 4);
+            r.m.material.opacity = Math.max(0, r.life) * .8;
+            if (r.life <= 0) r.m.visible = false;
+        });
 
         // Pope Lick eyes blink + drift
         const blink = (T % 5.3) < .12 ? .1 : 1;

@@ -19,12 +19,6 @@ const MONO = '"Space Mono", "Courier New", monospace';
 function drawFace(ctx, text, row) {
     ctx.fillStyle = '#f2eee3';
     ctx.fillRect(0, 0, TW, TH);
-    // halftone edge
-    ctx.fillStyle = 'rgba(20,20,20,.12)';
-    for (let y = 6; y < TH; y += 10) for (let x = (y / 10 % 2) * 5; x < TW; x += 10) {
-        const d = Math.abs(y - TH / 2) / (TH / 2);
-        if (d > .62) { ctx.beginPath(); ctx.arc(x, y, (d - .6) * 5, 0, 7); ctx.fill(); }
-    }
     ctx.fillStyle = '#141414';
     ctx.fillRect(0, 0, 14, TH);
     ctx.fillRect(TW - 14, 0, 14, TH);
@@ -73,9 +67,6 @@ function panelTexture() {
     const px = (wx) => (wx + 4.9) * sx, py = (wy) => (4.7 - wy) * sy;
     x.fillStyle = '#141414';
     x.fillRect(0, 0, W, H);
-    // halftone
-    x.fillStyle = 'rgba(234,255,0,.10)';
-    for (let yy = 4; yy < H; yy += 9) for (let xx = (yy / 9 % 2) * 4.5; xx < W; xx += 9) { x.beginPath(); x.arc(xx, yy, 1.4, 0, 7); x.fill(); }
     // title
     x.fillStyle = '#eaff00';
     x.font = `${Math.round(sy * .62)}px ${FONT}`;

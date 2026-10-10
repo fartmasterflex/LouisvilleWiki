@@ -1,5 +1,5 @@
 // --- js/secrets.js ---
-// Registry of easter eggs + "sticker book" progress tracker.
+// Registry of easter eggs + "the vault" progress tracker.
 import { store, toast, escapeHtml, openModal } from './utils.js';
 import { sfx } from './audio.js';
 
@@ -20,7 +20,7 @@ export const SECRETS = [
     { id: 'belle', emoji: '📯', name: 'All Aboard', hint: 'Say hi to the old steamboat.' },
     { id: 'star', emoji: '🌠', name: 'Make a Wish', hint: 'Night sky. Something streaks by. Catch it.' },
     { id: 'cincy', emoji: '🙃', name: 'Wrong City', hint: 'Type the name of the enemy.' },
-    { id: 'pronounce', emoji: '🗣️', name: 'Say It Right', hint: 'Hear every way to say it.' },
+    { id: 'skipper', emoji: '🪨', name: 'Six Skipper', hint: 'Skip a stone across the Ohio. Six or better.' },
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
     { id: 'console', emoji: '🧑‍💻', name: 'View Source', hint: 'Developers: check your console.' },
     { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' }
