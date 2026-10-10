@@ -5,7 +5,7 @@ import { sfx } from './audio.js';
 
 const diveNeighborhoods = {
     "Germantown / Schnitzelburg": ["Nachbar", "Seidenfaden's", "The Merryweather", "The Pearl"],
-    "Highlands": ["Bambi Bar", "The Outlook Inn", "Hideaway Saloon", "Left Field Lounge", "Kern's Korner", "Barret Bar", "The Back Door"],
+    "Highlands": ["Bambi Bar", "The Outlook Inn", "Hideaway Saloon", "Left Field Lounge", "Kern's Korner", "Barret Bar"],
     "Clifton / Crescent Hill": ["Mellwood Tavern", "Frankfort Ave Beer Depot", "Dive Bar on Frankfort", "Clifton Tavern"],
     "Old Louisville / Downtown": ["Mag Bar", "Granville Pub", "Third Street Dive"]
 };

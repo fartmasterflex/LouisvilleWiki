@@ -767,7 +767,6 @@ export const wikiData = {
             { name: "Stooges" },
             { name: "The Merryweather" },
             { name: "The Outlook Inn" },
-            { name: "The Back Door" },
             { name: "The Pearl" },
             { name: "Third Street Dive" },
             { name: "Whirling Tiger" }
@@ -894,6 +893,7 @@ export const wikiData = {
         description: "Books & Tools.",
         type: "custom",
         items: [
+            { name: "Louisville Tool Library", note: "Borrow a power drill or a ladder like you borrow a book. Not an LFPL branch." },
             { name: "LFPL Main Branch" },
             { name: "Bon Air" },
             { name: "Crescent Hill" },

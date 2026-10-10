@@ -310,7 +310,6 @@ export const manualCoords = {
     "Third Street Dive": [38.25123, -85.75592],                // OSM: Third Street Dive, South 3rd Street, Louisville, Kentucky, 40214
     "Big Rock Bar & Brew": [38.22400, -85.69381],              // OSM: Big Rock Bar & Brew, 2120, Bardstown Road, Highlands Douglass Neighborhood, Strathmoor Gardens, Loui
     "Clifton Tavern": [38.25672, -85.71662],                   // addr: 1800 FRANKFORT AVE, LOUISVILLE, KY, 40206
-    "The Back Door": [38.23611, -85.71693],                    // addr: 1250 BARDSTOWN RD, LOUISVILLE, KY, 40204
 
     // ===== BREWERIES & DISTILLERIES =====
     "Rabbit Hole Distillery": [38.25204, -85.74002],           // addr: 711 E JEFFERSON ST, LOUISVILLE, KY, 40202
