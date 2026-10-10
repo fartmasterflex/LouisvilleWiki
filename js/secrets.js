@@ -4,7 +4,7 @@ import { store, toast, escapeHtml, openModal } from './utils.js';
 import { sfx } from './audio.js';
 
 export const SECRETS = [
-    { id: 'fleur', emoji: '⚜️', name: 'Fleur Storm', hint: 'The title likes attention. Give it three.' },
+    { id: 'fleur', emoji: '⚜️', name: 'Fleur Storm', hint: 'The gold fleur-de-lis floating over downtown likes to be poked.' },
     { id: 'derby', emoji: '🏇', name: 'And They’re Off', hint: 'A painted horse is loose on the riverfront. Give it a pat.' },
     { id: 'boat', emoji: '🚢', name: 'Stowaway', hint: 'Something is docked at the very bottom.' },
     { id: 'gems', emoji: '💎', name: 'Hidden Gems', hint: 'Beat Cincinnati on the water.' },

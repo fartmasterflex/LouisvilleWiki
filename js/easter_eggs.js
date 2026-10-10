@@ -65,7 +65,7 @@ export async function celebrate(opts = {}) {
 }
 
 // -----------------------------------------------
-// FLEUR STORM (title x3, or click the 3D fleur)
+// FLEUR STORM (click the 3D fleur, or type "fleur")
 // -----------------------------------------------
 let fleurBusy = false;
 export async function fleurRain() {
@@ -106,7 +106,45 @@ function flatFleurRain() {
 }
 
 // -----------------------------------------------
-// CHURCHILL DOWNS (subtitle x3, or type "derby")
+// BUSTED SIGN (title x3): the letters fall off the sign, bounce, then snap back
+// -----------------------------------------------
+let signBusy = false;
+function bustedSign() {
+    const title = document.getElementById('wikiTitle');
+    const hero = document.getElementById('hero');
+    if (signBusy || !title || !hero) return;
+    const letters = [...title.querySelectorAll('.t-lou .ch'), title.querySelector('.t-wiki')].filter(Boolean);
+    if (!letters.length) return;
+    signBusy = true;
+    if (prefersReducedMotion()) {
+        title.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg)' }, { transform: 'rotate(2deg)' }, { transform: 'rotate(0)' }], { duration: 500 });
+    } else {
+        const floor = hero.getBoundingClientRect().bottom - 8;
+        letters.forEach((el, i) => {
+            const r = el.getBoundingClientRect();
+            const dy = Math.max(40, floor - r.bottom);
+            const dx = (Math.random() - .5) * 120;
+            const spin = (Math.random() - .5) * 140;
+            // keep each letter's own resting transform (WIKI sits at a tilt)
+            const rest = getComputedStyle(el).transform;
+            const base = rest === 'none' ? '' : ' ' + rest;
+            el.animate([
+                { transform: rest, easing: 'cubic-bezier(.5, 0, 1, .5)' },               // falls (gravity)
+                { transform: `translate(${dx}px, ${dy}px) rotate(${spin}deg)${base}`, offset: .3, easing: 'ease-out' },
+                { transform: `translate(${dx * 1.15}px, ${dy - 36}px) rotate(${spin * 1.15}deg)${base}`, offset: .38, easing: 'ease-in' },   // bounce
+                { transform: `translate(${dx * 1.25}px, ${dy}px) rotate(${spin * 1.25}deg)${base}`, offset: .46 },
+                { transform: `translate(${dx * 1.25}px, ${dy}px) rotate(${spin * 1.25}deg)${base}`, offset: .78, easing: 'cubic-bezier(.3, 1.5, .5, 1)' },
+                { transform: rest },                                                      // the sign guy fixes it
+            ], { duration: 3400, delay: i * 45 });
+        });
+        setTimeout(() => sfx.punch(), 1000);
+    }
+    setTimeout(() => toast('Somebody call the sign guy.', { kicker: 'CLATTER', emoji: '🪧', duration: 2600 }), 1200);
+    setTimeout(() => { signBusy = false; }, 3900);
+}
+
+// -----------------------------------------------
+// CHURCHILL DOWNS (click the horse, or type "derby")
 // -----------------------------------------------
 export async function churchill() {
     if (document.getElementById('churchillOverlay')) return;
@@ -717,7 +755,7 @@ export function initEasterEggs() {
         titleClicks++;
         clearTimeout(titleTimer);
         titleTimer = setTimeout(() => { titleClicks = 0; }, 900);
-        if (titleClicks >= 3) { titleClicks = 0; fleurRain(); }
+        if (titleClicks >= 3) { titleClicks = 0; bustedSign(); }
     });
 
     document.getElementById('neon-switch')?.addEventListener('click', toggleNeon);
