@@ -30,6 +30,10 @@ const defaultBingoItems = [
     "Stand inside the Water Tower",
     "Visit the Thomas Edison House",
     "Walk through St. James Court",
+    "Spot the giant vampire bat on Caufield's",
+    "Watch a Louisville Kings game",
+    "See the Big Four Bridge light show",
+    "Catch a Waterfront Wednesday show",
 
     // === ONLY IN LOUISVILLE MOMENTS ===
     "Hear someone say 'Keep Louisville Weird'",

@@ -393,6 +393,12 @@ const hiddenGems = [
     { name: "Louisville Waterfront Park at Dawn", note: "The Big Four Bridge at sunrise with nobody on it is a different city entirely." },
     { name: "Iroquois Amphitheater", note: "Outdoor concerts in a hollow in the middle of the park. Great overlook of the city." },
     { name: "Hadley Pottery", note: "Handmade Louisville pottery since 1940, known for its whimsical blue folk designs. Nearly closed in 2022 before a local buyer saved it." },
+    { name: "Caperton Swamp", note: "A one-mile loop through a real wetland off River Road. Herons, turtles, and zero crowds." },
+    { name: "The Witches' Tree", note: "6th & Park in Old Louisville. A twisted, gnarled maple with a legend tying it to the 1890 tornado." },
+    { name: "Columbia Gym", note: "4th St. The gym where a 12-year-old Cassius Clay walked in to report his stolen bike and started boxing." },
+    { name: "Caufield's Vampire Bat", note: "A 36-foot bat clings to the costume shop on W Main. Best at night." },
+    { name: "Baxter Square", note: "Louisville's first public cemetery, turned into an Olmsted park." },
+    { name: "Fairmount Falls", note: "A seasonal waterfall in Jefferson Memorial Forest. Go after a good rain." }
 ];
 
 export function openHiddenGems() {

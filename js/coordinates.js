@@ -17,6 +17,7 @@ export const manualCoords = {
     "The Outlook Inn": [38.24210, -85.72585],                  // addr: 916 BAXTER AVE, LOUISVILLE, KY, 40204
     "Hideaway Saloon": [38.23057, -85.70397],                  // OSM: Hideaway Saloon, Bardstown Road, Bonnycastle Neighborhood, Highlands, Louisville, Kentucky, 
     "Seidenfaden's": [38.23917, -85.73396],                    // addr: 1134 E BRECKINRIDGE ST, LOUISVILLE, KY, 40204
+    "Merle's Whiskey Kitchen": [38.25607, -85.75202],          // addr: 122 W MAIN ST, LOUISVILLE, KY, 40202
 
     // ===== MUSEUMS & GALLERIES =====
     "Speed Art Museum": [38.21785, -85.76080],                 // OSM: J B Speed Art Museum, 2035, South 3rd Street, Louisville, Kentucky, 40208
@@ -35,6 +36,10 @@ export const manualCoords = {
     "Revelry Boutique Gallery": [38.25307, -85.73837],         // OSM: Revelry Boutique Gallery, 742, East Market Street, Louisville, Kentucky, 40202, United State
     "Garner Narrative": [38.25325, -85.74022],                 // OSM: Garner Narrative, South Clay Street, Louisville, Kentucky, 40203
     "Howard Steamboat Museum": [38.27826, -85.72532],          // OSM: Howard Steamboat Museum, 1101, East Market Street, Port Fulton, Jeffersonville, Clark County, Indiana, 47
+    "Riverside, the Farnsley-Moremen Landing": [38.09666, -85.89492], // addr: 7410 MOORMAN RD, LOUISVILLE, KY, 40272
+    "SAR Education Center & Museum": [38.25742, -85.76334],    // addr: 809 W MAIN ST, LOUISVILLE, KY, 40202
+    "AHOY Children's Museum": [38.26934, -85.78647],           // same spot as Portland Museum
+    "Louisville Stoneware": [38.24305, -85.73467],             // addr: 731 BRENT ST, LOUISVILLE, KY, 40204
 
     // ===== ATTRACTIONS & OUTINGS =====
     "The Belle of Louisville": [38.25915, -85.75570],          // OSM: Belle of Louisville, Louisville Loop, Louisville, Kentucky, 40202
@@ -45,6 +50,13 @@ export const manualCoords = {
     "Louisville Mega Cavern": [38.20138, -85.70410],           // OSM: Louisville Mega Cavern, 1841, Taylor Avenue, Louisville-Jefferson County, Louisville, Kentuc
     "Vernon Lanes": [38.25905, -85.72234],                     // OSM: Vernon Lanes, 1575, Story Avenue, Clifton, Louisville, Kentucky, 40206
     "Recbar": [38.19584, -85.56605],                           // OSM: RecBar, Jefferson Street, Jeffersontown, Kentucky, 40299
+    "Waterfront Park": [38.26000, -85.74300],                  // manual: the Great Lawn, Waterfront Park
+    "Whiskey Row": [38.25660, -85.75300],                      // manual: W Main St 100 block (Whiskey Row)
+    "Louisville Slugger Field": [38.25550, -85.74577],         // addr: 401 E MAIN ST, LOUISVILLE, KY, 40202
+    "Kentucky Kingdom": [38.19408, -85.73887],                 // addr: 937 PHILLIPS LN, LOUISVILLE, KY, 40209
+    "Topgolf": [38.24523, -85.61072],                          // OSM: Topgolf, 301, Oxmoor Lane, Louisville, Jefferson County, Kentucky, 40222, United States
+    "GoodBounce Pickleball Yard": [38.26452, -85.72752],       // addr: 1515 RIVER SHORE DR, LOUISVILLE, KY, 40206
+    "Iroquois Amphitheater": [38.15952, -85.78007],            // addr: 1080 AMPHLITHEATER RD, LOUISVILLE, KY, 40214
 
     // ===== THRIFT, VINTAGE & DIGGING =====
     "The Nitty Gritty": [38.23654, -85.72846],                 // OSM: The Nitty Gritty, East Kentucky Street, Louisville, Kentucky, 40204
@@ -70,6 +82,7 @@ export const manualCoords = {
     "Turners Circus": [38.28232, -85.69759],                   // OSM: American Turners of Louisville, 3125, River Road, Metro Council District 9, Louisville, Kent
     "Paddling Floyds Fork": [38.23050, -85.46790],             // North Beckley Paddling Access (kept)
     "Harrods Creek": [38.34229, -85.49386],                    // OSM: South Fork Harrods Creek, Park Lake, Crestwood, Oldham County, Kentucky, 40056
+    "Beckley Creek Park": [38.21794, -85.47543],               // OSM: Beckley Creek Park, 1411, Louisville, Jefferson County, Kentucky, 40245, United States
 
     // ===== CLUBS & ACTIVITIES =====
     "LXC Sports": null,                                        // leagues play all over town
@@ -95,6 +108,11 @@ export const manualCoords = {
     "YPAL (Young Professionals Association)": null,            // not a single place
     "Neighborhood Associations": null,                         // not a single place
     "Metro Health Harm Reduction": [38.24642, -85.74736],      // addr: 400 E GRAY ST, LOUISVILLE, KY, 40202
+    "Louisville Race Club": null,                              // meets around town
+    "Iroquois Hill Runners": null,                             // club, no single location
+    "Louisville Improvisors": null,                            // troupe, no single venue
+    "Louisville TKO Boxing": [38.24128, -85.75404],            // addr: 104 E BRECKINRIDGE ST, LOUISVILLE, KY, 40203
+    "Columbia Gym": [38.24364, -85.75888],                     // addr: 824 S 4TH ST, LOUISVILLE, KY, 40203
 
     // ===== OLDEST RESTAURANTS =====
     "Wagner's Pharmacy": [38.20451, -85.76531],                // OSM: Wagner's Pharmacy, 3113, South 4th Street, Louisville, Kentucky, 40214
@@ -161,6 +179,11 @@ export const manualCoords = {
     "The Pendennis Clubhouse": [38.25075, -85.75454],          // addr: 218 W MUHAMMAD ALI BLVD, LOUISVILLE, KY, 40202
     "The Palace Theatre": [38.24805, -85.75781],               // OSM: The Louisville Palace Theater, 623, South 4th Street, Louisville, Kentucky, 40202, United St
     "Louisville Memorial Auditorium": [38.23938, -85.76012],   // OSM: Memorial Auditorium, Baseball Alley, Louisville, Kentucky, 40203
+    "Springfield (Zachary Taylor House)": [38.27893, -85.64757], // addr: 5608 APACHE RD, LOUISVILLE, KY, 40207
+    "Oxmoor Farm": [38.24335, -85.61308],                      // OSM: Oxmoor Farm Ln (approx.)
+    "Brennan House": [38.24820, -85.75962],                    // addr: 631 S 5TH ST, LOUISVILLE, KY, 40202
+    "Western Branch Library": [38.24994, -85.76790],           // addr: 604 S 10TH ST, LOUISVILLE, KY, 40203
+    "Zachary Taylor National Cemetery": [38.27575, -85.64273], // addr: 4701 BROWNSBORO RD, LOUISVILLE, KY, 40207
 
     // ===== PARKS =====
     "Algonquin Park": [38.22792, -85.80187],                   // OSM: Algonquin Park, 1614, South Parkland, Louisville, Kentucky, 40210
@@ -188,6 +211,13 @@ export const manualCoords = {
     "Bernheim Arboretum & Research Forest": [37.92434, -85.66230], // addr: 2075 CLERMONT RD, CLERMONT, KY, 40110
     "Falls of the Ohio State Park": [38.27534, -85.76288],     // OSM: Falls of the Ohio State Park, Clarksville, Clark County, Indiana
     "Creasey Mahan Nature Preserve": [38.39851, -85.57970],    // addr: 12501 HARMONY LANDING RD, GOSHEN, KY, 40026
+    "McNeely Lake Park": [38.09760, -85.63159],                // OSM: McNeely Lake Park, Louisville, Jefferson County, Kentucky, United States
+    "Blackacre State Nature Preserve": [38.19343, -85.52433],  // addr: 3200 TUCKER STATION RD, LOUISVILLE, KY, 40299
+    "Beargrass Creek State Nature Preserve": [38.21305, -85.70836], // OSM: Beargrass Creek State Nature Preserve, Louisville-Jefferson County, Louisville, Jefferson County, Ke
+    "Big Rock": [38.23361, -85.68465],                         // OSM: Big Rock, Park Boundary Road, Highlands Douglass Neighborhood, Louisville, Jefferson County, Kentuck
+    "Hogan's Fountain": [38.23943, -85.69645],                 // OSM: Hogan's Fountain, Scenic Loop, Louisville, Jefferson County, Kentucky, 40206, United States
+    "Fairmount Falls": [38.09118, -85.57701],                  // OSM: Fairmount Falls Park, Thixton, Louisville, Jefferson County, Kentucky, United States
+    "Otter Creek Outdoor Recreation Area": [37.94298, -86.04087], // OSM: Otter Creek Outdoor Recreation Area, Meade County, Kentucky, United States
 
     // ===== GROCERY =====
     "Lotsa Pasta": [38.25203, -85.66012],                      // addr: 3717 LEXINGTON RD, LOUISVILLE, KY, 40207
@@ -202,6 +232,14 @@ export const manualCoords = {
     "Highland Fish Market": [38.22890, -85.70165],             // addr: 1745 BARDSTOWN RD, LOUISVILLE, KY, 40205
     "Viet Hoa Food Market": [38.14889, -85.69261],             // addr: 7100 PRESTON HWY, LOUISVILLE, KY, 40219
     "Patel Brothers": [38.22008, -85.58205],                   // addr: 1850 S HURSTBOURNE PKWY, LOUISVILLE, KY, 40220
+    "Vietnam Oriental Market": [38.17436, -85.76742],          // addr: 5019 S 3RD ST, LOUISVILLE, KY, 40214
+    "Dong Phuong Oriental Market": [38.15942, -85.76276],      // addr: 6705 STRAWBERRY LN, LOUISVILLE, KY, 40214
+    "Choi's Asian Food Market": [38.25881, -85.60385],         // addr: 607 LYNDON LN, LOUISVILLE, KY, 40222
+    "Anar Food Mart": [38.28060, -85.59162],                   // addr: 8730 WESTPORT RD, LOUISVILLE, KY, 40242
+    "Golden Key Market": [38.19669, -85.65554],                // addr: 3821 BARDSTOWN RD, LOUISVILLE, KY, 40218
+    "Lanceta Trading": [38.19860, -85.62277],                  // OSM: 'Lanceda', Six Mile Lane (Lanceta Trading Co.)
+    "My Tindahan": [38.22343, -85.68275],                      // addr: 2240 TAYLORSVILLE RD (shares space with Mixmix Cafe)
+    "Haymarket by Ashbourne Farms": [38.27772, -85.69859],     // addr: 3020 RIVER RD, LOUISVILLE, KY, 40207
 
     // ===== MUSIC VENUES =====
     "Camp Spaceman": [38.24382, -85.73403],                    // addr: 710 BARRET AVE, LOUISVILLE, KY, 40204
@@ -211,6 +249,8 @@ export const manualCoords = {
     "Headliners": [38.25055, -85.72078],                       // addr: 1386 LEXINGTON RD, LOUISVILLE, KY, 40204
     "Mercury Ballroom": [38.24844, -85.75769],                 // OSM: The Mercury Ballroom, 611, South 4th Street, Louisville, Kentucky, 40202
     "Paristown Hall": [38.24266, -85.73498],                   // OSM: Old Foresters Paristown Hall, 724, Accessibility Ramp, Louisville, Kentucky, 40204, United S
+    "KFC Yum! Center": [38.25770, -85.75386],                  // OSM: KFC Yum! Center, 1, Clark Memorial Bridge, Louisville, Jefferson County, Kentucky, 40202, United Sta
+    "Stevie Ray's Blues Bar": [38.25577, -85.74927],           // addr: 230 E MAIN ST, LOUISVILLE, KY, 40202
 
     // ===== THEATRE / THE STAGE =====
     "Actors Theatre of Louisville": [38.25606, -85.75552],     // OSM: Actors Theatre of Louisville, 316, West Main Street, Louisville, Kentucky, 40202, United Sta
@@ -228,6 +268,12 @@ export const manualCoords = {
     "UofL Theatre Arts": [38.21437, -85.75523],                // addr: 2314 S FLOYD ST, LOUISVILLE, KY, 40208
     "Louisville Comedy Club": [38.25282, -85.75712],           // addr: 411 S 4TH ST, LOUISVILLE, KY, 40202
     "Planet of the Tapes": [38.24613, -85.73351],              // OSM: Planet of the Tapes, 640, Barret Avenue, Louisville, Kentucky, 40204
+    "Louisville Orchestra": [38.25686, -85.75824],             // same spot as KY Center for the Performing Arts
+    "Kentucky Shakespeare": [38.23045, -85.76284],             // same spot as Central Park
+    "Pandora Productions": [38.24860, -85.75632],              // addr: 604 S 3RD ST, LOUISVILLE, KY, 40202
+    "Commonwealth Theatre Center": [38.24673, -85.72824],      // addr: 1123 PAYNE ST, LOUISVILLE, KY, 40204
+    "The Bard's Town": [38.22832, -85.70075],                  // addr: 1801 BARDSTOWN RD, LOUISVILLE, KY, 40205
+    "CenterStage": [38.22543, -85.65161],                      // addr: 3600 DUTCHMANS LN, LOUISVILLE, KY, 40205
 
     // ===== GOLF & DISC GOLF =====
     "Bobby Nichols (Waverly Park)": [38.12616, -85.83683],     // OSM: Bobby Nichols Golf Course, 4301, East Pages Lane, Waverly Hills, Louisville, Kentucky, 40272
@@ -242,6 +288,7 @@ export const manualCoords = {
     "Louisville Champions Park": [38.26953, -85.70934],        // OSM: Louisville Champions Park, 2050, Clifton, Metro Council District 9, Louisville, Kentucky, 40
     "Ryan's Course at Red Orchard Park": [38.19566, -85.23411], // course coordinates (DG Course Review), Red Orchard Park, Shelbyville
     "Wendell Moore Disc Golf Course": [38.39385, -85.43677],   // OSM: Wendell Moore Park, Buckner, Oldham County, Kentucky
+    "Arrowhead Disc Golf Course": [38.07716, -85.90027],       // addr: 7300 SCENIC TRL, LOUISVILLE, KY, 40272
 
     // ===== DIVE BARS =====
     "Air Devils Inn": [38.22278, -85.66814],                   // addr: 2802 TAYLORSVILLE RD, LOUISVILLE, KY, 40205
@@ -261,6 +308,9 @@ export const manualCoords = {
     "The Merryweather": [38.22438, -85.73716],                 // OSM: The MerryWeather, 1101, Lydia Street, Germantown, Louisville, Kentucky, 40217
     "The Pearl": [38.22649, -85.73411],                        // addr: 1151 GOSS AVE, LOUISVILLE, KY, 40217
     "Third Street Dive": [38.25123, -85.75592],                // OSM: Third Street Dive, South 3rd Street, Louisville, Kentucky, 40214
+    "Big Rock Bar & Brew": [38.22400, -85.69381],              // OSM: Big Rock Bar & Brew, 2120, Bardstown Road, Highlands Douglass Neighborhood, Strathmoor Gardens, Loui
+    "Clifton Tavern": [38.25672, -85.71662],                   // addr: 1800 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "The Back Door": [38.23611, -85.71693],                    // addr: 1250 BARDSTOWN RD, LOUISVILLE, KY, 40204
 
     // ===== BREWERIES & DISTILLERIES =====
     "Rabbit Hole Distillery": [38.25204, -85.74002],           // addr: 711 E JEFFERSON ST, LOUISVILLE, KY, 40202
@@ -287,6 +337,14 @@ export const manualCoords = {
     "TEN20": [38.25480, -85.73253],                            // OSM: Ten20 Brewery Butchertown, 1020, East Washington Street, Louisville, Kentucky, 40206, United
     "Trellis Brewing": [38.24078, -85.73877],                  // addr: 827 LOGAN ST, LOUISVILLE, KY, 40204
     "West Sixth Nulu": [38.25320, -85.73764],                  // addr: 817 E MARKET ST, LOUISVILLE, KY, 40206
+    "Kentucky Peerless Distilling": [38.25801, -85.76647],     // addr: 120 N 10TH ST, LOUISVILLE, KY, 40202
+    "Brough Brothers Distillery": [38.22940, -85.79025],       // OSM: Brough Brothers Distillery, 1460, Dixie Highway, Louisville, Jefferson County, Kentucky, 40210, Unit
+    "Prova Spirits": [38.25039, -85.73570],                    // OSM: Prova Spirits, 917, East Liberty Street, Louisville, Jefferson County, Kentucky, 40204, United State
+    "Chicken Cock Tasting Room": [38.25319, -85.73757],        // addr: 821 E MARKET ST, LOUISVILLE, KY, 40206
+    "Apocalypse Brew Works": [38.25678, -85.72053],            // addr: 1612 MELLWOOD AVE, LOUISVILLE, KY, 40206
+    "Country Boy Brewing Taproom": [38.25265, -85.75393],      // addr: 400 S 2ND ST, LOUISVILLE, KY, 40202
+    "Greenside Pizzeria by Gravely": [38.25441, -85.73569],    // addr: 901 E MAIN ST, LOUISVILLE, KY, 40206
+    "Shippingport Brewing": [38.25817, -85.77013],             // addr: 1221 W MAIN ST, LOUISVILLE, KY, 40203
 
     // ===== COFFEE =====
     "Red Hot Roasters": [38.25066, -85.72075],                 // addr: 1399 LEXINGTON RD, LOUISVILLE, KY, 40206
@@ -312,6 +370,10 @@ export const manualCoords = {
     "The Well": [38.15977, -85.77834],                         // OSM: The Well Coffee Co., 5225, New Cut Road, Kenwood, Louisville, Kentucky, 40214
     "Whirling Tiger Coffee": [38.25681, -85.72685],            // OSM: The Whirling Tiger, 1335, Story Avenue, Clifton, Louisville, Kentucky, 40206
     "Witches Brew": [38.25666, -85.71606],                     // addr: 1813 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Cup of Joy": null,                                        // Portland; address not verified
+    "Elixir Cafe": [38.25455, -85.69332],                      // addr: 2714 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Lucia's Cafecito y Mas": [38.23275, -85.71056],           // addr: 1433 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "Mixmix Cafe": [38.22343, -85.68275],                      // addr: 2240 TAYLORSVILLE RD, LOUISVILLE, KY, 40205
 
     // ===== SPORTS =====
     "Bellarmine Knights": [38.21637, -85.70614],               // addr: 2001 NEWBURG RD, LOUISVILLE, KY, 40205
@@ -322,6 +384,9 @@ export const manualCoords = {
     "Louisville City FC": [38.25933, -85.73255],               // OSM: Lynn Family Stadium, 350, Adams Street, Clifton, Louisville, Kentucky, 40206
     "Racing Louisville FC": [38.25933, -85.73255],             // OSM: Lynn Family Stadium, 350, Adams Street, Clifton, Louisville, Kentucky, 40206
     "Louisville Kings (UFL)": [38.25933, -85.73255],           // OSM: Lynn Family Stadium, 350, Adams Street, Clifton, Louisville, Kentucky, 40206
+    "Louisville Cardinals Baseball": [38.20577, -85.76236],    // OSM: Jim Patterson Stadium, 3015, South 2nd Street, Louisville, Jefferson County, Kentucky, 40208, United
+    "Louisville Cardinals Volleyball": [38.21817, -85.75483],  // OSM: L&N Federal Credit Union Arena, South Floyd Street, Louisville, Jefferson County, Kentucky, 40280, U
+    "Louisville Cardinals Women's Basketball": [38.25770, -85.75386], // same spot as Louisville Cardinals Basketball
 
     // ===== EDUCATION =====
     "Bellarmine University": [38.21875, -85.70584],            // OSM: Bellarmine University, 2001, Newburg Road, Louisville-Jefferson County, Louisville, Kentucky
@@ -336,6 +401,8 @@ export const manualCoords = {
     "Louisville Presbyterian Theological Seminary": [38.23709, -85.68496], // OSM: Louisville Presbyterian Theological Seminary, Chapel Valley Way, Cherokee Garden, Louisville
     "McKendree University": null,                              // classes are in Shepherdsville now
     "The Southern Baptist Theological Seminary": [38.24842, -85.68774], // OSM: Southern Baptist Theological Seminary, Lexington Road, Cherokee Garden, Metro Council District 9, Louisvi
+    "Kentucky School for the Blind": [38.25608, -85.71426],    // addr: 1867 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Ivy Tech Sellersburg": [38.38967, -85.76535],             // addr: 8204 STATE RD 311, SELLERSBURG, IN, 47172
 
     // ===== LIBRARIES =====
     "LFPL Main Branch": [38.24411, -85.75712],                 // addr: 301 YORK ST, LOUISVILLE, KY, 40203
@@ -354,15 +421,16 @@ export const manualCoords = {
     "Southwest Regional": [38.11428, -85.85903],               // OSM: Southwest Regional Library, 9725, Dixie Highway, Johnsontown, Louisville, Kentucky, 40272, U
     "St. Matthews": [38.24920, -85.64956],                     // OSM: Saint Matthews Branch Public Library, 3940, Grandview Avenue, Herriston, Broad Fields, Metro Council Dist
     "Western": [38.24982, -85.76809],                          // OSM: Western Branch Library Louisville Free Public Library, 604, West Chestnut Street, Russell, Louisville, Je
+    "Fern Creek": null,                                        // new branch opens 2027
+    "Parkland": [38.23808, -85.79935],                         // addr: 2743 VIRGINIA AVE, LOUISVILLE, KY, 40211
 
     // ===== LOCAL BUSINESS =====
     "Better Days Records": [38.23956, -85.73055],              // addr: 921 BARRET AVE, LOUISVILLE, KY, 40204
     "Caufield's Novelty": [38.25768, -85.76679],               // addr: 1006 W MAIN ST, LOUISVILLE, KY, 40202
-    "Doo Wop Shop": null,                                      // unverified (only one found is in Frankfort, KY)
     "Fat Rabbit Thrift": [38.23661, -85.72850],                // OSM: Fat Rabbit Thrift & Vintage, Barret Avenue, Louisville, Kentucky, 40204
     "Fleur de Flea": [38.23974, -85.73673],                    // OSM: Fleur de Flea Vintage Market, Swan Street, Louisville, Kentucky, 40204
     "Guestroom Records": [38.25657, -85.71635],                // OSM: Guestroom Records, Frankfort Avenue, Clifton, Metro Council District 9, Louisville, Kentucky
-    "Home Skateshop": null,                                    // no pin: location not verified yet
+    "Home Skateshop": [38.23389, -85.71264],                   // addr: 1363 BARDSTOWN RD, LOUISVILLE, KY, 40204
     "Idlewild Butterfly Farm": [38.23516, -85.73970],          // addr: 1100 LOGAN ST, LOUISVILLE, KY, 40204
     "Keith's Hardware": [38.23739, -85.71899],                 // addr: 1201 BARDSTOWN RD, LOUISVILLE, KY, 40204
     "Leatherhead": [38.23068, -85.70414],                      // OSM: LeatherHead, 1601, Bardstown Road, Bonnycastle Neighborhood, Highlands, Louisville, Kentucky
@@ -377,6 +445,10 @@ export const manualCoords = {
     "Swag's Sport Shoes": [38.28746, -85.57705],               // OSM: Swag's Shoes, 9407, Westport Road, Meadow Vale, Kentucky, 40241
     "The Great Escape": [38.22382, -85.68720],                 // OSM: The Great Escape Comics, 2433, Bardstown Road, Highlands Douglass Neighborhood, Strathmoor Gardens, Louis
     "Work the Metal": [38.25556, -85.72911],                   // addr: 1201B STORY AVE (Butchertown Market), LOUISVILLE, KY, 40206
+    "Bourbon Barrel Foods": [38.25556, -85.72911],             // same spot as Work the Metal
+    "Cellar Door Chocolates": [38.25556, -85.72911],           // same spot as Work the Metal
+    "Hadley Pottery": [38.25845, -85.72218],                   // addr: 1570 STORY AVE, LOUISVILLE, KY, 40206
+    "Matt Anthony's Record Shop": [38.25352, -85.70114],       // addr: 2354 FRANKFORT AVE, LOUISVILLE, KY, 40206
 
     // ===== BIKE SHOPS =====
     "Falls City Community BikeWorks!": [38.24392, -85.73849],  // OSM: Falls City Community BikeWorks, 716, Logan Street, Louisville, Kentucky, 40204, United State
@@ -388,6 +460,7 @@ export const manualCoords = {
     "Parkside Bikes": [38.23362, -85.71214],                   // addr: 1377 BARDSTOWN RD, LOUISVILLE, KY, 40204
     "Shifty Business Cycleworks": [38.23432, -85.73970],       // addr: 1125 LOGAN ST, LOUISVILLE, KY, 40204
     "Vic's Classic Bikes": [38.20333, -85.73518],              // addr: 3141 PRESTON HWY, LOUISVILLE, KY, 40213
+    "Pedal Power": [38.25212, -85.64645],                      // addr: 4100 SHELBYVILLE RD, LOUISVILLE, KY, 40207
 
     // ===== BOOKSTORES =====
     "A Novel Romance": [38.19465, -85.56475],                  // addr: 10512 WATTERSON TRL, JEFFERSONTOWN, KY, 40299
@@ -395,6 +468,8 @@ export const manualCoords = {
     "Carmichael's Bookstore": [38.23557, -85.71548],           // OSM: Carmichael's Bookstore, 1295, Bardstown Road, Highlands, Louisville, Kentucky, 40204, United
     "Foxing Bookstore": [38.17950, -85.78375],                 // addr: 1314 BLUEGRASS AVE, LOUISVILLE, KY, 40215
     "Set & Setting": [38.26145, -85.77482],                    // addr: 1535 LYTLE ST, LOUISVILLE, KY, 40203
+    "Paul Wheeldon's Second Hand Books": [38.25352, -85.70114], // addr: 2354 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Yer Mom's Book & Wine Cafe": null,                        // not open yet
 
     // ===== CINEMA & DRIVE-INS =====
     "Sauerbeck Family Drive-In": [38.39394, -85.40928],        // OSM: Sauerbeck Family Drive In, 3210, D. W. Griffth Lane, Oldham County, Kentucky, 40032
@@ -407,6 +482,8 @@ export const manualCoords = {
     "Cinemark Preston Crossings": [38.10833, -85.67176],       // OSM: Cinemark Preston Crossings 16, 9700, Preston Crossing Boulevard, Louisville, Kentucky, 40229
     "AMC Stonybrook": [38.21042, -85.59635],                   // OSM: AMC Stonybrook 20 + IMAX, 2745, South Hurstbourne Parkway, Louisville, Kentucky, 40220, Unit
     "RIP Baxter Avenue Theatres (1996-2025). Forever in our Hearts.": [38.23479, -85.71771], // OSM: Mid City Mall, 1250, Bardstown Road, Highlands, Louisville, Kentucky, 40204
+    "Floyd Theater": [38.21763, -85.75522],                    // OSM: Swain Student Activities Center, 2100, South Floyd Street, Louisville, Jefferson County, Kentucky, 4
+    "RIP Village 8 (closed 2022).": null,                      // closed
 
     // ===== DAY TRIPS =====
     "Bardstown": [37.80925, -85.46690],                        // OSM: Bardstown, Nelson County, Kentucky, 40004
@@ -420,6 +497,20 @@ export const manualCoords = {
     "Cincinnati, OH": [39.10128, -84.51274],                   // OSM: Cincinnati, Hamilton County, Ohio
     "Nashville, TN": [36.16228, -86.77430],                    // OSM: Nashville, Davidson County, Middle Tennessee, Tennessee
     "Land Between the Lakes": [36.74550, -88.03917],           // OSM: Land Between the Lakes National Recreation Area, Trigg County, Middle Tennessee, Kentucky, 37157, United 
+    "Huber's Orchard & Winery": [38.42287, -85.92891],         // addr: 19816 HUBER RD, STARLIGHT, IN, 47106
+    "Kentucky Highland Renaissance Festival": [38.37007, -85.18051], // OSM: Eminence, KY (approx.)
+    "Maker's Mark Distillery": [37.64683, -85.34899],          // OSM: Maker's Mark Distillery, 3350, Burkes Spring Road, Burkes Spring, Loretto, Marion County, Kentucky, 
+    "Four Roses Distillery": [37.97345, -84.89644],            // addr: 1224 BONDS MILL RD, LAWRENCEBURG, KY, 40342
+    "Wild Turkey Distillery": [38.04040, -84.85411],           // OSM: Wild Turkey Distillery, US 62, Anderson County, Kentucky, United States
+    "Abbey of Gethsemani": [37.66466, -85.52911],              // OSM: Abbey of Gethsemani, 3642, Monks Road, Gethsemane, Nelson County, Kentucky, 40051, United States
+    "Abraham Lincoln Birthplace": [37.61179, -85.64278],       // OSM: Abraham Lincoln Birthplace National Historical Park, Larue County, Kentucky, United States
+    "Shaker Village of Pleasant Hill": [37.83030, -84.75332],  // OSM: Shaker Village of Pleasant Hill, Mercer County, Kentucky, United States
+    "Keeneland": [38.04750, -84.60800],                        // manual: Keeneland Race Course, Lexington
+    "Madison, IN & Clifty Falls": [38.75423, -85.41971],       // OSM: Clifty Falls State Park, Madison, Jefferson County, Indiana, United States
+    "Marengo Cave": [38.37552, -86.33950],                     // OSM: Marengo Cave, 400, Crystal Palace, Marengo, Crawford County, Indiana, 47140, United States
+    "French Lick & West Baden Springs": [38.56731, -86.61848], // OSM: West Baden Springs, West Baden Avenue, West Baden Springs, Orange County, Indiana, 47469, United Sta
+    "Holiday World & Splashin' Safari": [38.12272, -86.91058], // OSM: Holiday World & Splashin' Safari, 425, East County Road 1600 North, Santa Claus, Spencer County, Ind
+    "National Corvette Museum": [37.00422, -86.37445],         // OSM: National Corvette Museum, 350, Corvette Drive, Bowling Green, Warren County, Kentucky, 42101, United
 
     // ===== FARMERS MARKETS =====
     "Bardstown Road Farmers Market": [38.22909, -85.70218],    // addr: 1722 BARDSTOWN RD, LOUISVILLE, KY, 40205

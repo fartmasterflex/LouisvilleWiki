@@ -22,6 +22,13 @@ const curatedActivities = [
     "Trivia night at a local bar",
     "Escape room downtown",
     "Walk St. James Court",
+    "Pickleball at GoodBounce",
+    "Tiki drinks & mini golf at South Seas",
+    "Pinball at Tilt",
+    "Karaoke at Noraebar",
+    "Dueling pianos at Howl at the Moon",
+    "Rooftop drinks at 8UP",
+    "Arcade games at Recbar"
 ];
 
 const names = (key) => (wikiData[key]?.items || []).filter(i => i.name && !i.header).map(i => i.name);
