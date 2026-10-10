@@ -24,7 +24,7 @@ const EMOJI = {
     "Theatre / The Stage": "🎭",
     "Golf & Disc Golf": "⛳",
     "Notable Annual Events": "📅",
-    "Dive Bars": "🍺",
+    "Bars": "🍺",
     "Breweries & Distilleries": "🥃",
     "Coffee": "☕",
     "Sports": "🏟️",
@@ -54,6 +54,9 @@ export const orderedKeys = [...PINNED.filter(k => wikiData[k]), ...categoryKeys.
 const slugToKey = {};
 const keyToSlug = {};
 categoryKeys.forEach(k => { const s = slugify(k); slugToKey[s] = k; keyToSlug[k] = s; });
+// old links from before a category was renamed
+const RENAMED = { 'dive-bars': 'Bars' };
+for (const [s, k] of Object.entries(RENAMED)) if (wikiData[k] && !slugToKey[s]) slugToKey[s] = k;
 
 export const slugOf = (key) => keyToSlug[key] || slugify(key);
 export const keyOfSlug = (slug) => slugToKey[slug] || null;

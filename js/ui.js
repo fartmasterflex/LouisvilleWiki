@@ -115,8 +115,8 @@ export function renderHome() {
             <button type="button" class="tool-card" data-action="tool" data-tool="crawl" style="--i:1">
                 <span class="tc-badge">MAPPED</span>
                 <span class="tc-emoji">🍻</span>
-                <span class="tc-name">Dive Bar Crawl</span>
-                <span class="tc-desc">Three gritty bars in one neighborhood, plotted on a map. Walkable-ish.</span>
+                <span class="tc-name">Bar Crawl</span>
+                <span class="tc-desc">Three bars, all within a 2-mile walk, plotted on a map. Actually walkable.</span>
                 <span class="tc-cta">PLOT A ROUTE →</span>
             </button>
             <button type="button" class="tool-card" data-action="tool" data-tool="slot" style="--i:2">

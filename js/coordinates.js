@@ -290,7 +290,7 @@ export const manualCoords = {
     "Wendell Moore Disc Golf Course": [38.39385, -85.43677],   // OSM: Wendell Moore Park, Buckner, Oldham County, Kentucky
     "Arrowhead Disc Golf Course": [38.07716, -85.90027],       // addr: 7300 SCENIC TRL, LOUISVILLE, KY, 40272
 
-    // ===== DIVE BARS =====
+    // ===== BARS =====
     "Air Devils Inn": [38.22278, -85.66814],                   // addr: 2802 TAYLORSVILLE RD, LOUISVILLE, KY, 40205
     "Bambi Bar": [38.22150, -85.68180],                        // 2701 Bardstown Rd (kept: neither geocoder matched)
     "Barret Bar": [38.23612, -85.72804],                       // addr: 1012 BARRET AVE, LOUISVILLE, KY, 40204
@@ -310,6 +310,23 @@ export const manualCoords = {
     "Third Street Dive": [38.25123, -85.75592],                // OSM: Third Street Dive, South 3rd Street, Louisville, Kentucky, 40214
     "Big Rock Bar & Brew": [38.22400, -85.69381],              // OSM: Big Rock Bar & Brew, 2120, Bardstown Road, Highlands Douglass Neighborhood, Strathmoor Gardens, Loui
     "Clifton Tavern": [38.25672, -85.71662],                   // addr: 1800 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "21st in Germantown": [38.22521, -85.74200],               // addr: 1481 S SHELBY ST, LOUISVILLE, KY, 40217
+    "Bar Vetti": [38.25340, -85.73947],                        // addr: 727 E MARKET ST, LOUISVILLE, KY, 40202
+    "Big Bar": [38.23689, -85.71836],                          // addr: 1202 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "Chill Bar Highlands": [38.23810, -85.72029],              // addr: 1117 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "Flanagan's Ale House": [38.24145, -85.72533],             // addr: 934 BAXTER AVE, LOUISVILLE, KY, 40204
+    "Four Pegs": [38.22761, -85.73592],                        // addr: 1053 GOSS AVE, LOUISVILLE, KY, 40217
+    "Galaxie": [38.25327, -85.73937],                          // addr: 732 E MARKET ST, LOUISVILLE, KY, 40202
+    "Garage Bar": [38.25334, -85.73999],                       // addr: 700 E MARKET ST, LOUISVILLE, KY, 40202
+    "Granville Inn": [38.22445, -85.76042],                    // addr: 1601 S 3RD ST, LOUISVILLE, KY, 40208
+    "Holy Grale": [38.23949, -85.72308],                       // addr: 1034 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "Irish Rover": [38.25346, -85.70254],                      // addr: 2319 FRANKFORT AVE, LOUISVILLE, KY, 40206
+    "Jimmy Can't Dance": [38.25328, -85.73941],                // addr: 730 E MARKET ST, LOUISVILLE, KY, 40202
+    "Merle's Whiskey Kitchen": [38.25607, -85.75202],          // addr: 122 W MAIN ST, LOUISVILLE, KY, 40202
+    "Molly Malone's": [38.24167, -85.72534],                   // addr: 933 BAXTER AVE, LOUISVILLE, KY, 40204
+    "O'Shea's Irish Pub": [38.24071, -85.72475],               // addr: 956 BAXTER AVE, LOUISVILLE, KY, 40204
+    "Sidebar at Whiskey Row": [38.25711, -85.75295],           // addr: 129 N 2ND ST, LOUISVILLE, KY, 40202
+    "Zanzabar": [38.21737, -85.74613],                         // OSM: Zanzabar, 2100, South Preston Street, Germantown, Louisville, Kentucky, 40217
 
     // ===== BREWERIES & DISTILLERIES =====
     "Rabbit Hole Distillery": [38.25204, -85.74002],           // addr: 711 E JEFFERSON ST, LOUISVILLE, KY, 40202

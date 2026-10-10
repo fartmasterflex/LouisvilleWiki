@@ -37,7 +37,7 @@ function pools() {
     return [
         [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville")],
         names("Dining Directory"),
-        [...names("Late Night & 24/7"), ...names("Dive Bars")],
+        [...names("Late Night & 24/7"), ...names("Bars")],
     ];
 }
 

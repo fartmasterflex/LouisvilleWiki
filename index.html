@@ -41,7 +41,7 @@
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js" crossorigin>
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=2026-10-10">
+    <link rel="stylesheet" href="style.css?v=2026-10-10b">
 </head>
 
 <body>
@@ -152,13 +152,13 @@
         </div>
     </div>
 
-    <!-- Dive Bar Crawl -->
+    <!-- Bar Crawl -->
     <div id="crawlModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="crawlTitle" hidden>
         <div class="modal-backdrop" data-close></div>
         <div class="modal-box wide">
             <button type="button" class="modal-close" data-close aria-label="Close">×</button>
-            <h2 id="crawlTitle" class="modal-title">🍻 Dive Bar Crawl</h2>
-            <p class="modal-sub">3 gritty bars. 1 neighborhood. Walkable(ish).</p>
+            <h2 id="crawlTitle" class="modal-title">🍻 Bar Crawl</h2>
+            <p class="modal-sub">3 bars, one walk. Never more than 2 miles on foot.</p>
             <div class="crawl-ticket">
                 <div class="crawl-ticket-label">NEIGHBORHOOD</div>
                 <div id="crawlNeighborhood" class="crawl-hood">---</div>
@@ -167,7 +167,7 @@
                     <li class="crawl-bar">---</li>
                     <li class="crawl-bar">---</li>
                 </ol>
-                <div class="crawl-ticket-foot">ADMIT ONE · NO REFUNDS · HYDRATE</div>
+                <div class="crawl-ticket-foot" id="crawlFoot">ADMIT ONE · NO REFUNDS · HYDRATE</div>
             </div>
             <div id="crawlMap" class="map-frame crawl-map"></div>
             <button type="button" class="btn-tool" id="crawlAgainBtn">Generate New Route ↻</button>
@@ -288,7 +288,7 @@
         }
     </script>
 
-    <script type="module" src="js/main.js?v=2026-10-10"></script>
+    <script type="module" src="js/main.js?v=2026-10-10b"></script>
 </body>
 
 </html>
