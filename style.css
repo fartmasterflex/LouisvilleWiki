@@ -2313,12 +2313,23 @@ body.gonzo #app { animation: hue 2.4s linear infinite; }
 .hs-box { text-align: center; box-shadow: 10px 10px 0 var(--red); }
 .hs-box .modal-title { margin: 6px 0 14px; }
 .hs-box .dropdown-tool { width: 100%; }
-.hs-answer { min-height: 3.2em; margin-top: 14px; font-size: 1rem; line-height: 1.45; }
-.hs-answer p { margin: 0; }
-.hs-answer.pop { animation: popIn .45s var(--spring) both; }
-#hsModal.gotcha .hs-box { box-shadow: 10px 10px 0 var(--highlight); }
-#hsModal.gotcha .modal-title { color: var(--red); font-size: clamp(2rem, 6vw, 3rem); }
-#hsModal.gotcha .dropdown-tool { opacity: .35; text-decoration: line-through; }
+.dork-box { width: 360px; align-items: center; justify-content: center; min-height: 220px; box-shadow: 10px 10px 0 var(--highlight); }
+.dork-word { margin: 0; font: 400 clamp(3.4rem, 12vw, 5.5rem)/1 var(--f-display); color: var(--red); transform: rotate(-4deg); }
+#dorkModal.open .dork-word { animation: dorkSlam .5s var(--spring) both; }
+@keyframes dorkSlam { from { transform: scale(2.6) rotate(-12deg); opacity: 0; } to { transform: scale(1) rotate(-4deg); opacity: 1; } }
+
+/* Food Coma: the page dozes off */
+#app.coma,
+#hero.coma { animation: doze 4.8s ease-in-out both; }
+@keyframes doze {
+    0% { filter: none; }
+    25%, 80% { filter: blur(3px) brightness(.55) saturate(.5); }
+    100% { filter: none; }
+}
+.coma-overlay { background: radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, .55) 100%); animation: comaFade 4.8s ease-in-out both; }
+@keyframes comaFade { 0%, 100% { opacity: 0; } 20%, 85% { opacity: 1; } }
+.coma-z { position: absolute; bottom: 10%; font: 400 1em var(--f-display); color: var(--highlight); text-shadow: 3px 3px 0 #111; animation: zFloat 2.6s ease-out infinite both; }
+@keyframes zFloat { from { transform: translate(0, 0) rotate(-10deg); opacity: 0; } 20% { opacity: 1; } to { transform: translate(60px, -60vh) rotate(14deg); opacity: 0; } }
 
 @media (max-width: 1020px) {
     .tool-grid .tool-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }
@@ -2330,5 +2341,6 @@ body.gonzo #app { animation: hue 2.4s linear infinite; }
 [data-theme="dark"] .gem-tip { background: var(--paper-3); border-left-color: var(--neon-lime); }
 [data-theme="dark"] .gem-map { border-bottom-color: var(--neon-lime); }
 [data-theme="dark"] .gem-map:hover { background: transparent; color: var(--neon-lime); }
-[data-theme="dark"] #hsModal.gotcha .modal-title { color: var(--neon-1); text-shadow: 0 0 12px rgba(255, 79, 163, .5); }
+[data-theme="dark"] .dork-box { box-shadow: 0 0 0 1.5px var(--neon-lime), 0 0 30px -4px rgba(217, 255, 58, .45); }
+[data-theme="dark"] .dork-word { color: var(--neon-1); text-shadow: 0 0 14px rgba(255, 79, 163, .55); }
 [data-theme="dark"] .hs-box { box-shadow: 0 0 0 1.5px var(--neon-1), 0 0 30px -4px rgba(255, 79, 163, .5); }

@@ -21,11 +21,12 @@ export const SECRETS = [
     { id: 'skipper', emoji: '🪨', name: 'Six Skipper', hint: 'Skip a stone across the Ohio. Six or better.' },
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
     { id: 'highschool', emoji: '🏫', name: 'Two Degrees', hint: 'The city is clickable. Go on, click a building.' },
-    { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' }
+    { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' },
+    { id: 'coma', emoji: '😴', name: 'Food Coma', hint: 'Type the open-faced sandwich (no space). Try to stay awake.' },
+    // The super secret: counts toward the total but never gets a slot on the vault grid. The vault only whispers about it.
+    { id: 'console', emoji: '🧑‍💻', name: 'The Back Room', hidden: true },
 ];
-
-// The super secret: not on the vault grid and not in the count. The vault only whispers about it.
-const BACK_ROOM = { id: 'console', emoji: '🧑‍💻', name: 'The Back Room' };
+const BACK_ROOM = SECRETS.find(s => s.hidden);
 
 const KEY = 'louSecrets';
 let found = store.get(KEY, {}) || {};
@@ -36,12 +37,12 @@ export const foundCount = () => SECRETS.filter(s => found[s.id]).length;
 export const onSecretsChange = (fn) => listeners.add(fn);
 
 export function unlock(id) {
-    const s = SECRETS.find(x => x.id === id) || (id === BACK_ROOM.id ? BACK_ROOM : null);
+    const s = SECRETS.find(x => x.id === id);
     if (!s || found[id]) return false;
     found[id] = Date.now();
     store.set(KEY, found);
     const n = foundCount();
-    const line = s === BACK_ROOM ? 'not on any list. tell no one.' : `${n}/${SECRETS.length} secrets found`;
+    const line = s === BACK_ROOM ? `not on any list. tell no one. (${n}/${SECRETS.length})` : `${n}/${SECRETS.length} secrets found`;
     setTimeout(() => {
         sfx.secret();
         toast(`<b>${escapeHtml(s.name)}</b><br><small>${line}</small>`, { kicker: s === BACK_ROOM ? 'SUPER SECRET' : 'SECRET FOUND', emoji: s.emoji, secret: true, duration: 4200 });
@@ -72,7 +73,7 @@ export function renderStickerBook() {
     const grid = document.getElementById('stickerGrid');
     if (!grid) return;
     const n = foundCount();
-    grid.innerHTML = SECRETS.map((s, i) => {
+    grid.innerHTML = SECRETS.filter(s => !s.hidden).map((s, i) => {
         const f = !!found[s.id];
         const rot = ((i * 37) % 7) - 3;
         const reopen = f && s.id === 'gems' ? ' data-open-gems role="button" tabindex="0" title="Open the Hidden Gems again"' : '';

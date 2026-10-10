@@ -146,7 +146,7 @@ export async function churchill() {
 }
 
 // -----------------------------------------------
-// THUNDER OVER LOUISVILLE (catch the shooting star)
+// THUNDER OVER LOUISVILLE (type "thunder", or catch the shooting star)
 // -----------------------------------------------
 let thunderOn = false;
 export async function thunder() {
@@ -268,10 +268,9 @@ export function bourbon() {
 }
 
 // -----------------------------------------------
-// TWO DEGREES (click the city in the 3D header): a gag. It asks the only question
-// that matters here, then cuts you off for falling for it.
+// TWO DEGREES (click the city in the 3D header): asks the only question that
+// matters here. Answer it and you get called a dork.
 // -----------------------------------------------
-const HS_CUTOFF_MS = 4200;
 const SCHOOLS = [
     "Assumption", "Atherton", "Ballard", "Brown School", "Butler", "Central", "Christian Academy", "DeSales", "Doss",
     "duPont Manual", "Eastern", "Fairdale", "Fern Creek", "Holy Cross", "Iroquois", "Jeffersontown", "Kentucky Country Day",
@@ -279,52 +278,51 @@ const SCHOOLS = [
     "Sacred Heart Academy", "Seneca", "Shawnee", "Southern", "St. Francis", "St. Xavier", "Trinity", "Valley", "Waggener", "Western",
     "Across the river (Indiana)", "I'm not from here",
 ];
-const GOTCHA_LINES = [
-    "You were really about to tell a website where you went to high school. In under five seconds. That's the most Louisville thing you'll do all day.",
-    "We asked just to watch you reach for the dropdown. Classic Louisvillian.",
-    "Too slow. Someone at a church picnic already guessed it from your haircut.",
-    "Nobody cares where you went to high school. (Everyone in Louisville cares where you went to high school.)",
-    "Look at you, scrolling for your alma mater like it's a job interview. It basically is here.",
-];
-let hsTimer = 0;
 
 export function whatHighSchool() {
-    const box = document.getElementById('hsModal');
     const sel = document.getElementById('hsSelect');
-    const ans = document.getElementById('hsAnswer');
-    const title = document.getElementById('hsTitle');
-    if (!box || !sel || !ans || !title) return;
+    if (!sel) return;
     if (!sel.options.length) {
         sel.innerHTML = `<option value="">Pick one…</option>` + SCHOOLS.map(s => `<option>${escapeHtml(s)}</option>`).join('');
-        sel.addEventListener('change', () => { if (sel.value) gotcha(sel.value); });
+        sel.addEventListener('change', () => {
+            if (!sel.value) return;
+            closeModal('hsModal');
+            setTimeout(() => {
+                openModal('dorkModal');
+                sfx.error();
+                unlock('highschool');
+            }, 380);
+        });
     }
-    clearTimeout(hsTimer);
-    box.classList.remove('gotcha');
-    title.textContent = 'So… what high school did you go to?';
-    sel.disabled = false;
     sel.value = '';
-    ans.innerHTML = '';
     openModal('hsModal');
-    hsTimer = setTimeout(() => gotcha(''), HS_CUTOFF_MS);
 }
-onModalClose('hsModal', () => clearTimeout(hsTimer));
 
-function gotcha(picked) {
-    clearTimeout(hsTimer);
-    const box = document.getElementById('hsModal');
-    if (!box || box.hidden || box.classList.contains('gotcha')) return;
-    const sel = document.getElementById('hsSelect');
-    const ans = document.getElementById('hsAnswer');
-    box.classList.add('gotcha');
-    sel.disabled = true;
-    document.getElementById('hsTitle').textContent = 'GOTCHA.';
-    const lead = picked ? `${picked}? Of course. ` : '';
-    ans.innerHTML = `<p>${escapeHtml(lead + rand(GOTCHA_LINES))}</p>`;
-    ans.classList.remove('pop');
-    void ans.offsetWidth;
-    ans.classList.add('pop');
-    sfx.error();
-    unlock('highschool');
+// -----------------------------------------------
+// FOOD COMA (type "hotbrown"): the page dozes off, Mornay Mutual has you covered
+// -----------------------------------------------
+export function foodComa() {
+    const app = document.getElementById('app');
+    if (!app || app.classList.contains('coma')) return;
+    unlock('coma');
+    const o = overlay('coma-overlay');
+    banner(o, 'Food coma 😴<small>MORNAY MUTUAL HAS YOU COVERED</small>', 4300);
+    for (let i = 0; i < 7; i++) {
+        const z = document.createElement('div');
+        z.className = 'coma-z';
+        z.textContent = 'z';
+        z.style.cssText = `left:${20 + Math.random() * 60}%;font-size:${28 + Math.random() * 40}px;animation-delay:${i * .45}s;`;
+        o.appendChild(z);
+    }
+    const hero = document.getElementById('hero');
+    app.classList.add('coma');
+    hero?.classList.add('coma');
+    setTimeout(() => {
+        app.classList.remove('coma');
+        hero?.classList.remove('coma');
+        o.remove();
+        toast('You slept through the whole afternoon. Worth it.', { kicker: 'GOOD MORNING', emoji: '🥪' });
+    }, 4800);
 }
 
 // -----------------------------------------------
@@ -694,8 +692,8 @@ export function initEasterEggs() {
     document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
 
-    // typed words (Thunder comes from catching the shooting star; Two Degrees from clicking the city)
-    const WORDS = { gonzo, ali, bourbon, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
+    // typed words (Thunder also comes from catching the shooting star; Two Degrees from clicking the city)
+    const WORDS = { gonzo, ali, bourbon, thunder, hotbrown: foodComa, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
     Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
     let buf = '';
     document.addEventListener('keydown', (e) => {

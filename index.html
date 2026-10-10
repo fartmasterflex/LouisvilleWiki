@@ -41,7 +41,7 @@
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js" crossorigin>
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=2026-10-10k">
+    <link rel="stylesheet" href="style.css?v=2026-10-10l">
 </head>
 
 <body>
@@ -86,7 +86,7 @@
                 <button type="button" id="secretBoat" class="secret-boat" title="???" aria-label="???">🚢</button>
             </div>
             <div class="footer-row small">
-                <button type="button" id="stickerBookBtn" class="chip-btn">🔒 secrets <span id="secretCount">0/18</span></button>
+                <button type="button" id="stickerBookBtn" class="chip-btn">🔒 secrets <span id="secretCount">0/20</span></button>
                 <button type="button" id="soundBtn" class="chip-btn" aria-pressed="true">🔊 sound on</button>
                 <a class="chip-btn" href="#/">⌂ index</a>
             </div>
@@ -192,10 +192,15 @@
         <div class="modal-backdrop" data-close></div>
         <div class="modal-box hs-box">
             <button type="button" class="modal-close" data-close aria-label="Close">×</button>
-            <div class="pick-kicker">A LOUISVILLE TRADITION</div>
-            <h2 id="hsTitle" class="modal-title">So… what high school did you go to?</h2>
+            <h2 id="hsTitle" class="modal-title">What high school did you go to?</h2>
             <select id="hsSelect" class="dropdown-tool" aria-labelledby="hsTitle"></select>
-            <div id="hsAnswer" class="hs-answer" aria-live="polite"></div>
+        </div>
+    </div>
+    <div id="dorkModal" class="modal" role="dialog" aria-modal="true" aria-label="dork" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-box dork-box">
+            <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+            <p class="dork-word">dork.</p>
         </div>
     </div>
 
@@ -315,7 +320,7 @@
         }
     </script>
 
-    <script type="module" src="js/main.js?v=2026-10-10k"></script>
+    <script type="module" src="js/main.js?v=2026-10-10l"></script>
 </body>
 
 </html>
