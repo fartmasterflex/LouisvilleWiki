@@ -1,6 +1,6 @@
 // --- js/ui.js ---
 // Home + category rendering, dining table, been-there stamps, surprise picks.
-import { wikiData, orderedKeys, PINNED, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
+import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
 import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
@@ -43,7 +43,8 @@ export function initTheme() {
 export function renderHome() {
     state.currentCategory = '';
     const month = new Date().getMonth() + 1;
-    const monthEvents = eventsInMonth(month);
+    const months = [month, month % 12 + 1].map(m => ({ m, events: eventsInMonth(m) }));
+    const evHref = (e) => catHref(ANNUAL_EVENTS, wikiData[ANNUAL_EVENTS].items.indexOf(e));
 
     const card = (key, i, featured) => {
         const data = wikiData[key];
@@ -61,7 +62,7 @@ export function renderHome() {
     };
 
     const featured = PINNED.filter(k => wikiData[k]);
-    const rest = orderedKeys.filter(k => !PINNED.includes(k));
+    const rest = orderedKeys.filter(k => !PINNED.includes(k) && k !== ANNUAL_EVENTS);
     const nFound = foundCount();
 
     content().innerHTML = `
@@ -81,12 +82,22 @@ export function renderHome() {
             <div id="searchResults" class="search-results" role="listbox" hidden></div>
         </section>
 
-        ${monthEvents.length ? `
-        <section class="month-strip" aria-label="Happening this month">
-            <div class="month-label"><small>HAPPENING IN</small><strong>${MONTHS[month]}</strong></div>
-            <div class="month-items">
-                ${monthEvents.map(e => `<a href="${catHref('Notable Annual Events', wikiData['Notable Annual Events'].items.indexOf(e))}">${esc(e.name)}</a>`).join('')}
+        ${wikiData[ANNUAL_EVENTS] ? `
+        <section class="month-strip" aria-label="Happening this month and next">
+            <div class="month-rows">
+                ${months.map(({ m, events }) => `
+                <div class="month-row">
+                    <div class="month-label"><small>HAPPENING IN</small><strong>${MONTHS[m]}</strong></div>
+                    <div class="month-items">
+                        ${events.length ? events.map(e => `<a href="${evHref(e)}">${esc(e.name)}</a>`).join('') : '<span class="month-none">Nothing on the calendar yet.</span>'}
+                    </div>
+                </div>`).join('')}
             </div>
+            <a class="annual-btn" href="${catHref(ANNUAL_EVENTS)}">
+                <span class="ab-emoji" aria-hidden="true">${emojiOf(ANNUAL_EVENTS)}</span>
+                <span class="ab-name">Annual Events</span>
+                <span class="ab-desc">The whole year, month by month →</span>
+            </a>
         </section>` : ''}
 
         <div class="divider"></div>
@@ -96,8 +107,6 @@ export function renderHome() {
             <span class="scrawl">← the good stuff</span>
         </div>
         <div class="featured-grid">${featured.map((k, i) => card(k, i, true)).join('')}</div>
-        <div class="cat-grid">${rest.map((k, i) => card(k, i + 3, false)).join('')}</div>
-
         <div class="divider"></div>
 
         <div class="section-head">
@@ -134,6 +143,14 @@ export function renderHome() {
                 <span class="tc-cta">GET A CARD →</span>
             </button>
         </div>
+
+        <div class="divider"></div>
+
+        <div class="section-head">
+            <h2 class="section-title">Every <span class="hl">List</span></h2>
+            <span class="scrawl">all ${rest.length} of them, A to Z</span>
+        </div>
+        <div class="cat-grid">${rest.map((k, i) => card(k, i + 4, false)).join('')}</div>
 
         <div class="divider"></div>
 

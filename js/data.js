@@ -5,7 +5,9 @@ import { slugify } from './utils.js';
 
 export { wikiData };
 
-export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks"];
+export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks", "Louisville History Timeline"];
+// Shown as its own button in the "happening" strip instead of a card
+export const ANNUAL_EVENTS = "Notable Annual Events";
 
 // Presentation only — content lives in library_data.js
 const EMOJI = {
