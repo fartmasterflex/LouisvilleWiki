@@ -116,6 +116,7 @@ function bustedSign() {
     const letters = [...title.querySelectorAll('.t-lou .ch'), title.querySelector('.t-wiki')].filter(Boolean);
     if (!letters.length) return;
     signBusy = true;
+    unlock('sign');
     if (prefersReducedMotion()) {
         title.animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-3deg)' }, { transform: 'rotate(2deg)' }, { transform: 'rotate(0)' }], { duration: 500 });
     } else {
@@ -307,7 +308,7 @@ export function bourbon() {
 
 // -----------------------------------------------
 // TWO DEGREES (click the city in the 3D header): asks the only question that
-// matters here. Answer it and you get called a dork.
+// matters here. Answer it and you get called a dork. A hint-free joke, not a vault secret.
 // -----------------------------------------------
 const SCHOOLS = [
     "Assumption", "Atherton", "Ballard", "Brown School", "Butler", "Central", "Christian Academy", "DeSales", "Doss",
@@ -328,7 +329,6 @@ export function whatHighSchool() {
             setTimeout(() => {
                 openModal('dorkModal');
                 sfx.error();
-                unlock('highschool');
             }, 380);
         });
     }

@@ -4,6 +4,7 @@ import { store, toast, escapeHtml, openModal } from './utils.js';
 import { sfx } from './audio.js';
 
 export const SECRETS = [
+    { id: 'sign', emoji: '🔤', name: 'Call the Sign Guy', hint: 'The title likes attention. Give it three.' },
     { id: 'fleur', emoji: '⚜️', name: 'Fleur Storm', hint: 'The gold fleur-de-lis floating over downtown likes to be poked.' },
     { id: 'derby', emoji: '🏇', name: 'And They’re Off', hint: 'A painted horse is loose on the riverfront. Give it a pat.' },
     { id: 'boat', emoji: '🚢', name: 'Stowaway', hint: 'Something is docked at the very bottom.' },
@@ -21,7 +22,6 @@ export const SECRETS = [
     { id: 'star', emoji: '🌠', name: 'Make a Wish', hint: 'Night sky. Something streaks by. Catch it.' },
     { id: 'skipper', emoji: '🪨', name: 'Six Skipper', hint: 'Skip a stone across the Ohio. Six or better.' },
     { id: '502', emoji: '☎️', name: 'Bad Gateway', hint: 'Dial the area code.' },
-    { id: 'highschool', emoji: '🏫', name: 'Two Degrees', hint: 'The city is clickable. Go on, click a building.' },
     { id: 'homerun', emoji: '⚾', name: 'Home Run', hint: 'The world’s biggest bat needs a swing.' },
     { id: 'ads', emoji: '🪧', name: 'Ad Nauseam', hint: 'Read every billboard in town. Click through all of them.' },
 ];
