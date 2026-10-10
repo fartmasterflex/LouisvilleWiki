@@ -19,9 +19,10 @@ function loadLeaflet() {
 }
 
 const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
-const tileUrl = () => isDark()
-    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-    : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+// OpenStreetMap's own tiles (no API key; CARTO's basemaps started requiring one in 2026).
+// Dark mode reuses the same tiles, inverted in CSS via the .map-dark class.
+const TILE_URL = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_OPTS = { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19 };
 
 // ---------------------------------------------------------------
 // GEOCODING
@@ -99,7 +100,8 @@ export async function openCategoryMap(categoryKey) {
         catLayer = L.layerGroup().addTo(catMap);
     }
     if (catTiles) catMap.removeLayer(catTiles);
-    catTiles = L.tileLayer(tileUrl(), { attribution: '&copy; OpenStreetMap contributors &amp; CARTO', maxZoom: 19 }).addTo(catMap);
+    catTiles = L.tileLayer(TILE_URL, TILE_OPTS).addTo(catMap);
+    catMap.getContainer().classList.toggle('map-dark', isDark());
     catLayer.clearLayers();
     setTimeout(() => catMap.invalidateSize(), 120);
 
@@ -154,7 +156,8 @@ export async function initCrawlMap(barNames) {
     if (!el) return;
     if (crawlMap) { crawlMap.remove(); crawlMap = null; }
     crawlMap = L.map('crawlMap', { zoomControl: false, attributionControl: true }).setView(LOU, 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap contributors &amp; CARTO' }).addTo(crawlMap);
+    L.tileLayer(TILE_URL, TILE_OPTS).addTo(crawlMap);
+    crawlMap.getContainer().classList.add('map-dark');
     setTimeout(() => crawlMap && crawlMap.invalidateSize(), 250);
 
     const pts = [];
