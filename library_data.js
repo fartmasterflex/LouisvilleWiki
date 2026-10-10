@@ -693,7 +693,7 @@ export const wikiData = {
         ]
     },
     "Music, Stage & Screen": {
-        description: "Live music, theatre, dance and comedy, plus the movie houses still standing (and a few that are not).",
+        description: "Live music, theatre, dance and comedy, plus the movie houses and drive-ins.",
         type: "custom",
         items: [
             { header: "Music Venues" },
@@ -743,10 +743,7 @@ export const wikiData = {
             { name: "Cinemark Tinseltown" },
             { name: "Cinemark Mall St. Matthews" },
             { name: "Cinemark Preston Crossings" },
-            { name: "AMC Stonybrook", },
-            { name: "RIP Baxter Avenue Theatres (1996-2025). Forever in our Hearts." },
-            { name: "RIP Village 8 (closed 2022)." },
-            { name: "RIP Preston Drive-In (1949-1980s). Long gone, now demolished." }
+            { name: "AMC Stonybrook", }
         ]
     },
     "Notable Annual Events": {

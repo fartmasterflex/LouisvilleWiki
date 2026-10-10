@@ -186,6 +186,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const darkMat = bMat.clone(); darkMat.color = new THREE.Color(0x9aa0a6);
 
     const towerGeos = [];
+    const cityParts = [];      // every building mesh, so "the city" is clickable
     const occupied = [];
     const NEON = [0xff4fa3, 0x2fd4ff, 0xb06bff, 0xffb347, 0x3dffb0].map(h => new THREE.Color(h).multiplyScalar(1.9));
     const neonPos = [], neonCol = [];
@@ -213,7 +214,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         g.translate(x, lift + h / 2, z);
         occupied.push({ x, z, w, d });
         if (neon) addNeon(g, true);
-        if (mat) { const m = new THREE.Mesh(g, mat); scene.add(m); return m; }
+        if (mat) { const m = new THREE.Mesh(g, mat); scene.add(m); cityParts.push(m); return m; }
         towerGeos.push(g);
         return null;
     };
@@ -221,6 +222,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         const m = new THREE.Mesh(geo, mat);
         m.position.set(x, y, z);
         scene.add(m);
+        cityParts.push(m);
         addNeon(geo.clone().translate(x, y, z), false);
         return m;
     };
@@ -270,6 +272,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const city = new THREE.Mesh(mergeGeometries(towerGeos), bMat);
     towerGeos.forEach(g => g.dispose());
     scene.add(city);
+    cityParts.push(city);
 
     // KFC Yum! Center — the silver shell by the river
     const yumMat = new THREE.MeshStandardMaterial({ color: 0xcfd4d8, metalness: .55, roughness: .35, flatShading: true });
@@ -768,6 +771,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         { obj: moon, fn: () => on.toggleTheme?.(), when: () => S.night >= .5 },
         { obj: shootHit, fn: () => clickStar(), when: () => star.active },
         { obj: eyesHit, fn: () => clickEyes(), when: () => S.night > .6 },
+        ...cityParts.map(obj => ({ obj, fn: () => on.egg?.('city') })),
     ];
 
     let lastPoint = null;

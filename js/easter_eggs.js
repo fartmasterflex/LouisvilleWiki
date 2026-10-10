@@ -24,6 +24,17 @@ function overlay(cls = '') {
     return o;
 }
 
+// Shake the page content (never <body>: a transform left on body turns it into the
+// containing block for every position:fixed element, and modals/toasts land off screen)
+function shakePage() {
+    const el = document.getElementById('app');
+    if (!el) return;
+    el.classList.remove('shake');
+    void el.offsetWidth;
+    el.classList.add('shake');
+    el.addEventListener('animationend', () => el.classList.remove('shake'), { once: true });
+}
+
 function banner(parent, html, ms = 4200) {
     const b = document.createElement('div');
     b.className = 'egg-banner';
@@ -135,7 +146,7 @@ export async function churchill() {
 }
 
 // -----------------------------------------------
-// THUNDER OVER LOUISVILLE (Konami code)
+// THUNDER OVER LOUISVILLE (catch the shooting star)
 // -----------------------------------------------
 let thunderOn = false;
 export async function thunder() {
@@ -214,9 +225,7 @@ export function ali() {
             st.dead = true;
             f.textContent = '🐝';
             sfx.punch();
-            document.body.classList.remove('shake');
-            void document.body.offsetWidth;
-            document.body.classList.add('shake');
+            shakePage();
             f.animate([{ transform: `translate(${st.x}px,${st.y}px) scale(1)` }, { transform: `translate(${st.x + 400}px,${st.y - 500}px) scale(2.4) rotate(40deg)`, opacity: 0 }], { duration: 900, fill: 'forwards' });
             if (!caught) {
                 caught = true;
@@ -259,73 +268,63 @@ export function bourbon() {
 }
 
 // -----------------------------------------------
-// WRONG CITY (type "cincinnati" / "cincy")
+// TWO DEGREES (click the city in the 3D header): a gag. It asks the only question
+// that matters here, then cuts you off for falling for it.
 // -----------------------------------------------
-export function cincy() {
-    if (document.body.classList.contains('cincy')) return;
-    unlock('cincy');
-    sfx.error();
-    const o = overlay();
-    banner(o, '⚠ Cincinnati detected ⚠<small>REROUTING TO A BETTER CITY…</small>', 2900);
-    document.body.classList.add('cincy');
-    setTimeout(() => {
-        document.body.classList.remove('cincy');
-        o.remove();
-        toast('Crisis averted. You’re back in Louisville.', { kicker: 'PHEW', emoji: '⚜️' });
-    }, 3300);
-}
-
-// -----------------------------------------------
-// TWO DEGREES (type "highschool"): the only question that matters here
-// -----------------------------------------------
-const NOT_FROM_HERE = "I'm not from here";
-const ACROSS_RIVER = "Across the river (Indiana)";
+const HS_CUTOFF_MS = 4200;
 const SCHOOLS = [
     "Assumption", "Atherton", "Ballard", "Brown School", "Butler", "Central", "Christian Academy", "DeSales", "Doss",
     "duPont Manual", "Eastern", "Fairdale", "Fern Creek", "Holy Cross", "Iroquois", "Jeffersontown", "Kentucky Country Day",
     "Louisville Collegiate", "Louisville Male", "Mercy Academy", "Moore", "Pleasure Ridge Park", "Presentation Academy",
     "Sacred Heart Academy", "Seneca", "Shawnee", "Southern", "St. Francis", "St. Xavier", "Trinity", "Valley", "Waggener", "Western",
+    "Across the river (Indiana)", "I'm not from here",
 ];
-const SCHOOL_LINES = {
-    "duPont Manual": "A Crimson! So you have opinions about the Male game. Male and Manual have been at it since 1893.",
-    "Louisville Male": "A Bulldog! So you have opinions about the Manual game. Male and Manual have been at it since 1893.",
-    "St. Xavier": "A Tiger. You've networked three classmates into jobs since breakfast, and you still talk about the Trinity game.",
-    "Trinity": "A Shamrock. Somewhere a state-championship trophy just glowed, and you still talk about the St. X game.",
-    "Sacred Heart Academy": "A Valkyrie! You have run into four classmates at a church picnic this summer alone.",
-    "Assumption": "A Rocket! You have run into four classmates at a church picnic this summer alone.",
-    "Mercy Academy": "A Jaguar! You have run into four classmates at a church picnic this summer alone.",
-    "Presentation Academy": "Presentation! Tippy says hi. You have run into four classmates at a church picnic this summer alone.",
-    [NOT_FROM_HERE]: "Not from here? That's fine. We'll just ask where you go to church instead.",
-    [ACROSS_RIVER]: "Across the river! So you've already been asked this four times today. Welcome back over the bridge.",
-};
-const SMALL_WORLD_LINES = [
-    "{s}? Then we have at least four mutual friends and one shared ex.",
-    "{s}! Small world. Well, small city.",
-    "Oh, {s}. Say no more. I know exactly which church picnic you hit first.",
+const GOTCHA_LINES = [
+    "You were really about to tell a website where you went to high school. In under five seconds. That's the most Louisville thing you'll do all day.",
+    "We asked just to watch you reach for the dropdown. Classic Louisvillian.",
+    "Too slow. Someone at a church picnic already guessed it from your haircut.",
+    "Nobody cares where you went to high school. (Everyone in Louisville cares where you went to high school.)",
+    "Look at you, scrolling for your alma mater like it's a job interview. It basically is here.",
 ];
+let hsTimer = 0;
 
 export function whatHighSchool() {
+    const box = document.getElementById('hsModal');
     const sel = document.getElementById('hsSelect');
     const ans = document.getElementById('hsAnswer');
-    if (!sel || !ans) return;
+    const title = document.getElementById('hsTitle');
+    if (!box || !sel || !ans || !title) return;
     if (!sel.options.length) {
-        sel.innerHTML = `<option value="">Pick one…</option>` +
-            [...SCHOOLS, ACROSS_RIVER, NOT_FROM_HERE].map(s => `<option>${escapeHtml(s)}</option>`).join('');
-        sel.addEventListener('change', () => {
-            const s = sel.value;
-            if (!s) { ans.innerHTML = ''; return; }
-            const line = SCHOOL_LINES[s] || rand(SMALL_WORLD_LINES).replace('{s}', s);
-            ans.innerHTML = `<p>${escapeHtml(line)}</p>`;
-            ans.classList.remove('pop');
-            void ans.offsetWidth;
-            ans.classList.add('pop');
-            sfx.pop();
-            unlock('highschool');
-        });
+        sel.innerHTML = `<option value="">Pick one…</option>` + SCHOOLS.map(s => `<option>${escapeHtml(s)}</option>`).join('');
+        sel.addEventListener('change', () => { if (sel.value) gotcha(sel.value); });
     }
+    clearTimeout(hsTimer);
+    box.classList.remove('gotcha');
+    title.textContent = 'So… what high school did you go to?';
+    sel.disabled = false;
     sel.value = '';
     ans.innerHTML = '';
     openModal('hsModal');
+    hsTimer = setTimeout(() => gotcha(''), HS_CUTOFF_MS);
+}
+onModalClose('hsModal', () => clearTimeout(hsTimer));
+
+function gotcha(picked) {
+    clearTimeout(hsTimer);
+    const box = document.getElementById('hsModal');
+    if (!box || box.hidden || box.classList.contains('gotcha')) return;
+    const sel = document.getElementById('hsSelect');
+    const ans = document.getElementById('hsAnswer');
+    box.classList.add('gotcha');
+    sel.disabled = true;
+    document.getElementById('hsTitle').textContent = 'GOTCHA.';
+    const lead = picked ? `${picked}? Of course. ` : '';
+    ans.innerHTML = `<p>${escapeHtml(lead + rand(GOTCHA_LINES))}</p>`;
+    ans.classList.remove('pop');
+    void ans.offsetWidth;
+    ans.classList.add('pop');
+    sfx.error();
+    unlock('highschool');
 }
 
 // -----------------------------------------------
@@ -403,37 +402,63 @@ export function toggleNeon() {
 }
 
 // -----------------------------------------------
-// SAY IT RIGHT
-// -----------------------------------------------
-// -----------------------------------------------
 // HIDDEN GEMS + BOAT RACE
 // -----------------------------------------------
+// The prize for beating Cincinnati: spots most locals have never been to. `q` is the map search.
 const hiddenGems = [
-    { name: "Hillerich & Bradsby Factory Tour", note: "Watch Louisville Sluggers get made on the factory floor. Admission (about $24) comes with a mini bat, and the giant bat out front is free." },
-    { name: "Butchertown Market", note: "Sprawling old industrial building on Story Ave full of local shops, with Cellar Door Chocolates as the anchor. Worth the detour every time." },
-    { name: "Cave Hill Cemetery", note: "Final resting place of Muhammad Ali, Colonel Sanders & George Rogers Clark. Also genuinely beautiful." },
-    { name: "Louisville Waterfront Park at Dawn", note: "The Big Four Bridge at sunrise with nobody on it is a different city entirely." },
-    { name: "Iroquois Amphitheater", note: "Outdoor concerts in a hollow in the middle of the park. Great overlook of the city." },
-    { name: "Hadley Pottery", note: "Handmade Louisville pottery since 1940, known for its whimsical blue folk designs. Nearly closed in 2022 before a local buyer saved it." },
-    { name: "Caperton Swamp", note: "A one-mile loop through a real wetland off River Road. Herons, turtles, and zero crowds." },
-    { name: "The Witches' Tree", note: "6th & Park in Old Louisville. A twisted, gnarled maple with a legend tying it to the 1890 tornado." },
-    { name: "Columbia Gym", note: "4th St. The gym where a 12-year-old Cassius Clay walked in to report his stolen bike and started boxing." },
-    { name: "Caufield's Vampire Bat", note: "A 36-foot bat clings to the costume shop on W Main. Best at night." },
-    { name: "Baxter Square", note: "Louisville's first public cemetery, turned into an Olmsted park." },
-    { name: "Fairmount Falls", note: "A seasonal waterfall in Jefferson Memorial Forest. Go after a good rain." }
+    { emoji: "🏮", name: "Belgravia Court", area: "Old Louisville", q: "Belgravia Court Louisville KY",
+      note: "Louisville's first walking court (early 1890s): Victorian houses facing a shared green, gas lamps, and no street at all.",
+      tip: "Walk in from St. James Court at dusk, when the gas lamps come on." },
+    { emoji: "🏺", name: "Portland Wharf Park", area: "Portland", q: "Portland Wharf Park Louisville KY",
+      note: "55 acres on the river where the 1811 river town of Portland lies buried. Archaeologists still dig here.",
+      tip: "Bike the Riverwalk out past the floodwall and read the interpretive signs." },
+    { emoji: "🏰", name: "Crescent Hill Reservoir", area: "Crescent Hill", q: "Crescent Hill Reservoir Louisville KY",
+      note: "A nearly one-mile loop around the 1879 reservoir, with a Gothic gatehouse modeled on a castle on the Rhine.",
+      tip: "Open dawn to dusk. The gatehouse itself opens on select summer Wednesdays." },
+    { emoji: "🐚", name: "The Fossil Beds at Low Water", area: "Falls of the Ohio", q: "Falls of the Ohio State Park",
+      note: "When the river drops, you can walk out onto a 390-million-year-old coral reef.",
+      tip: "Go August to October, when the river is lowest. Look, photograph, and leave the fossils be." },
+    { emoji: "🧶", name: "The Little Loomhouse", area: "Kenwood Hill", q: "Little Loomhouse Louisville KY",
+      note: "Three 1800s board-and-batten cabins where weaving is still taught, up the hill where the 'Happy Birthday' Hill sisters lived.",
+      tip: "Check tour hours first. It's an uphill walk on gravel." },
+    { emoji: "🛶", name: "Six Mile Island", area: "The Ohio River", q: "Six Mile Island State Nature Preserve",
+      note: "An island nature preserve you can only reach by boat. Herons, egrets, and the Steamboat Race's turnaround.",
+      tip: "Paddle about 1.5 miles upstream from the Cox Park ramp and give the barges plenty of room." },
+    { emoji: "🐢", name: "Caperton Swamp", area: "River Road", q: "Caperton Swamp Louisville KY",
+      note: "A one-mile loop through a real wetland off River Road. Herons, turtles, and zero crowds.",
+      tip: "Bring bug spray from May on." },
+    { emoji: "💧", name: "Fairmount Falls", area: "Jefferson Memorial Forest", q: "Fairmount Falls Louisville KY",
+      note: "A seasonal waterfall tucked into the woods in the southern end of the county.",
+      tip: "Only worth the trip after a good rain." },
+    { emoji: "🥊", name: "Columbia Gym", area: "S 4th St", q: "Columbia Gym Spalding University Louisville",
+      note: "Where a 12-year-old Cassius Clay reported his stolen bike to a cop who ran a boxing gym in the basement.",
+      tip: "It's Spalding University's gym now, so pay your respects from the sidewalk." },
+    { emoji: "🐐", name: "Hogan's Fountain", area: "Cherokee Park", q: "Hogan's Fountain Cherokee Park Louisville",
+      note: "Enid Yandell's bronze Pan (1905) on a fountain at the top of the park, next to the teepee-shaped pavilion.",
+      tip: "Bring a dog. Half of Louisville does." },
 ];
+
+const mapLink = (q) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
 export function openHiddenGems() {
     const list = document.getElementById('hiddenGemsList');
     if (list) {
         list.innerHTML = hiddenGems.map((g, i) => `
-            <li style="animation-delay:${i * 60}ms">
-                <div class="gem-name">💎 ${escapeHtml(g.name)}</div>
-                <div class="gem-note">${escapeHtml(g.note)}</div>
+            <li class="gem" style="animation-delay:${i * 60}ms">
+                <span class="gem-num">${String(i + 1).padStart(2, '0')}</span>
+                <div class="gem-head">
+                    <span class="gem-emoji" aria-hidden="true">${g.emoji}</span>
+                    <div><div class="gem-name">${escapeHtml(g.name)}</div><div class="gem-area">${escapeHtml(g.area)}</div></div>
+                </div>
+                <p class="gem-note">${escapeHtml(g.note)}</p>
+                <p class="gem-tip"><b>Tip:</b> ${escapeHtml(g.tip)}</p>
+                <a class="gem-map" href="${mapLink(g.q)}" target="_blank" rel="noopener">Map ↗</a>
             </li>`).join('');
     }
     openModal('hiddenGemsModal');
 }
+// Found it before? The Hidden Gems sticker in the vault reopens the list
+document.addEventListener('click', (e) => { if (e.target.closest('[data-open-gems]')) openHiddenGems(); });
 
 let raceCtl = null;
 export async function startBoatRace() {
@@ -547,7 +572,6 @@ function spawnCardinal() {
 // -----------------------------------------------
 // HERO (3D) CALLBACKS
 // -----------------------------------------------
-const WISHES = ['No construction on Bardstown Road.', 'A parking spot in NuLu.', 'Derby tickets. Good ones.', 'A Hot Brown that doesn’t put you to sleep.', 'The Watterson, but empty.', 'Cards AND Cats both win. (impossible)', 'Spring that lasts longer than a week.'];
 const LED_NAMES = { rainbow: 'rainbow chase', cards: 'Cardinal red', divided: 'house divided (Cards vs. Cats)', sparkle: 'twinkle', gold: 'fleur gold' };
 
 const SKIP_MEH = [
@@ -580,15 +604,18 @@ export function onHeroEgg(id, payload) {
             fleurRain();
             break;
         case 'star':
+            // make a wish: you get Thunder Over Louisville
             sfx.ding();
-            unlock('star');
-            toast(`Wish granted: ${rand(WISHES)}`, { kicker: 'SHOOTING STAR', emoji: '🌠' });
+            thunder();
             break;
         case 'pope':
             popeLick();
             break;
         case 'horse':
             churchill();
+            break;
+        case 'city':
+            whatHighSchool();
             break;
         case 'island':
             sfx.pop();
@@ -667,22 +694,16 @@ export function initEasterEggs() {
     document.getElementById('weirdBtn')?.addEventListener('click', toggleWeird);
     document.getElementById('secretBoat')?.addEventListener('click', startBoatRace);
 
-    // typed words + konami
-    const WORDS = { gonzo, ali, bourbon, cincinnati: cincy, cincy, '502': badGateway, derby: churchill, popelick: popeLick, thunder, fleur: fleurRain, highschool: whatHighSchool, 'high school': whatHighSchool };
+    // typed words (Thunder comes from catching the shooting star; Two Degrees from clicking the city)
+    const WORDS = { gonzo, ali, bourbon, '502': badGateway, derby: churchill, popelick: popeLick, fleur: fleurRain };
     Object.entries(WORDS).forEach(([w, fn]) => registerSearchEgg(w, fn));
-    const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-    let kIdx = 0, buf = '';
+    let buf = '';
     document.addEventListener('keydown', (e) => {
         const t = e.target;
         if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-        if (e.metaKey || e.ctrlKey || e.altKey) return;
-        const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-        kIdx = key === KONAMI[kIdx] ? kIdx + 1 : (key === KONAMI[0] ? 1 : 0);
-        if (kIdx === KONAMI.length) { kIdx = 0; thunder(); return; }
-        if (e.key.length === 1) {
-            buf = (buf + key).slice(-16);
-            for (const w in WORDS) if (buf.endsWith(w)) { buf = ''; WORDS[w](); break; }
-        }
+        if (e.metaKey || e.ctrlKey || e.altKey || e.key.length !== 1) return;
+        buf = (buf + e.key.toLowerCase()).slice(-16);
+        for (const w in WORDS) if (buf.endsWith(w)) { buf = ''; WORDS[w](); break; }
     });
 
     ['pointermove', 'pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(evt => addEventListener(evt, resetIdle, { passive: true }));

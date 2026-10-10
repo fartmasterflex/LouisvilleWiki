@@ -504,15 +504,12 @@ export const manualCoords = {
     "Sauerbeck Family Drive-In": [38.39394, -85.40928],        // OSM: Sauerbeck Family Drive In, 3210, D. W. Griffth Lane, Oldham County, Kentucky, 40032
     "Georgetown Drive-In": [38.29630, -85.96074],              // OSM: Georgetown Drive-In, 8200, Main Street, Georgetown, Floyd County, Indiana, 47122
     "Speed Cinema": [38.21788, -85.76157],                     // addr: 2035 S 3RD ST, LOUISVILLE, KY, 40208
-    "RIP Preston Drive-In (1949-1980s). Long gone, now demolished.": null,
     "Xscape Blankenbaker 14": [38.22227, -85.53155],           // OSM: Xscape Theatres Blankenbaker 16, 12450, Sycamore Station Place, Louisville, Kentucky, 40299,
     "Cinemark Tinseltown": [38.30203, -85.55784],              // OSM: Cinemark Tinseltown, 4400, Towne Center Drive, Springhurst Towne Center, Freys Hill, Louisville, Jefferso
     "Cinemark Mall St. Matthews": [38.24806, -85.62457],       // OSM: Cinemark Mall St. Matthews and XD;Cinemark St. Matthews, 5000, Shelbyville Road, Louisville,
     "Cinemark Preston Crossings": [38.10833, -85.67176],       // OSM: Cinemark Preston Crossings 16, 9700, Preston Crossing Boulevard, Louisville, Kentucky, 40229
     "AMC Stonybrook": [38.21042, -85.59635],                   // OSM: AMC Stonybrook 20 + IMAX, 2745, South Hurstbourne Parkway, Louisville, Kentucky, 40220, Unit
-    "RIP Baxter Avenue Theatres (1996-2025). Forever in our Hearts.": [38.23479, -85.71771], // OSM: Mid City Mall, 1250, Bardstown Road, Highlands, Louisville, Kentucky, 40204
     "Floyd Theater": [38.21763, -85.75522],                    // OSM: Swain Student Activities Center, 2100, South Floyd Street, Louisville, Jefferson County, Kentucky, 4
-    "RIP Village 8 (closed 2022).": null,                      // closed
 
     // ===== DAY TRIPS =====
     "Bardstown": [37.80925, -85.46690],                        // OSM: Bardstown, Nelson County, Kentucky, 40004

@@ -567,6 +567,13 @@ main { outline: none; min-height: 50vh; }
 .month-items a:hover { background: var(--highlight); color: #111; transform: rotate(-2deg); }
 
 /* ---------- CATEGORY CARDS ---------- */
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 26px;
+    margin-bottom: 34px;
+}
+
 .companion-banner {
     display: flex;
     align-items: center;
@@ -688,6 +695,35 @@ main { outline: none; min-height: 50vh; }
     background: var(--red);
     width: 0;
     transition: width .8s var(--ease-out);
+}
+
+.cat-card.featured {
+    min-height: 210px;
+    padding: 26px 22px 20px;
+    background: var(--paper-2);
+    border-width: 3px;
+    box-shadow: 7px 7px 0 var(--shadow);
+}
+
+.cat-card.featured .cc-name { font-size: clamp(1.4rem, 2.4vw, 1.9rem); }
+.cat-card.featured .cc-emoji { font-size: 2.8rem; }
+.cat-card.featured .cc-desc { -webkit-line-clamp: 3; font-size: .85rem; }
+
+.cat-card.featured .star-badge {
+    position: absolute;
+    left: -14px;
+    top: -14px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    background: var(--red);
+    color: #fff;
+    font-size: 1.1rem;
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    transform: rotate(-12deg);
+    box-shadow: 2px 2px 0 var(--shadow);
 }
 
 /* Tools */
@@ -1709,10 +1745,22 @@ main { outline: none; min-height: 50vh; }
 .bingo-input-area { display: flex; gap: 8px; }
 
 /* Gems */
-.gems-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-.gems-list li { border: 2px solid var(--ink); padding: 10px 12px; background: var(--paper); box-shadow: 3px 3px 0 var(--shadow); animation: popIn .4s var(--spring) both; }
-.gems-list .gem-name { font: 400 1rem var(--f-display); text-transform: uppercase; }
-.gems-list .gem-note { font-size: .82rem; color: var(--ink-2); margin-top: 3px; }
+.gems-box { width: 860px; }
+.gems-box .pick-kicker { margin-bottom: 4px; }
+.gems-list { list-style: none; padding: 0; margin: 10px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.gem { position: relative; display: flex; flex-direction: column; gap: 6px; border: 2px solid var(--ink); padding: 14px 14px 12px; background: var(--paper); box-shadow: 4px 4px 0 var(--shadow); animation: popIn .4s var(--spring) both; }
+.gem-num { position: absolute; top: 10px; right: 12px; font: 700 .7rem var(--f-mono); color: var(--ink-3); letter-spacing: .1em; }
+.gem-head { display: flex; align-items: center; gap: 10px; padding-right: 22px; }
+.gem-emoji { font-size: 1.9rem; line-height: 1; }
+.gem-name { font: 400 1.02rem/1.1 var(--f-display); text-transform: uppercase; }
+.gem-area { font: 700 .66rem var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--red); margin-top: 3px; }
+.gem-note { margin: 0; font-size: .82rem; line-height: 1.45; color: var(--ink-2); }
+.gem-tip { margin: 0; font-size: .78rem; line-height: 1.4; padding: 6px 8px; background: var(--paper-3); border-left: 3px solid var(--highlight); }
+.gem-map { align-self: flex-start; margin-top: auto; font: 700 .72rem var(--f-mono); color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--highlight); }
+.gem-map:hover { background: var(--highlight); color: #111; }
+.egg-sticker[data-open-gems] { cursor: pointer; }
+.egg-sticker[data-open-gems]:hover { transform: rotate(0) scale(1.04); }
+.vault-whisper { margin: 10px 0 0; text-align: center; font: 400 .6rem var(--f-mono); letter-spacing: .06em; color: var(--ink-3); opacity: .55; }
 
 /* Sticker book */
 .sticker-meter { height: 16px; border: 3px solid var(--ink); background: repeating-linear-gradient(-45deg, transparent 0 4px, var(--dot) 4px 7px); overflow: hidden; }
@@ -1900,12 +1948,8 @@ body.bourbon { background-color: #e9d6a8; }
     75% { transform: rotate(-.7deg) translate(-6px, -2px); }
 }
 
-body.cincy #app,
-body.cincy .hero,
-body.cincy .site-footer { transform: rotate(180deg); transition: transform .9s var(--spring); }
-
 body.gonzo #app { animation: hue 2.4s linear infinite; }
-body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
+#app.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97); }
 
 @keyframes shake {
     10%, 90% { transform: translate(-2px, 1px); }
@@ -2083,9 +2127,11 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 1020px) {
     .tool-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 820px) {
+    .featured-grid { grid-template-columns: 1fr; gap: 22px; }
     .community-grid { grid-template-columns: 1fr; }
     .timeline::before { left: 14px; }
     .tl-item,
@@ -2200,7 +2246,9 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
     animation: tubeOn .5s linear;
 }
 [data-theme="dark"] .cat-card:active { box-shadow: 0 0 4px var(--neon), 2px 3px 0 rgba(0, 0, 0, .55); }
+[data-theme="dark"] .cat-card.featured { border-width: 2px; }
 [data-theme="dark"] .cat-card .cc-count { background: var(--paper); color: var(--neon); border: 1px solid var(--neon); border-radius: 4px; box-shadow: none; transform: none; }
+[data-theme="dark"] .cat-card.featured .star-badge { background: var(--paper); color: var(--neon); border: 1.5px solid var(--neon); box-shadow: 0 0 10px var(--glow); }
 [data-theme="dark"] .meter { border: 1px solid var(--line); border-radius: 4px; background: var(--paper-3); }
 [data-theme="dark"] .meter > i { background: var(--neon); box-shadow: 0 0 6px var(--neon); }
 
@@ -2268,10 +2316,19 @@ body.shake { animation: shake .5s cubic-bezier(.36, .07, .19, .97) both; }
 .hs-answer { min-height: 3.2em; margin-top: 14px; font-size: 1rem; line-height: 1.45; }
 .hs-answer p { margin: 0; }
 .hs-answer.pop { animation: popIn .45s var(--spring) both; }
+#hsModal.gotcha .hs-box { box-shadow: 10px 10px 0 var(--highlight); }
+#hsModal.gotcha .modal-title { color: var(--red); font-size: clamp(2rem, 6vw, 3rem); }
+#hsModal.gotcha .dropdown-tool { opacity: .35; text-decoration: line-through; }
 
 @media (max-width: 1020px) {
     .tool-grid .tool-card:last-child:nth-child(odd) { grid-column: 1 / -1; min-height: 0; }
 }
 
 [data-theme="dark"] .free-tag { background: transparent; color: var(--neon-lime); border: 1px solid var(--neon-lime); border-radius: 3px; text-shadow: 0 0 6px rgba(217, 255, 58, .45); }
+[data-theme="dark"] .gem { background: var(--paper-2); border: 1.5px solid var(--line); border-radius: 10px; box-shadow: 0 6px 0 rgba(0, 0, 0, .5); }
+[data-theme="dark"] .gem-area { color: var(--neon-2); }
+[data-theme="dark"] .gem-tip { background: var(--paper-3); border-left-color: var(--neon-lime); }
+[data-theme="dark"] .gem-map { border-bottom-color: var(--neon-lime); }
+[data-theme="dark"] .gem-map:hover { background: transparent; color: var(--neon-lime); }
+[data-theme="dark"] #hsModal.gotcha .modal-title { color: var(--neon-1); text-shadow: 0 0 12px rgba(255, 79, 163, .5); }
 [data-theme="dark"] .hs-box { box-shadow: 0 0 0 1.5px var(--neon-1), 0 0 30px -4px rgba(255, 79, 163, .5); }

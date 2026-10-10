@@ -1,6 +1,6 @@
 // --- js/ui.js ---
 // Home + category rendering, dining table, been-there stamps, surprise picks.
-import { wikiData, orderedKeys, ANNUAL_EVENTS, COMPANIONS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
+import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, COMPANIONS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
 // Namespace import: if GitHub Pages serves a cached data.js from before quick lists, this degrades instead of blanking the page
 import * as dataNs from './data.js';
 const PRESETS = dataNs.PRESETS || {};
@@ -53,12 +53,13 @@ export function renderHome() {
     const months = [month, month % 12 + 1].map(m => ({ m, events: eventsInMonth(m) }));
     const evHref = (e) => catHref(ANNUAL_EVENTS, wikiData[ANNUAL_EVENTS].items.indexOf(e));
 
-    const card = (key, i) => {
+    const card = (key, i, featured = false) => {
         const data = wikiData[key];
         const n = countOf(key);
         const been = beenCount(key, data.items);
         return `
-        <a class="cat-card" href="${catHref(key)}" style="--i:${i}" data-tilt>
+        <a class="cat-card ${featured ? 'featured' : ''}" href="${catHref(key)}" style="--i:${i}" data-tilt>
+            ${featured ? '<span class="star-badge">★</span>' : ''}
             <span class="cc-count">${n} ${n === 1 ? 'ENTRY' : 'ENTRIES'}</span>
             <span class="cc-emoji" aria-hidden="true">${emojiOf(key)}</span>
             <span class="cc-name">${esc(key)}</span>
@@ -79,10 +80,12 @@ export function renderHome() {
         </a>`;
     };
 
+    // the pinned four lead the page in their own row of bigger cards
+    const featured = PINNED.filter(k => wikiData[k]);
     // companions (Neighborhoods, Lost Louisville, …) live inside their parent's page only
     const companions = Object.keys(COMPANIONS).flatMap(companionsOf);
     const lists = [
-        ...orderedKeys.filter(k => k !== ANNUAL_EVENTS && !companions.includes(k)).map(k => ({ name: k, html: (i) => card(k, i) })),
+        ...orderedKeys.filter(k => !featured.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k)).map(k => ({ name: k, html: (i) => card(k, i) })),
         ...Object.keys(PRESETS).map(id => ({ name: PRESETS[id].title, html: (i) => presetCard(id, i) })),
     ].sort((a, b) => a.name.localeCompare(b.name));
     const nFound = foundCount();
@@ -125,11 +128,9 @@ export function renderHome() {
         <div class="divider"></div>
 
         <div class="section-head">
-            <h2 class="section-title">Every <span class="hl">List</span></h2>
-            <span class="scrawl">all ${lists.length} of them, A to Z</span>
+            <h2 class="section-title">The <span class="hl">Directory</span></h2>
         </div>
-        <div class="cat-grid">${lists.map((r, i) => r.html(i)).join('')}</div>
-
+        <div class="featured-grid">${featured.map((k, i) => card(k, i, true)).join('')}</div>
         <div class="divider"></div>
 
         <div class="section-head">
@@ -173,6 +174,14 @@ export function renderHome() {
                 <span class="tc-cta">TAKE A WALK →</span>
             </button>
         </div>
+
+        <div class="divider"></div>
+
+        <div class="section-head">
+            <h2 class="section-title">Every <span class="hl">List</span></h2>
+            <span class="scrawl">all ${lists.length} of them, A to Z</span>
+        </div>
+        <div class="cat-grid">${lists.map((r, i) => r.html(i + 4)).join('')}</div>
 
         <div class="divider"></div>
 

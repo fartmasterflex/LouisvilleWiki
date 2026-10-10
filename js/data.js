@@ -5,8 +5,8 @@ import { slugify } from './utils.js';
 
 export { wikiData };
 
-// No staff picks: every list sits in one A to Z grid. Kept (empty) so a cached older ui.js still loads.
-export const PINNED = [];
+// The four that lead the home page, in their own bigger cards
+export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks", "Louisville History Timeline"];
 // Shown as its own button in the "happening" strip instead of a card
 export const ANNUAL_EVENTS = "Notable Annual Events";
 // Lists that live inside another list's page (a banner at the top) instead of in the big grid
@@ -58,8 +58,8 @@ export const MONTHS = ["", "January", "February", "March", "April", "May", "June
 
 export const categoryKeys = Object.keys(wikiData);
 
-// Home and pager ordering: A to Z
-export const orderedKeys = [...categoryKeys].sort((a, b) => a.localeCompare(b));
+// Home and pager ordering: the pinned four first, then A to Z
+export const orderedKeys = [...PINNED.filter(k => wikiData[k]), ...categoryKeys.filter(k => !PINNED.includes(k)).sort((a, b) => a.localeCompare(b))];
 
 const slugToKey = {};
 const keyToSlug = {};

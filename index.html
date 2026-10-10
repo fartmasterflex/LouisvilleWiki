@@ -41,7 +41,7 @@
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/EffectComposer.js" crossorigin>
     <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/postprocessing/UnrealBloomPass.js" crossorigin>
 
-    <link rel="stylesheet" href="style.css?v=2026-10-10j">
+    <link rel="stylesheet" href="style.css?v=2026-10-10k">
 </head>
 
 <body>
@@ -86,7 +86,7 @@
                 <button type="button" id="secretBoat" class="secret-boat" title="???" aria-label="???">🚢</button>
             </div>
             <div class="footer-row small">
-                <button type="button" id="stickerBookBtn" class="chip-btn">🔒 secrets <span id="secretCount">0/21</span></button>
+                <button type="button" id="stickerBookBtn" class="chip-btn">🔒 secrets <span id="secretCount">0/18</span></button>
                 <button type="button" id="soundBtn" class="chip-btn" aria-pressed="true">🔊 sound on</button>
                 <a class="chip-btn" href="#/">⌂ index</a>
             </div>
@@ -254,8 +254,9 @@
         <div class="modal-backdrop" data-close></div>
         <div class="modal-box scroll-box gems-box">
             <button type="button" class="modal-close" data-close aria-label="Close">×</button>
-            <h2 id="gemsTitle" class="modal-title">🔓 Hidden Gems</h2>
-            <p class="modal-sub marker-note">Places the tourists don't know about. Keep it between us.</p>
+            <div class="pick-kicker">YOU BEAT CINCINNATI · HERE'S YOUR PRIZE</div>
+            <h2 id="gemsTitle" class="modal-title">💎 Hidden Gems</h2>
+            <p class="modal-sub marker-note">Ten spots most locals have never been to. Keep it between us.</p>
             <ul id="hiddenGemsList" class="gems-list"></ul>
         </div>
     </div>
@@ -272,6 +273,7 @@
             <div class="modal-actions">
                 <button type="button" class="btn-map" id="resetSecretsBtn">reset my secrets</button>
             </div>
+            <p id="vaultWhisper" class="vault-whisper"></p>
         </div>
     </div>
 
@@ -313,7 +315,7 @@
         }
     </script>
 
-    <script type="module" src="js/main.js?v=2026-10-10j"></script>
+    <script type="module" src="js/main.js?v=2026-10-10k"></script>
 </body>
 
 </html>
