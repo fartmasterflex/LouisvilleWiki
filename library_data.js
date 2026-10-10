@@ -327,7 +327,7 @@ export const wikiData = {
         type: "custom",
         items: [
             { header: "The Heavy Hitters" },
-            { name: "Speed Art Museum", note: "The oldest and largest art museum in Kentucky. Sundays are pay-what-you-want." },
+            { name: "Speed Art Museum", note: "The oldest and largest art museum in Kentucky. Pay-what-you-can Sundays; check which ones, since the schedule changed in 2026." },
             { name: "Frazier History Museum", note: "The official starting point of the Bourbon Trail." },
             { name: "Muhammad Ali Center", note: "A spectacular, multi-story interactive museum dedicated to the Greatest." },
             { name: "Kentucky Derby Museum", note: "Everything Churchill Downs, right next to the track." },
@@ -391,7 +391,6 @@ export const wikiData = {
             { name: "Barret Babes", note: "Inclusive, heavily curated vintage with a highly localized aesthetic." },
             { header: "Malls, Fleas & Digging" },
             { name: "Fleur de Flea Vintage Urban Market", note: "A massive, beautifully organized warehouse of vintage furniture and oddities." },
-            { name: "Derby City Antique Mall", note: "30,000 sq ft of booths. You have to dig, but the prices are great." },
             { name: "Mellwood Antiques & Interiors", note: "Huge antique mall perfect for mid-century modern hunting." },
             { name: "Tickled Pink Memorabilia Mall", note: "Classic, dusty, packed-to-the-brim antique mall." },
             { name: "Louisville Antique Market", note: "845 E Jefferson. Three floors of dealers in an old NuLu building." },
@@ -643,7 +642,7 @@ export const wikiData = {
         items: [
             { name: "Mag Bar" },
             { name: "Camp Spaceman" },
-            { name: "Whirling Tiger" },
+            { name: "Whirling Tiger", note: "Moving down Story Ave to a bigger space in early 2027; open at the current spot until then." },
             { name: "Zanzabar" },
             { name: "Portal" },
             { name: "Headliners" },

@@ -65,7 +65,6 @@ export const manualCoords = {
     "Hey Tiger": [38.23097, -85.70585],                        // OSM: Hey Tiger, 1572, Bardstown Road, Bonnycastle Neighborhood, Highlands, Louisville, Kentucky, 
     "Barret Babes": [38.23729, -85.72896],                     // addr: 970 BARRET AVE, LOUISVILLE, KY, 40204
     "Fleur de Flea Vintage Urban Market": [38.23974, -85.73673], // OSM: Fleur de Flea Vintage Market, Swan Street, Louisville, Kentucky, 40204
-    "Derby City Antique Mall": [38.19671, -85.65558],          // addr: 3819 BARDSTOWN RD, LOUISVILLE, KY, 40218
     "Mellwood Antiques & Interiors": [38.26350, -85.71314],    // addr: 1860 MELLWOOD AVE, LOUISVILLE, KY, 40206
     "Tickled Pink Memorabilia Mall": [38.20295, -85.78035],    // addr: 3269 TAYLOR BLVD, LOUISVILLE, KY, 40215
     "Peddler's Malls": [38.13694, -85.65438],                  // OSM: Peddler's Mall Outer Loop, 5718, Outer Loop, Smyrna, Louisville, Kentucky, 40219, United Sta
