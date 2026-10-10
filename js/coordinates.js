@@ -119,7 +119,15 @@ export const manualCoords = {
     "English Grill at the Brown Hotel": [38.24639, -85.75797], // OSM: The Brown Hotel, 335, West Broadway, Louisville, Kentucky, 40202
     "Mike Linnig's": [38.11908, -85.89727],                    // OSM: Mike Linnig's, 9308, Cane Run Road, Greenwood, Louisville, Kentucky, 40258
     "Jack Fry's": [38.24024, -85.72373],                       // OSM: Jack Fry's Restaurant, 1007, Bardstown Road, Louisville, Kentucky, 40204
-    "Checks Café": [38.22280, -85.73872],                      // OSM: Check's Cafe, 1101, East Burnett Avenue, Germantown, Louisville, Kentucky, 40217, United Sta
+    "Check's Cafe": [38.22280, -85.73872],                     // OSM: Check's Cafe, 1101, East Burnett Avenue, Germantown, Louisville, Kentucky, 40217, United Sta
+    "Joe's Older Than Dirt": [38.26005, -85.60141],            // addr: 8131 NEW LA GRANGE RD, LOUISVILLE, KY, 40222
+    "U.S. Marine Hospital": [38.26912, -85.78437],             // addr: 2215 PORTLAND AVE, LOUISVILLE, KY, 40212
+    "Heigold House Facade": [38.26391, -85.72505],             // OSM: Heigold House Facade, Frankfort Avenue, Clifton, Louisville, Kentucky, 40206
+    "The Rosewater": [38.18309, -85.76602],                    // addr: 4634 S 3RD ST, LOUISVILLE, KY, 40214
+    "Bardstown Road Bicycle Co.": [38.23931, -85.72250],       // addr: 1051 BARDSTOWN RD, LOUISVILLE, KY, 40204
+    "Scheller's Fitness & Cycling": [38.13151, -85.68284],    // addr: 8323 PRESTON HWY, LOUISVILLE, KY, 40219
+    "Carmichael's Kids": null,                                // no verified address yet: no pin, no lookup
+    "Louisville Rowing Club": null,                           // club, launches vary
     "Granville Pub": [38.22445, -85.76042],                    // addr: 1601 S 3RD ST, LOUISVILLE, KY, 40208
     "Dizzy Whizz": [38.23721, -85.75756],                      // addr: 217 W SAINT CATHERINE ST, LOUISVILLE, KY, 40203
     "KingFish": [38.28113, -85.69944],                         // OSM: Kingfish Restaurant, 3021, River Road, Metro Council District 9, Louisville, Kentucky, 40207
@@ -318,7 +326,6 @@ export const manualCoords = {
     "Four Pegs": [38.22761, -85.73592],                        // addr: 1053 GOSS AVE, LOUISVILLE, KY, 40217
     "Galaxie": [38.25327, -85.73937],                          // addr: 732 E MARKET ST, LOUISVILLE, KY, 40202
     "Garage Bar": [38.25334, -85.73999],                       // addr: 700 E MARKET ST, LOUISVILLE, KY, 40202
-    "Granville Inn": [38.22445, -85.76042],                    // addr: 1601 S 3RD ST, LOUISVILLE, KY, 40208
     "Holy Grale": [38.23949, -85.72308],                       // addr: 1034 BARDSTOWN RD, LOUISVILLE, KY, 40204
     "Irish Rover": [38.25346, -85.70254],                      // addr: 2319 FRANKFORT AVE, LOUISVILLE, KY, 40206
     "Jimmy Can't Dance": [38.25328, -85.73941],                // addr: 730 E MARKET ST, LOUISVILLE, KY, 40202
@@ -491,7 +498,7 @@ export const manualCoords = {
     "Sauerbeck Family Drive-In": [38.39394, -85.40928],        // OSM: Sauerbeck Family Drive In, 3210, D. W. Griffth Lane, Oldham County, Kentucky, 40032
     "Georgetown Drive-In": [38.29630, -85.96074],              // OSM: Georgetown Drive-In, 8200, Main Street, Georgetown, Floyd County, Indiana, 47122
     "Speed Cinema": [38.21788, -85.76157],                     // addr: 2035 S 3RD ST, LOUISVILLE, KY, 40208
-    "Preston Hwy Drive-In": null,                              // unverified, no evidence it exists
+    "RIP Preston Drive-In (1949-1980s). Long gone, now demolished.": null,
     "Xscape Blankenbaker 14": [38.22227, -85.53155],           // OSM: Xscape Theatres Blankenbaker 16, 12450, Sycamore Station Place, Louisville, Kentucky, 40299,
     "Cinemark Tinseltown": [38.30203, -85.55784],              // OSM: Cinemark Tinseltown, 4400, Towne Center Drive, Springhurst Towne Center, Freys Hill, Louisville, Jefferso
     "Cinemark Mall St. Matthews": [38.24806, -85.62457],       // OSM: Cinemark Mall St. Matthews and XD;Cinemark St. Matthews, 5000, Shelbyville Road, Louisville,
