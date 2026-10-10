@@ -1,12 +1,13 @@
 // --- js/walk.js ---
-// History Walk: four stops from Oldest Landmarks + Weird Louisville that you can walk
+// History Walk: four stops from Oldest Landmarks + the oddities in Weird & Wonderful that you can walk
 // in one go. Same idea as the bar crawl: the whole route stays under MAX_MILES.
 import { openModal, rand, store, escapeHtml as esc } from './utils.js';
-import { realItems } from './data.js';
+import { wikiData } from './data.js';
 import { initCrawlMap } from './map.js';
 import { sfx } from './audio.js';
 
-const SOURCES = ['Oldest Landmarks', 'Weird Louisville'];
+// [list, sections to skip]: no sunsets or sledding hills on a history walk
+const SOURCES = [['Oldest Landmarks', []], ['Weird & Wonderful', ['Golden Hour & Night Sky', 'Snow Day Sledding Hills']]];
 const SKIP = new Set(['Pope Lick Trestle']);   // stay off the trestle
 const STOPS = 4;
 const MAX_MILES = 2;
@@ -47,8 +48,8 @@ async function buildPool() {
     if (pool) return pool;
     const { manualCoords } = await import('./coordinates.js');
     const stops = [];
-    for (const cat of SOURCES) {
-        for (const item of realItems(cat)) {
+    for (const [cat, skipSections] of SOURCES) {
+        for (const item of itemsOf(cat, skipSections)) {
             const c = manualCoords[item.name];
             if (!Array.isArray(c) || SKIP.has(item.name)) continue;
             const s = { name: item.name, year: item.year || '', note: item.note || '', lat: c[0], lng: c[1] };
@@ -58,6 +59,15 @@ async function buildPool() {
     }
     pool = stops;
     return pool;
+}
+
+// A list's entries, minus whole sections (by header)
+function itemsOf(cat, skipSections) {
+    let skip = false;
+    return (wikiData[cat]?.items || []).filter(i => {
+        if (i.header) { skip = skipSections.includes(i.header); return false; }
+        return !skip && i.name;
+    });
 }
 
 function weighted(list, w) {

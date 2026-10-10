@@ -445,10 +445,23 @@ export const wikiData = {
             { name: "Vic's Classic Bikes" }
         ]
     },
-    "Clubs & Activities": {
-        description: "How to meet people in this town—from mainstream kickball to obscure street games.",
+    "Sports, Clubs & Activities": {
+        description: "Teams to cheer for, then how to meet people in this town, from mainstream kickball to obscure street games.",
         type: "custom",
         items: [
+            { header: "Teams to Watch" },
+            { name: "Bellarmine Knights", note: "Knights Hall" },
+            { name: "Louisville Bats", note: "Louisville Slugger Field" },
+            { name: "Louisville Cardinals Basketball", note: "KFC Yum! Center" },
+            { name: "Louisville Cardinals Baseball", note: "Jim Patterson Stadium" },
+            { name: "Louisville Cardinals Volleyball", note: "L&N Federal Credit Union Arena. Perennial top-10; national runner-up in 2022 and 2024" },
+            { name: "Louisville Cardinals Women's Basketball", note: "KFC Yum! Center" },
+            { name: "Louisville Cardinals Football", note: "L&N Stadium" },
+            { name: "Louisville Cardinals Hockey", note: "Iceland Sports Complex" },
+            { name: "Louisville City FC", note: "Lynn Family Stadium" },
+            { name: "Racing Louisville FC", note: "Lynn Family Stadium" },
+            { name: "Louisville Kings (UFL)", note: "Lynn Family Stadium. Won the UFL title in their first season (2026)" },
+            { name: "Churchill Downs", note: "Spring and fall racing meets, plus Derby Day" },
             { header: "Active & Sports Leagues" },
             { name: "LXC Sports", note: "The massive mainstream option. Kickball, dodgeball, softball, and flag football." },
             { name: "Louisville Hardcourt Bike Polo", note: "Shelby Park. Pickup games with no set schedule; check their socials." },
@@ -679,10 +692,11 @@ export const wikiData = {
             { name: "Logan Street Market", note: "Shelby Park. Not a farmers market: a year-round indoor market hall with local makers and food stalls.", free: true }
         ]
     },
-    "Music Venues": {
-        description: "Live and Loud.",
-        type: "alpha",
+    "Music, Stage & Screen": {
+        description: "Live music, theatre, dance and comedy, plus the movie houses still standing (and a few that are not).",
+        type: "custom",
         items: [
+            { header: "Music Venues" },
             { name: "Mag Bar" },
             { name: "Camp Spaceman" },
             { name: "Whirling Tiger", note: "Moving down Story Ave to a bigger space in early 2027; open at the current spot until then." },
@@ -697,19 +711,12 @@ export const wikiData = {
             { name: "Kaiju" },
             { name: "Third Street Dive" },
             { name: "Surface Noise", note: "Intimate experimental shows at the record shop" },
-            { name: "Stevie Ray's Blues Bar" }
-        ]
-    },
-    "Stage & Screen": {
-        description: "Live theatre, music, comedy and dance, plus the movie houses still standing (and a few that are not).",
-        type: "custom",
-        items: [
-            { header: "Theatre, Music & Comedy" },
+            { name: "Stevie Ray's Blues Bar" },
+            { header: "The Stage: Theatre, Dance, Opera & Comedy" },
             { name: "Actors Theatre of Louisville" },
             { name: "The Louisville Ballet" },
             { name: "KY Opera" },
             { name: "The Brown Theatre" },
-            { name: "Louisville Palace Theatre" },
             { name: "KY Center for the Performing Arts" },
             { name: "Bunbury Theatre" },
             { name: "Stage One" },
@@ -928,47 +935,6 @@ export const wikiData = {
             { name: "Witches Brew" }
         ]
     },
-    "Sports": {
-        description: "The Teams.",
-        type: "custom",
-        items: [
-            { name: "Bellarmine Knights", note: "Knights Hall" },
-            { name: "Louisville Bats", note: "Louisville Slugger Field" },
-            { name: "Louisville Cardinals Basketball", note: "KFC Yum! Center" },
-            { name: "Louisville Cardinals Baseball", note: "Jim Patterson Stadium" },
-            { name: "Louisville Cardinals Volleyball", note: "L&N Federal Credit Union Arena. Perennial top-10; national runner-up in 2022 and 2024" },
-            { name: "Louisville Cardinals Women's Basketball", note: "KFC Yum! Center" },
-            { name: "Louisville Cardinals Football", note: "L&N Stadium" },
-            { name: "Louisville Cardinals Hockey", note: "Iceland Sports Complex" },
-            { name: "Louisville City FC", note: "Lynn Family Stadium" },
-            { name: "Racing Louisville FC", note: "Lynn Family Stadium" },
-            { name: "Louisville Kings (UFL)", note: "Lynn Family Stadium. Won the UFL title in their first season (2026)" },
-            { name: "Churchill Downs", note: "Spring and fall racing meets, plus Derby Day" },
-            { name: "Louisville Roller Derby", note: "Flat-track roller derby, 20+ seasons" }
-        ]
-    },
-    "Education": {
-        description: "Higher Learning.",
-        type: "custom",
-        items: [
-            { header: "Universities & Colleges" },
-            { name: "Bellarmine University", url: "https://www.bellarmine.edu/" },
-            { name: "Galen College of Nursing", url: "https://galencollege.edu/" },
-            { name: "Indiana University Southeast", url: "https://www.ius.edu/" },
-            { name: "Jefferson Community & Technical College", url: "https://jefferson.kctcs.edu/" },
-            { name: "Purdue Polytechnic", note: "New Albany", url: "https://polytechnic.purdue.edu/locations/new-albany" },
-            { name: "Simmons College of Kentucky", url: "https://simmonscollegeky.edu/", note: "Historically Black college, founded 1879" },
-            { name: "Kentucky School for the Blind", url: "https://www.ksb.k12.ky.us/", note: "Founded 1842; Frankfort Ave campus" },
-            { name: "Ivy Tech Sellersburg", url: "https://www.ivytech.edu/locations/sellersburg/", note: "Community college just across the river" },
-            { name: "Spalding University", url: "https://spalding.edu/" },
-            { name: "Sullivan University", url: "https://www.sullivan.edu/" },
-            { name: "University of Louisville", url: "https://louisville.edu/" },
-            { header: "Seminaries & Religious Colleges" },
-            { name: "Boyce College", url: "https://boycecollege.com/" },
-            { name: "Louisville Presbyterian Theological Seminary" },
-            { name: "The Southern Baptist Theological Seminary" }
-        ]
-    },
     "Louisville Media": {
         description: "Local news, indie radio, podcasts, and blogs.",
         type: "custom",
@@ -999,8 +965,8 @@ export const wikiData = {
             { name: "WXOX 97.1 / ARTxFM", note: "Incredible experimental, volunteer-run freeform community radio." },
         ]
     },
-    "Books & Libraries": {
-        description: "Read local. Indie bookstores, every LFPL branch, and a library that lends power drills.",
+    "Books, Libraries & Schools": {
+        description: "Read local, learn local. Indie bookstores, every LFPL branch, a library that lends power drills, and the colleges in town.",
         type: "custom",
         items: [
             { header: "Bookstores" },
@@ -1032,7 +998,23 @@ export const wikiData = {
             { name: "South Central Regional", free: true },
             { name: "Southwest Regional", free: true },
             { name: "St. Matthews", free: true },
-            { name: "Western", free: true }
+            { name: "Western", free: true },
+            { header: "Universities & Colleges" },
+            { name: "Bellarmine University", url: "https://www.bellarmine.edu/" },
+            { name: "Galen College of Nursing", url: "https://galencollege.edu/" },
+            { name: "Indiana University Southeast", url: "https://www.ius.edu/" },
+            { name: "Jefferson Community & Technical College", url: "https://jefferson.kctcs.edu/" },
+            { name: "Purdue Polytechnic", note: "New Albany", url: "https://polytechnic.purdue.edu/locations/new-albany" },
+            { name: "Simmons College of Kentucky", url: "https://simmonscollegeky.edu/", note: "Historically Black college, founded 1879" },
+            { name: "Kentucky School for the Blind", url: "https://www.ksb.k12.ky.us/", note: "Founded 1842; Frankfort Ave campus" },
+            { name: "Ivy Tech Sellersburg", url: "https://www.ivytech.edu/locations/sellersburg/", note: "Community college just across the river" },
+            { name: "Spalding University", url: "https://spalding.edu/" },
+            { name: "Sullivan University", url: "https://www.sullivan.edu/" },
+            { name: "University of Louisville", url: "https://louisville.edu/" },
+            { header: "Seminaries & Religious Colleges" },
+            { name: "Boyce College", url: "https://boycecollege.com/" },
+            { name: "Louisville Presbyterian Theological Seminary" },
+            { name: "The Southern Baptist Theological Seminary" }
         ]
     },
     "Day Trips": {
@@ -1246,8 +1228,8 @@ export const wikiData = {
             { name: "LPM's Fish Frynder", note: "Louisville Public Media's searchable map of 50+ fish fries, rebuilt every Lent. The easiest way to find this year's.", url: "https://www.lpm.org/news/2026-02-20/order-up-here-is-the-2026-fish-frynder" }
         ]
     },
-    "Weird Louisville": {
-        description: "Free oddities, giant bats, cursed trees and famous graves. Keeping it weird since 1778.",
+    "Weird & Wonderful": {
+        description: "Free oddities, giant bats, cursed trees and famous graves, plus the best sunsets, star parties and sledding hills. The sledding hills open once 2 to 3 inches stick: no sledding on golf courses, no bonfires.",
         type: "custom",
         items: [
             { header: "Legends & Curiosities" },
@@ -1262,18 +1244,19 @@ export const wikiData = {
             { name: "The Thinker", location: "UofL Belknap", note: "In front of Grawemeyer Hall since 1949. UofL says it's the first large-scale bronze cast of Rodin's Thinker, made under Rodin's eye in 1904.", free: true },
             { name: "Daniel Boone Statue", location: "Cherokee Park", note: "Enid Yandell's bronze frontiersman at the Eastern Parkway end of the park, cast in 1906. It survived the 1974 tornado.", free: true },
             { name: "Lincoln Memorial at Waterfront Park", location: "Waterfront", note: "A larger-than-life Lincoln on a rock, looking out at the river, by Louisville sculptor Ed Hamilton (2009).", free: true },
-            { name: "Cave Hill's Famous Graves", location: "Cave Hill", note: "Colonel Sanders, Muhammad Ali, George Rogers Clark, Pappy Van Winkle and Patty and Mildred Hill, who wrote the 'Happy Birthday' tune. Grab a free map at the office.", free: true }
-        ]
-    },
-    "Golden Hour & Night Sky": {
-        description: "Sunsets, skyline views and stars, all free. Bring a blanket.",
-        type: "custom",
-        items: [
+            { name: "Cave Hill's Famous Graves", location: "Cave Hill", note: "Colonel Sanders, Muhammad Ali, George Rogers Clark, Pappy Van Winkle and Patty and Mildred Hill, who wrote the 'Happy Birthday' tune. Grab a free map at the office.", free: true },
+            { header: "Golden Hour & Night Sky" },
             { name: "Iroquois Park North Overlook", location: "Iroquois Park", note: "What some call the best view of downtown. Cars can drive up Wed, Sat and Sun from April to October, 10 AM to 8 PM. Otherwise walk or bike up and plan on coming down in the dark.", free: true },
             { name: "Big Four Bridge at Sunset", location: "Waterfront", note: "Walk out over the Ohio for golden hour, then stay for the LED light show on the bridge after dark.", free: true },
             { name: "Big Four Station Park", location: "Jeffersonville, IN", note: "The best skyline view of Louisville is from Indiana. Walk across the bridge and look back.", free: true },
             { name: "Shawnee Park Riverbank", location: "West End", note: "The sun sets right over the Ohio from Olmsted's riverside park.", free: true },
-            { name: "Louisville Astronomical Society Star Parties", location: "Tom Sawyer State Park", note: "Free public star parties one Saturday a month, March to November, at the Urban Astronomy Center in Tom Sawyer Park or the dark-sky Baker Observatory in Curby, IN (about an hour). Weather decides, so check their Facebook first.", url: "https://louisville-astro.org/", free: true }
+            { name: "Louisville Astronomical Society Star Parties", location: "Tom Sawyer State Park", note: "Free public star parties one Saturday a month, March to November, at the Urban Astronomy Center in Tom Sawyer Park or the dark-sky Baker Observatory in Curby, IN (about an hour). Weather decides, so check their Facebook first.", url: "https://louisville-astro.org/", free: true },
+            { header: "Snow Day Sledding Hills" },
+            { name: "Dog Hill (Cherokee Park)", location: "Cherokee Park", note: "Baringer Hill, better known as Dog Hill, at Alexander Rd and Scenic Loop. The classic.", free: true },
+            { name: "Joe Creason Park", location: "Trevilian Way", note: "Across from the Zoo. Some sledders swear it beats Dog Hill.", free: true },
+            { name: "George Rogers Clark Park", location: "Thruston Ave", note: "1024 Thruston Ave, behind the playground near McKinley Ave.", free: true },
+            { name: "McNeely Lake Park", location: "Cooper Chapel Rd", note: "Near the Korean War Memorial.", free: true },
+            { name: "Charlie Vettiner Park", location: "Jeffersontown", note: "Near the Easum Rd entrance.", free: true }
         ]
     },
     "Lost Louisville": {
@@ -1283,25 +1266,15 @@ export const wikiData = {
             { name: "Mazzoni's", year: "1884–c.2010", note: "Started at Third and Market, handing out a free rolled oyster with every beer. The family's last restaurant closed around 2010." },
             { name: "Fontaine Ferry Park", year: "1905–1969", note: "A riverside amusement park in the West End with 50+ rides, a pool and a skating rink. It barred Black visitors until 1964, and it closed after unrest on opening day in 1969." },
             { name: "Kentucky Colonels", year: "1967–1976", note: "Louisville's ABA basketball team. They won the 1975 championship, then folded when the ABA merged with the NBA." },
+            { name: "Casa Grisanti", year: "until 1991", note: "The Grisanti family's white-tablecloth Italian room. Its alumni went on to run Vincenzo's, Corbett's and the English Grill, and Ditto's and Stevens & Stevens grew out of the same group." },
+            { name: "The Toy Tiger", year: "1973–1999", note: "Rock club at Bardstown Rd and Goldsmith Ln, with touring acts like GWAR and Queens of the Stone Age, wild contests and that neon sign. Torn down for a gas station." },
+            { name: "Deitrich's", year: "1988–2003", note: "Brasserie Deitrich's filled the old Crescent Theatre on Frankfort Ave (locals joked about dinner at the blue movies). It and Allo Spiedo helped turn Frankfort Ave into a restaurant row." },
             { name: "Kaelin's", year: "1934–2009", note: "The Newburg Road restaurant that claimed the first cheeseburger. The building now serves burgers as 80/20 at Kaelin's." },
             { name: "ear X-tacy", year: "1985–2011", note: "The Bardstown Road record store that defined Louisville music for 25 years. Its sign now hangs in the Frazier History Museum." },
             { name: "Lynn's Paradise Cafe", year: "1991–2013", note: "The kitschy Barret Ave brunch spot with the giant coffee pot out front and the Ugly Lamp Contest at the State Fair." },
             { name: "Phoenix Hill Tavern", year: "1976–2015", note: "The sprawling Baxter Ave music club. Closed abruptly in 2015 and torn down in 2017. Its moose head went to the Frazier." },
-            { name: "King Louis XVI Statue", year: "1967–2020", note: "A gift from Montpellier, our sister city. The city's namesake stood at 6th and Jefferson until he was damaged in 2020 and moved into storage." },
-            { name: "GonzoFest", year: "until 2023", note: "The annual Hunter S. Thompson festival held its last edition in 2023." },
             { name: "Baxter Avenue Theatres", year: "1996–2025", note: "The Highlands' indie and midnight-movie house. It closed Dec. 31, 2025." },
             { name: "Rauch Planetarium", year: "2001–2026", note: "UofL's dome went dark in 2020 and never reopened. The university made the closure permanent in March 2026." }
         ]
     },
-    "Snow Day": {
-        description: "Metro Parks opens five official sledding hills once 2 to 3 inches stick (6 AM to 11 PM). If grass pokes through, it's not deep enough. No sledding on golf courses, no bonfires, no driving on the grass.",
-        type: "custom",
-        items: [
-            { name: "Dog Hill (Cherokee Park)", location: "Cherokee Park", note: "Baringer Hill, better known as Dog Hill, at Alexander Rd and Scenic Loop. The classic.", free: true },
-            { name: "Joe Creason Park", location: "Trevilian Way", note: "Across from the Zoo. Some sledders swear it beats Dog Hill.", free: true },
-            { name: "George Rogers Clark Park", location: "Thruston Ave", note: "1024 Thruston Ave, behind the playground near McKinley Ave.", free: true },
-            { name: "McNeely Lake Park", location: "Cooper Chapel Rd", note: "Near the Korean War Memorial.", free: true },
-            { name: "Charlie Vettiner Park", location: "Jeffersontown", note: "Near the Easum Rd entrance.", free: true }
-        ]
-    }
 };

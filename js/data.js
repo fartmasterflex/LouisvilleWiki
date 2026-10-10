@@ -5,7 +5,8 @@ import { slugify } from './utils.js';
 
 export { wikiData };
 
-export const PINNED = ["Dining Directory", "Oldest Restaurants", "Oldest Landmarks", "Louisville History Timeline"];
+// No staff picks: every list sits in one A to Z grid. Kept (empty) so a cached older ui.js still loads.
+export const PINNED = [];
 // Shown as its own button in the "happening" strip instead of a card
 export const ANNUAL_EVENTS = "Notable Annual Events";
 // Lists that live inside another list's page (a banner at the top) instead of in the big grid
@@ -29,30 +30,25 @@ const EMOJI = {
     "Oldest Landmarks": "🏛️",
     "Bars & Late Night": "🍺",
     "Shops & Digging": "🛍️",
-    "Books & Libraries": "📚",
-    "Stage & Screen": "🎭",
     "Groceries & Markets": "🧺",
     "Museums & Galleries": "🖼️",
     "Attractions & Outings": "🎡",
     "Active Louisville": "🚴",
-    "Clubs & Activities": "🎳",
     "Parks": "🌳",
-    "Music Venues": "🎸",
     "Notable Annual Events": "📅",
     "Breweries & Distilleries": "🥃",
     "Coffee": "☕",
-    "Sports": "🏟️",
-    "Education": "🎓",
     "Louisville Media": "📰",
     "Day Trips": "🚗",
     "Neighborhoods": "🏘️",
     "Louisville History Timeline": "⏳",
     "Eats & Lingo": "🗣️",
     "Church Picnics & Fish Fries": "🐟",
-    "Weird Louisville": "🦇",
-    "Golden Hour & Night Sky": "🌅",
     "Lost Louisville": "🕯️",
-    "Snow Day": "❄️"
+    "Weird & Wonderful": "🦇",
+    "Books, Libraries & Schools": "📚",
+    "Sports, Clubs & Activities": "🎳",
+    "Music, Stage & Screen": "🎸"
 };
 
 // Categories without a sensible map view
@@ -62,8 +58,8 @@ export const MONTHS = ["", "January", "February", "March", "April", "May", "June
 
 export const categoryKeys = Object.keys(wikiData);
 
-// Home ordering: pinned first, then alphabetical
-export const orderedKeys = [...PINNED.filter(k => wikiData[k]), ...categoryKeys.filter(k => !PINNED.includes(k)).sort((a, b) => a.localeCompare(b))];
+// Home and pager ordering: A to Z
+export const orderedKeys = [...categoryKeys].sort((a, b) => a.localeCompare(b));
 
 const slugToKey = {};
 const keyToSlug = {};
@@ -72,8 +68,10 @@ categoryKeys.forEach(k => { const s = slugify(k); slugToKey[s] = k; keyToSlug[k]
 const RENAMED = {
     'dive-bars': 'Bars & Late Night', 'bars': 'Bars & Late Night', 'late-night-and-24-7': 'Bars & Late Night',
     'thrift-vintage-and-digging': 'Shops & Digging', 'local-business': 'Shops & Digging',
-    'bookstores': 'Books & Libraries', 'libraries': 'Books & Libraries',
-    'theatre-the-stage': 'Stage & Screen', 'cinema-and-drive-ins': 'Stage & Screen',
+    'bookstores': 'Books, Libraries & Schools', 'libraries': 'Books, Libraries & Schools', 'books-and-libraries': 'Books, Libraries & Schools', 'education': 'Books, Libraries & Schools',
+    'theatre-the-stage': 'Music, Stage & Screen', 'cinema-and-drive-ins': 'Music, Stage & Screen', 'stage-and-screen': 'Music, Stage & Screen', 'music-venues': 'Music, Stage & Screen',
+    'sports': 'Sports, Clubs & Activities', 'clubs-and-activities': 'Sports, Clubs & Activities',
+    'weird-louisville': 'Weird & Wonderful', 'golden-hour-and-night-sky': 'Weird & Wonderful', 'snow-day': 'Weird & Wonderful',
     'grocery': 'Groceries & Markets', 'farmers-markets': 'Groceries & Markets',
     'golf-and-disc-golf': 'Active Louisville', 'bike-shops': 'Active Louisville',
 };

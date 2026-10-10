@@ -37,15 +37,21 @@ export const state = {
 const BEEN_KEY = 'louBeen';
 let been = store.get(BEEN_KEY, {}) || {};
 
-// Stamps saved under lists that were merged (2026-10-10) move to their new home
+// Stamps saved under lists that were merged (2026-10-10) move to their new home.
+// Targets can themselves be merged later; the chain is followed to the end.
 const MERGED = {
     'Bars': 'Bars & Late Night', 'Late Night & 24/7': 'Bars & Late Night',
     'Thrift, Vintage & Digging': 'Shops & Digging', 'Local Business': 'Shops & Digging',
     'Bookstores': 'Books & Libraries', 'Libraries': 'Books & Libraries',
+    'Books & Libraries': 'Books, Libraries & Schools', 'Education': 'Books, Libraries & Schools',
     'Theatre / The Stage': 'Stage & Screen', 'Cinema & Drive-Ins': 'Stage & Screen',
+    'Stage & Screen': 'Music, Stage & Screen', 'Music Venues': 'Music, Stage & Screen',
     'Grocery': 'Groceries & Markets', 'Farmers Markets': 'Groceries & Markets',
     'Golf & Disc Golf': 'Active Louisville', 'Bike Shops': 'Active Louisville',
+    'Sports': 'Sports, Clubs & Activities', 'Clubs & Activities': 'Sports, Clubs & Activities',
+    'Weird Louisville': 'Weird & Wonderful', 'Golden Hour & Night Sky': 'Weird & Wonderful', 'Snow Day': 'Weird & Wonderful',
 };
+const finalCat = (cat) => { while (MERGED[cat]) cat = MERGED[cat]; return cat; };
 // Local Business entries that landed somewhere else (or were duplicates of a longer name)
 const MOVED = {
     'Local Business::Louisville Nature Center': 'Parks::Louisville Nature Center',
@@ -59,9 +65,10 @@ const MOVED = {
 {
     let changed = false;
     for (const k of Object.keys(been)) {
-        const [cat, ...rest] = k.split('::');
-        const to = MOVED[k] || (MERGED[cat] && `${MERGED[cat]}::${rest.join('::')}`);
-        if (!to) continue;
+        const moved = MOVED[k] || k;
+        const [cat, ...rest] = moved.split('::');
+        const to = `${finalCat(cat)}::${rest.join('::')}`;
+        if (to === k) continue;
         been[to] = 1;
         delete been[k];
         changed = true;

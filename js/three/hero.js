@@ -258,7 +258,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     for (let i = 0, tries = 0; i < 95 && tries < 900; tries++) {
         const x = -44 + rnd() * 94;
         const z = -11 - rnd() * 36;
-        if (x > 28 && z < -30) continue;            // keep Pope Lick sightline open
+        if (x < -28 && z < -30) continue;           // keep Pope Lick sightline open
         if (x > 9 && x < 16 && z > -14) continue;   // bridge landing
         const w = 1.7 + rnd() * 2.6, d = 1.7 + rnd() * 2.4;
         if (!clear(x, z, w, d)) continue;
@@ -642,28 +642,30 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const horseAnim = { t: -1 };
 
     // ---------------- POPE LICK TRESTLE ----------------
+    // West side of town, behind and below the billboard, where it isn't lost behind the Big Four
+    const PL_X = -50;
     const hillMat = new THREE.MeshStandardMaterial({ color: 0xbfc7ae, flatShading: true });
     const hillA = new THREE.Mesh(new THREE.IcosahedronGeometry(10, 1), hillMat);
-    hillA.scale.set(1.15, 1.3, 1); hillA.position.set(37, -1, -68);
-    const hillB = hillA.clone(); hillB.position.set(63, -2, -70); hillB.scale.set(1.1, 1.25, 1);
+    hillA.scale.set(1.15, 1.3, 1); hillA.position.set(PL_X - 13, -1, -68);
+    const hillB = hillA.clone(); hillB.position.set(PL_X + 13, -2, -70); hillB.scale.set(1.1, 1.25, 1);
     scene.add(hillA, hillB);
     const tb = [];
     const TY = 13.5;
-    for (let x = 42; x <= 58; x += 1.75) {
+    for (let x = PL_X - 8; x <= PL_X + 8; x += 1.75) {
         const zc = -66;
         tb.push(beam(new THREE.Vector3(x, TY, zc - .9), new THREE.Vector3(x - .2, -1, zc - 2.6), .12));
         tb.push(beam(new THREE.Vector3(x, TY, zc + .9), new THREE.Vector3(x - .2, -1, zc + 2.6), .12));
         tb.push(beam(new THREE.Vector3(x, TY * .66, zc - 1.35), new THREE.Vector3(x, TY * .33, zc + 2.1), .06));
         tb.push(beam(new THREE.Vector3(x, TY * .66, zc + 1.35), new THREE.Vector3(x, TY * .33, zc - 2.1), .06));
     }
-    tb.push(beam(new THREE.Vector3(38, TY, -66.9), new THREE.Vector3(62, TY, -66.9), .2));
-    tb.push(beam(new THREE.Vector3(38, TY, -65.1), new THREE.Vector3(62, TY, -65.1), .2));
+    tb.push(beam(new THREE.Vector3(PL_X - 12, TY, -66.9), new THREE.Vector3(PL_X + 12, TY, -66.9), .2));
+    tb.push(beam(new THREE.Vector3(PL_X - 12, TY, -65.1), new THREE.Vector3(PL_X + 12, TY, -65.1), .2));
     const trestle = new THREE.Mesh(mergeBeams(tb), steelMat);
     scene.add(trestle);
     const eyeMat = new THREE.MeshBasicMaterial({ color: 0xff1a1a, toneMapped: false, transparent: true, opacity: 0, fog: false });
     const eyes = new THREE.Group();
     [-0.55, 0.55].forEach(dx => { const e = new THREE.Mesh(new THREE.SphereGeometry(.34, 10, 8), eyeMat); e.position.x = dx; eyes.add(e); });
-    const EYES_X = 50;
+    const EYES_X = PL_X;
     eyes.position.set(EYES_X, 5.4, -60);
     scene.add(eyes);
     const eyesHit = new THREE.Mesh(new THREE.SphereGeometry(4.2, 8, 6), new THREE.MeshBasicMaterial({ visible: false }));

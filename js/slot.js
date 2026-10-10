@@ -48,7 +48,7 @@ function names(key, skipSections = []) {
 
 function pools() {
     return [
-        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville", ["Ball Golf Courses", "Disc Golf Courses", "Bike Shops"]), ...names("Weird Louisville")],
+        [...curatedActivities, ...names("Attractions & Outings"), ...names("Active Louisville", ["Ball Golf Courses", "Disc Golf Courses", "Bike Shops"]), ...names("Weird & Wonderful", ["Snow Day Sledding Hills"])],
         names("Dining Directory"),
         names("Bars & Late Night"),
     ];
