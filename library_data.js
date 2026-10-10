@@ -604,14 +604,14 @@ export const wikiData = {
         description: "Local Provisions.",
         type: "alpha",
         items: [
-            { name: "Lotsa Pasta" },
+            { name: "Lotsa Pasta", note: "Lexington Rd. Italian specialty mini-grocery: fresh pasta, imports and a deli counter" },
             { name: "Paul's Fruit Market" },
             { name: "Rainbow Blossom" },
             { name: "Frank's Meat & Produce" },
             { name: "Supermercado Guanajuato" },
             { name: "Five Star Halal Grocery" },
             { name: "Kingsley Meats & Catering" },
-            { name: "Red Hog" },
+            { name: "Red Hog", note: "Frankfort Ave. Butcher counter and specialty mini-grocery, plus a food menu" },
             { name: "Lori's Fish Market" },
             { name: "Highland Fish Market" },
             { name: "Viet Hoa Food Market" },
@@ -623,7 +623,8 @@ export const wikiData = {
             { name: "Golden Key Market", note: "European" },
             { name: "Lanceta Trading", note: "Filipino" },
             { name: "My Tindahan", note: "Filipino" },
-            { name: "Haymarket by Ashbourne Farms", note: "Farm market & cafe on River Rd" }
+            { name: "Haymarket by Ashbourne Farms", note: "Farm market & cafe on River Rd" },
+            { name: "Saraga International Grocery", note: "Opened Sept 2026 in the old Lucky's at the Forum Center (Hurstbourne). Groceries from 50+ countries plus a food court" }
         ]
     },
     "Music Venues": {
@@ -908,7 +909,6 @@ export const wikiData = {
             { header: "Seminaries & Religious Colleges" },
             { name: "Boyce College", url: "https://boycecollege.com/" },
             { name: "Louisville Presbyterian Theological Seminary" },
-            { name: "McKendree University", note: "Classes in Shepherdsville (Bullitt Co.)" },
             { name: "The Southern Baptist Theological Seminary" }
         ]
     },

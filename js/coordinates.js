@@ -128,6 +128,7 @@ export const manualCoords = {
     "Scheller's Fitness & Cycling": [38.13151, -85.68284],    // addr: 8323 PRESTON HWY, LOUISVILLE, KY, 40219
     "Carmichael's Kids": null,                                // no verified address yet: no pin, no lookup
     "Louisville Rowing Club": null,                           // club, launches vary
+    "Saraga International Grocery": [38.25024, -85.57870],     // addr: 200 N HURSTBOURNE PKWY, LOUISVILLE, KY, 40222
     "Granville Pub": [38.22445, -85.76042],                    // addr: 1601 S 3RD ST, LOUISVILLE, KY, 40208
     "Dizzy Whizz": [38.23721, -85.75756],                      // addr: 217 W SAINT CATHERINE ST, LOUISVILLE, KY, 40203
     "KingFish": [38.28113, -85.69944],                         // OSM: Kingfish Restaurant, 3021, River Road, Metro Council District 9, Louisville, Kentucky, 40207
@@ -422,7 +423,6 @@ export const manualCoords = {
     "University of Louisville": [38.21332, -85.75771],         // OSM: University of Louisville, 2301, South 3rd Street, Louisville, Kentucky, 40292
     "Boyce College": [38.24632, -85.68598],                    // addr: 2825 LEXINGTON RD, LOUISVILLE, KY, 40206
     "Louisville Presbyterian Theological Seminary": [38.23709, -85.68496], // OSM: Louisville Presbyterian Theological Seminary, Chapel Valley Way, Cherokee Garden, Louisville
-    "McKendree University": null,                              // classes are in Shepherdsville now
     "The Southern Baptist Theological Seminary": [38.24842, -85.68774], // OSM: Southern Baptist Theological Seminary, Lexington Road, Cherokee Garden, Metro Council District 9, Louisvi
     "Kentucky School for the Blind": [38.25608, -85.71426],    // addr: 1867 FRANKFORT AVE, LOUISVILLE, KY, 40206
     "Ivy Tech Sellersburg": [38.38967, -85.76535],             // addr: 8204 STATE RD 311, SELLERSBURG, IN, 47172
