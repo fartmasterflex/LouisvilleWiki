@@ -1,45 +1,96 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512">
-  <!-- App icon source. Render to icon-192.png / icon-512.png (see tools/README.md).
-       The lily and banner text sit inside the maskable safe zone: a 205px circle around the center. -->
+  <!-- App icon source ("Bourbon & Brass", engraved lily). Render to icon-192.png / icon-512.png (see tools/README.md).
+       The lily is drawn in its own 810-wide space (center x 405) and scaled into the icon. -->
   <defs>
-    <style>
-      @font-face { font-family: "Archivo Black"; src: url("../vendor/fonts/archivo-black-latin-400-normal.woff2") format("woff2"); }
-    </style>
-    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
-      <circle cx="12" cy="12" r="2" fill="#141414" opacity=".12"/>
+    <radialGradient id="navy" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="#1f3358"/><stop offset="1" stop-color="#0b1426"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fae3a0"/><stop offset=".55" stop-color="#dcae4c"/><stop offset="1" stop-color="#b07c22"/>
+    </linearGradient>
+    <linearGradient id="bronze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a87124"/><stop offset="1" stop-color="#5c3b0c"/>
+    </linearGradient>
+    <linearGradient id="curl" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f8dc8e"/><stop offset=".5" stop-color="#cf9d3c"/><stop offset="1" stop-color="#7a5212"/>
+    </linearGradient>
+    <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse">
+      <path d="M4.5 0 V9" stroke="#5a3a0c" stroke-width="2.2" stroke-opacity=".6"/>
     </pattern>
-    <!-- left half of the lily; the right half is this mirrored -->
-    <g id="half">
-      <!-- side petal: rises from the band, arches out and droops to a point -->
-      <path d="M252 292 C 240 236, 202 176, 150 158 C 110 146, 80 172, 88 210 C 91 226, 98 238, 108 248
-               C 110 228, 118 210, 134 204 C 162 196, 196 222, 214 292 Z"/>
-      <!-- foot below the band -->
-      <path d="M226 318 C 206 330, 184 340, 170 362 C 196 362, 224 348, 244 318 Z"/>
+    <clipPath id="petalLit">
+      <path d="M405 80 L 405 548 L 382 548 C 382 520, 378 500, 360 480 C 320 440, 270 380, 290 300 C 310 220, 380 140, 405 80 Z"/>
+    </clipPath>
+
+    <!-- left side of the lily; the right side is this mirrored -->
+    <g id="side">
+      <!-- big curl: up and out from the cuff, over the top, around and hooked back in -->
+      <path fill="url(#curl)" d="M372 548 C 345 470, 290 380, 205 360 C 120 340, 50 395, 56 470
+               C 62 545, 125 595, 195 592 C 232 590, 252 565, 250 522
+               C 238 548, 210 560, 185 555 C 150 548, 132 515, 140 482
+               C 150 445, 195 430, 235 445 C 285 465, 320 520, 336 592 Z"/>
+      <g fill="none" stroke="#4e3209" stroke-linecap="round">
+        <path stroke-width="5" stroke-opacity=".55" d="M330 520 C 305 450, 262 395, 205 380 C 135 365, 75 410, 78 470 C 82 530, 135 572, 195 572"/>
+        <path stroke-width="4" stroke-opacity=".5" d="M312 520 C 290 460, 255 412, 205 400 C 148 388, 98 425, 100 472 C 104 520, 140 550, 182 552"/>
+        <path stroke-width="3" stroke-opacity=".45" d="M296 522 C 278 470, 250 428, 208 420 C 165 412, 124 440, 122 478"/>
+        <path stroke-width="3" stroke-opacity=".5" d="M70 440 C 64 470, 70 510, 96 540"/>
+        <path stroke-width="3" stroke-opacity=".5" d="M84 432 C 78 466, 86 500, 108 526"/>
+      </g>
+      <path fill="none" stroke="#fff1c4" stroke-width="5" stroke-linecap="round" stroke-opacity=".7"
+            d="M352 500 C 330 440, 285 385, 215 368"/>
+      <!-- lower curl: down from the cuff and hooked up at the tip -->
+      <path fill="url(#curl)" d="M358 606 C 336 672, 292 738, 238 742 C 192 746, 176 694, 198 636
+               C 201 628, 205 622, 212 616 C 220 652, 228 676, 252 678 C 280 680, 304 646, 326 606 Z"/>
+      <path fill="none" stroke="#4e3209" stroke-width="4" stroke-linecap="round" stroke-opacity=".5"
+            d="M342 622 C 320 676, 286 722, 242 728 C 208 732, 194 700, 200 662"/>
+      <path fill="none" stroke="#fff1c4" stroke-width="4" stroke-linecap="round" stroke-opacity=".6"
+            d="M318 616 C 302 650, 282 668, 256 670"/>
     </g>
   </defs>
 
-  <rect width="512" height="512" fill="#eaff00"/>
-  <rect width="512" height="512" fill="url(#dots)"/>
+  <rect width="512" height="512" fill="url(#navy)"/>
+  <circle cx="256" cy="256" r="232" fill="none" stroke="#d4a23f" stroke-opacity=".35" stroke-width="3"/>
 
-  <g fill="#141414" transform="translate(256 190) scale(.92) translate(-256 -208)">
-    <use xlink:href="#half"/>
-    <use xlink:href="#half" transform="translate(512 0) scale(-1 1)"/>
-    <!-- center petal -->
-    <path d="M256 60 C 310 108, 330 162, 310 218 C 298 250, 276 270, 256 290 C 236 270, 214 250, 202 218 C 182 162, 202 108, 256 60 Z"/>
-    <!-- fills the seams where the petals meet the band -->
-    <rect x="214" y="262" width="84" height="30"/>
-    <!-- band -->
-    <rect x="170" y="288" width="172" height="32" rx="6"/>
-    <!-- center point below the band -->
-    <path d="M238 318 C 236 342, 244 360, 256 376 C 268 360, 276 342, 274 318 Z"/>
+  <g transform="translate(256 218) scale(.43) translate(-405 -485)">
+    <!-- long faceted point under the cuff -->
+    <path fill="url(#gold)" d="M368 604 L 405 604 L 405 890 L 318 742 Z"/>
+    <path fill="url(#bronze)" d="M405 604 L 442 604 L 492 742 L 405 890 Z"/>
+    <path fill="#e9c46e" d="M405 646 L 452 742 L 405 846 Z"/>
+    <path fill="#c9973a" d="M405 646 L 358 742 L 405 846 Z"/>
+    <path fill="none" stroke="#4e3209" stroke-width="3" stroke-opacity=".6"
+          d="M318 742 L 358 742 M 492 742 L 452 742 M 405 890 L 405 846 M 405 604 L 405 646"/>
+
+    <use xlink:href="#side"/>
+    <use xlink:href="#side" transform="translate(810 0) scale(-1 1)"/>
+
+    <!-- center petal: hatched lit half, bronze shadow half -->
+    <path fill="url(#gold)" d="M405 80 C 430 140, 500 220, 520 300 C 540 380, 490 440, 450 480 C 432 500, 428 520, 428 548
+             L 382 548 C 382 520, 378 500, 360 480 C 320 440, 270 380, 290 300 C 310 220, 380 140, 405 80 Z"/>
+    <rect x="260" y="60" width="150" height="500" fill="url(#hatch)" clip-path="url(#petalLit)"/>
+    <path fill="none" stroke="#fff3cc" stroke-width="12" stroke-linecap="round" stroke-opacity=".55"
+          d="M352 190 C 318 250, 306 320, 330 400"/>
+    <path fill="url(#bronze)" d="M405 80 C 430 140, 500 220, 520 300 C 540 380, 490 440, 450 480 C 432 500, 428 520, 428 548 L 405 548 Z"/>
+    <g fill="none" stroke="#f0c76c" stroke-linecap="round" stroke-opacity=".45">
+      <path stroke-width="4" d="M424 132 C 466 196, 500 252, 506 312"/>
+      <path stroke-width="3" d="M502 350 C 492 400, 466 436, 440 462"/>
+    </g>
+    <path fill="none" stroke="#fff3cc" stroke-width="5" stroke-linecap="round" d="M405 96 L 405 544"/>
+
+    <!-- cuff -->
+    <path fill="#fbe7a8" d="M316 560 L 332 542 L 478 542 L 494 560 Z"/>
+    <path fill="url(#bronze)" d="M316 560 L 494 560 L 488 606 L 322 606 Z"/>
+    <path fill="url(#gold)" d="M316 560 L 405 560 L 405 606 L 322 606 Z"/>
+    <path fill="none" stroke="#4e3209" stroke-width="3" stroke-opacity=".55"
+          d="M336 566 L 336 602 M 352 566 L 352 602 M 368 566 L 368 602 M 384 566 L 384 602 M 442 566 L 442 602 M 462 566 L 462 602"/>
   </g>
 
-  <!-- banner: tails tuck behind, front strip carries the name -->
-  <g transform="rotate(-4 256 376)">
-    <path d="M130 360 L 92 366 L 108 384 L 94 404 L 138 398 Z" fill="#141414"/>
-    <path d="M382 360 L 420 366 L 404 384 L 418 404 L 374 398 Z" fill="#141414"/>
-    <rect x="120" y="350" width="272" height="52" rx="4" fill="#141414"/>
-    <text x="256" y="388" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif"
-          font-size="32" letter-spacing="1" fill="#eaff00">LOUISVILLE</text>
-  </g>
+  <!-- ribbon: tails and folds behind, curved front strip -->
+  <path d="M136 404 L 72 398 L 94 424 L 74 452 L 140 450 Z" fill="#d8c79f"/>
+  <path d="M376 404 L 440 398 L 418 424 L 438 452 L 372 450 Z" fill="#d8c79f"/>
+  <path d="M118 440 L 140 450 L 140 432 Z" fill="#9c875c"/>
+  <path d="M394 440 L 372 450 L 372 432 Z" fill="#9c875c"/>
+  <path d="M118 386 Q 256 418 394 386 L 394 440 Q 256 472 118 440 Z" fill="#f4ead2"/>
+  <path id="arc" d="M120 422 Q 256 454 392 422" fill="none"/>
+  <text font-family="Georgia, serif" font-weight="700" font-size="31" letter-spacing="5" fill="#14223a">
+    <textPath xlink:href="#arc" startOffset="50%" text-anchor="middle">LOUISVILLE</textPath>
+  </text>
 </svg>
