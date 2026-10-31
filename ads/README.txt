@@ -9,7 +9,9 @@ NAMING: number them, starting at 1, with no gaps:
     2.png
     3.jpg
     ...
-The billboard counts up from 1 and stops at the first missing number,
+After adding or removing ads, run `node tools/build.mjs` (or just push:
+GitHub runs it) to refresh ads/index.json, the list the billboard reads.
+Without that file, the billboard counts up from 1 and stops at the first missing number,
 so if you delete 2.png, rename 3 -> 2, 4 -> 3, etc.
 
 SIZE: 1024 x 512 pixels (2:1). Bigger at the same ratio (2048 x 1024) is fine.

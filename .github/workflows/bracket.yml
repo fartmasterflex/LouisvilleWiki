@@ -1,0 +1,34 @@
+# Bracket of the Month: once a day, freeze the month's 16 and count the votes
+# for any round that has closed. Commits data/bracket/YYYY-MM.json when it changes.
+name: Bracket of the Month
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # 6:17 UTC, ~2 AM in Louisville
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  discussions: read
+
+jobs:
+  tally:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Count votes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/tally-bracket.mjs
+      - name: Commit results
+        run: |
+          if [ -n "$(git status --porcelain data/bracket)" ]; then
+            git config user.name "bracket-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/bracket
+            git commit -m "Bracket of the Month: update results"
+            git push
+          fi

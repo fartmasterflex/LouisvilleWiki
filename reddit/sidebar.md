@@ -1,39 +1,39 @@
 ## ⚜ The Louisville Wiki
 
-**[fartmasterflex.github.io/LouisvilleWiki](https://fartmasterflex.github.io/LouisvilleWiki/)**
+**[james-baunach.github.io/louisville-wiki](https://james-baunach.github.io/louisville-wiki/)**
 
-1050 places, events and legends in 24 lists. Search it, map it, track where you've been. [Read the whole thing as text](/r/YOURSUB/wiki/louisvillewiki).
+1059 places, events and legends in 24 lists. Search it, map it, track where you've been. [Read the whole thing as text](/r/YOURSUB/wiki/louisvillewiki).
 
 **The Directory**
 
-* 🍽️ [Dining Directory](https://fartmasterflex.github.io/LouisvilleWiki/#/c/dining-directory)
-* 🥘 [Oldest Restaurants](https://fartmasterflex.github.io/LouisvilleWiki/#/c/oldest-restaurants)
-* 🏛️ [Oldest Landmarks](https://fartmasterflex.github.io/LouisvilleWiki/#/c/oldest-landmarks)
-* ⏳ [Louisville History Timeline](https://fartmasterflex.github.io/LouisvilleWiki/#/c/louisville-history-timeline)
+* 🍽️ [Dining Directory](https://james-baunach.github.io/louisville-wiki/#/c/dining-directory)
+* 🥘 [Oldest Restaurants](https://james-baunach.github.io/louisville-wiki/#/c/oldest-restaurants)
+* 🏛️ [Oldest Landmarks](https://james-baunach.github.io/louisville-wiki/#/c/oldest-landmarks)
+* ⏳ [Louisville History Timeline](https://james-baunach.github.io/louisville-wiki/#/c/louisville-history-timeline)
 
 **Every List**
 
-* 🗣️ [Eats & Lingo](https://fartmasterflex.github.io/LouisvilleWiki/#/c/eats-and-lingo) (24)
-* 🏘️ [Neighborhoods](https://fartmasterflex.github.io/LouisvilleWiki/#/c/neighborhoods) (26)
-* 🕯️ [Lost Louisville](https://fartmasterflex.github.io/LouisvilleWiki/#/c/lost-louisville) (12)
-* 🚴 [Active Louisville](https://fartmasterflex.github.io/LouisvilleWiki/#/c/active-louisville) (44)
-* 🎡 [Attractions & Outings](https://fartmasterflex.github.io/LouisvilleWiki/#/c/attractions-and-outings) (17)
-* 🍺 [Bars & Late Night](https://fartmasterflex.github.io/LouisvilleWiki/#/c/bars-and-late-night) (55)
-* 📚 [Books, Libraries & Schools](https://fartmasterflex.github.io/LouisvilleWiki/#/c/books-libraries-and-schools) (42)
-* 🥃 [Breweries & Distilleries](https://fartmasterflex.github.io/LouisvilleWiki/#/c/breweries-and-distilleries) (32)
-* ☕ [Coffee](https://fartmasterflex.github.io/LouisvilleWiki/#/c/coffee) (27)
-* 🚗 [Day Trips](https://fartmasterflex.github.io/LouisvilleWiki/#/c/day-trips) (27)
-* 🧺 [Groceries & Markets](https://fartmasterflex.github.io/LouisvilleWiki/#/c/groceries-and-markets) (35)
-* 📰 [Louisville Media](https://fartmasterflex.github.io/LouisvilleWiki/#/c/louisville-media) (21)
-* 🖼️ [Museums & Galleries](https://fartmasterflex.github.io/LouisvilleWiki/#/c/museums-and-galleries) (25)
-* 🎸 [Music, Stage & Screen](https://fartmasterflex.github.io/LouisvilleWiki/#/c/music-stage-and-screen) (45)
-* 🌳 [Parks](https://fartmasterflex.github.io/LouisvilleWiki/#/c/parks) (38)
-* 🛍️ [Shops & Digging](https://fartmasterflex.github.io/LouisvilleWiki/#/c/shops-and-digging) (30)
-* 🎳 [Sports, Clubs & Activities](https://fartmasterflex.github.io/LouisvilleWiki/#/c/sports-clubs-and-activities) (44)
-* 🦇 [Weird & Wonderful](https://fartmasterflex.github.io/LouisvilleWiki/#/c/weird-and-wonderful) (20)
-* 📅 [Notable Annual Events](https://fartmasterflex.github.io/LouisvilleWiki/#/c/notable-annual-events) (40)
-* 🐟 [Church Picnics & Fish Fries](https://fartmasterflex.github.io/LouisvilleWiki/#/c/church-picnics-and-fish-fries) (26)
-* 🆓 [Free Louisville](https://fartmasterflex.github.io/LouisvilleWiki/#/p/free) (135)
+* 🗣️ [Eats & Lingo](https://james-baunach.github.io/louisville-wiki/#/c/eats-and-lingo) (24)
+* 🏘️ [Neighborhoods](https://james-baunach.github.io/louisville-wiki/#/c/neighborhoods) (26)
+* 🕯️ [Lost Louisville](https://james-baunach.github.io/louisville-wiki/#/c/lost-louisville) (16)
+* 🚴 [Active Louisville](https://james-baunach.github.io/louisville-wiki/#/c/active-louisville) (44)
+* 🎡 [Attractions & Outings](https://james-baunach.github.io/louisville-wiki/#/c/attractions-and-outings) (17)
+* 🍺 [Bars & Late Night](https://james-baunach.github.io/louisville-wiki/#/c/bars-and-late-night) (55)
+* 📚 [Books, Libraries & Schools](https://james-baunach.github.io/louisville-wiki/#/c/books-libraries-and-schools) (42)
+* 🥃 [Breweries & Distilleries](https://james-baunach.github.io/louisville-wiki/#/c/breweries-and-distilleries) (32)
+* ☕ [Coffee](https://james-baunach.github.io/louisville-wiki/#/c/coffee) (27)
+* 🚗 [Day Trips](https://james-baunach.github.io/louisville-wiki/#/c/day-trips) (27)
+* 🧺 [Groceries & Markets](https://james-baunach.github.io/louisville-wiki/#/c/groceries-and-markets) (35)
+* 📰 [Louisville Media](https://james-baunach.github.io/louisville-wiki/#/c/louisville-media) (21)
+* 🖼️ [Museums & Galleries](https://james-baunach.github.io/louisville-wiki/#/c/museums-and-galleries) (25)
+* 🎸 [Music, Stage & Screen](https://james-baunach.github.io/louisville-wiki/#/c/music-stage-and-screen) (45)
+* 🌳 [Parks](https://james-baunach.github.io/louisville-wiki/#/c/parks) (38)
+* 🛍️ [Shops & Digging](https://james-baunach.github.io/louisville-wiki/#/c/shops-and-digging) (30)
+* 🎳 [Sports, Clubs & Activities](https://james-baunach.github.io/louisville-wiki/#/c/sports-clubs-and-activities) (44)
+* 🦇 [Weird & Wonderful](https://james-baunach.github.io/louisville-wiki/#/c/weird-and-wonderful) (20)
+* 📅 [Notable Annual Events](https://james-baunach.github.io/louisville-wiki/#/c/notable-annual-events) (40)
+* 🐟 [Church Picnics & Fish Fries](https://james-baunach.github.io/louisville-wiki/#/c/church-picnics-and-fish-fries) (26)
+* 🆓 [Free Louisville](https://james-baunach.github.io/louisville-wiki/#/p/free) (125)
 
 **Can't decide?**
 
@@ -41,8 +41,8 @@
 
 **Need it fast**
 
-* 🌙 [Bars & Late Night](https://fartmasterflex.github.io/LouisvilleWiki/#/c/bars-and-late-night): what's open after 2 AM
-* 🗣️ [Eats & Lingo](https://fartmasterflex.github.io/LouisvilleWiki/#/c/eats-and-lingo): Hot Browns, Modjeskas, "the Watterson"
-* 📅 [Annual Events](https://fartmasterflex.github.io/LouisvilleWiki/#/c/notable-annual-events): what's on this month
+* 🌙 [Bars & Late Night](https://james-baunach.github.io/louisville-wiki/#/c/bars-and-late-night): what's open after 2 AM
+* 🗣️ [Eats & Lingo](https://james-baunach.github.io/louisville-wiki/#/c/eats-and-lingo): Hot Browns, Modjeskas, "the Watterson"
+* 📅 [Annual Events](https://james-baunach.github.io/louisville-wiki/#/c/notable-annual-events): what's on this month
 
 *Spot something closed or wrong? Post it and it gets fixed.*

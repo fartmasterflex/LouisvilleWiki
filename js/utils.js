@@ -109,7 +109,22 @@ export function closeModal(id) {
 
 export function topModal() { return modalStack[modalStack.length - 1] || null; }
 
-document.addEventListener('click', (e) => {
+// Keep Tab / Shift+Tab inside the open dialog, so keyboard users can't wander behind it
+const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+if (typeof document !== 'undefined') document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const id = topModal();
+    const box = id && document.getElementById(id)?.querySelector('.modal-box');
+    if (!box) return;
+    const items = [...box.querySelectorAll(FOCUSABLE)].filter(el => el.offsetParent !== null || el === document.activeElement);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (!box.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+});
+
+if (typeof document !== 'undefined') document.addEventListener('click', (e) => {
     const closer = e.target.closest('[data-close]');
     if (closer) {
         const m = closer.closest('.modal');
@@ -139,5 +154,4 @@ export function toast(html, { kicker = '', emoji = '', secret = false, duration 
 }
 
 // Legacy globals (older inline handlers / bookmarklets)
-window.openModal = openModal;
-window.closeModal = closeModal;
+if (typeof window !== 'undefined') Object.assign(window, { openModal, closeModal });

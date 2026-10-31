@@ -9,6 +9,7 @@ import { bindSearch } from './search.js';
 import { openBracketSetup, initBracket } from './bracket.js';
 import { openCrawlGenerator, generateCrawl } from './crawl.js';
 import { openHistoryWalk, generateWalk } from './walk.js';
+import { openMonthly } from './monthly.js';
 import { openSlotMachine, initSlot } from './slot.js';
 import { openBingo, initBingo } from './bingo.js';
 import { openCategoryMap } from './map.js';
@@ -16,7 +17,7 @@ import { initEasterEggs, setHero, onHeroEgg } from './easter_eggs.js';
 import { updateBadge, openStickerBook, resetSecrets } from './secrets.js';
 import { setSound } from './audio.js';
 import { state } from './state.js';
-import { openModal, closeModal, topModal, prefersReducedMotion } from './utils.js';
+import { openModal, closeModal, topModal, prefersReducedMotion, store, toast as toastMsg } from './utils.js';
 
 let hero = null;
 
@@ -73,21 +74,43 @@ function route() {
 // ---------------------------------------------------------------
 // TOOLS / COMMUNITY
 // ---------------------------------------------------------------
-const TOOLS = { bracket: openBracketSetup, crawl: openCrawlGenerator, slot: openSlotMachine, bingo: openBingo, walk: openHistoryWalk };
+const TOOLS = { bracket: openBracketSetup, crawl: openCrawlGenerator, slot: openSlotMachine, bingo: openBingo, walk: openHistoryWalk, monthly: openMonthly };
+// The monthly bracket posts votes in its own thread
+window.addEventListener('wiki:board', (e) => openGiscus(e.detail));
 
-let giscusLoaded = false;
-function openGiscus() {
+// One discussion per page. The site lives on a single URL (#/ routes), so
+// giscus's "pathname" mapping put every page in the same thread. The home page
+// keeps that original thread; each list or gathered page gets its own, keyed
+// by a fixed title, e.g. "Louisville Wiki · Dining Directory".
+export const GISCUS_PREFIX = 'Louisville Wiki · ';
+let giscusTerm = null;
+function currentBoard() {
+    const h = location.hash || '#/';
+    const m = h.match(/^#\/c\/([^/]+)/);
+    const key = m ? keyOfSlug(decodeURIComponent(m[1])) : null;
+    if (key) return { term: GISCUS_PREFIX + key, title: key };
+    const pm = h.match(/^#\/p\/([^/]+)/);
+    const p = pm && (dataNs.PRESETS || {})[pm[1]];
+    if (p) return { term: GISCUS_PREFIX + p.title, title: p.title };
+    return { term: '', title: '' };
+}
+function openGiscus(override = null) {
     openModal('giscusModal');
-    if (giscusLoaded) return;
-    giscusLoaded = true;
+    const { term, title } = override || currentBoard();
+    document.getElementById('giscusTitle').textContent = title ? `💬 ${title}` : '💬 Community Board';
+    document.getElementById('giscusSub').textContent = title
+        ? `Tips, corrections and arguments about ${title}. Requires a GitHub account.`
+        : 'Discuss Louisville with fellow wiki visitors. Requires a GitHub account.';
+    if (giscusTerm === term) return;
+    giscusTerm = term;
     const s = document.createElement('script');
     s.src = 'https://giscus.app/client.js';
     Object.entries({
-        'data-repo': 'FartmasterFlex/LouisvilleWiki',
-        'data-repo-id': 'R_kgDORVhqTg',
+        'data-repo': 'James-baunach/louisville-wiki',
+        'data-repo-id': 'R_kgDOVefAWg',
         'data-category': 'Announcements',
-        'data-category-id': 'DIC_kwDORVhqTs4C4Lr2',
-        'data-mapping': 'pathname',
+        'data-category-id': 'DIC_kwDOVefAWs4DKGrf',
+        ...(term ? { 'data-mapping': 'specific', 'data-term': term } : { 'data-mapping': 'pathname' }),
         'data-strict': '0',
         'data-reactions-enabled': '1',
         'data-emit-metadata': '1',
@@ -102,6 +125,18 @@ function openGiscus() {
     mount.appendChild(s);
 }
 
+// Share the list's static page (list/<slug>/): it has real titles and previews,
+// and its big button opens this interactive version
+async function shareList(slug) {
+    const url = new URL(`list/${slug}/`, location.href.split('#')[0]).href;
+    const title = document.title;
+    try {
+        if (navigator.share) { await navigator.share({ title, url }); return; }
+        await navigator.clipboard.writeText(url);
+        toastMsg(`Link copied. It opens a page that previews nicely in texts and posts.`, { kicker: "🔗 SHARE" });
+    } catch (e) { /* share sheet dismissed */ }
+}
+
 // ---------------------------------------------------------------
 // GLOBAL EVENTS
 // ---------------------------------------------------------------
@@ -111,13 +146,15 @@ document.addEventListener('click', (e) => {
     switch (a.dataset.action) {
         case 'surprise': surprisePick(); break;
         case 'pick-cat': surprisePick(state.currentCategory); break;
-        case 'map': openCategoryMap(state.currentCategory); break;
+        case 'map': openCategoryMap(state.currentCategory, state.currentCategory === 'Dining Directory' ? uiNs.diningFilteredItems?.() : null); break;
+        case 'toggle-filters': uiNs.toggleFiltersDrawer?.(); break;
         case 'been': onBeenClick(a); break;
         case 'filter': toggleFilter(a.dataset.type, a.dataset.value); break;
         case 'clear-filters': clearFilters(); break;
         case 'sort': sortTable(a.dataset.col); break;
         case 'tool': TOOLS[a.dataset.tool]?.(); break;
         case 'giscus': openGiscus(); break;
+        case 'share': shareList(a.dataset.slug); break;
         case 'stickers': openStickerBook(); break;
         case 'jump':
             e.preventDefault();
@@ -132,6 +169,8 @@ document.addEventListener('change', (e) => {
 
 document.addEventListener('input', (e) => {
     if (e.target.id === 'diningText') onDiningText(e.target.value);
+    // then/now photo slider
+    if (e.target.classList.contains('ba-range')) e.target.closest('.ba')?.style.setProperty('--pos', e.target.value + '%');
 });
 
 document.addEventListener('keydown', (e) => {
@@ -177,9 +216,33 @@ function bindStatic() {
 // ---------------------------------------------------------------
 // 3D HERO
 // ---------------------------------------------------------------
+// Lite 3D: 1x pixels, no bloom, 30 fps. On by itself for Save-Data, slow
+// connections, small devices and low battery; the footer chip overrides.
+async function wantsLite() {
+    const saved = store.get('wikiLite', null);
+    if (saved !== null) return saved;
+    const c = navigator.connection;
+    if (c && (c.saveData || /(^|-)2g|3g/.test(c.effectiveType || ''))) return true;
+    if ((navigator.deviceMemory && navigator.deviceMemory <= 2) || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2)) return true;
+    try {
+        const b = await navigator.getBattery?.();
+        if (b && !b.charging && b.level < 0.2) return true;
+    } catch (e) { /* no battery API */ }
+    return false;
+}
+let liteOn = false;
+function paintLite() {
+    const b = document.getElementById('liteBtn');
+    if (!b) return;
+    b.textContent = liteOn ? '⚡ lite 3D: on' : '⚡ lite 3D: off';
+    b.setAttribute('aria-pressed', liteOn);
+}
+
 async function initHero() {
     const heroEl = document.getElementById('hero');
     const canvas = document.getElementById('heroCanvas');
+    liteOn = await wantsLite();
+    paintLite();
     try {
         const { hasWebGL, loadThree } = await import('./three/core.js');
         if (!hasWebGL()) return;
@@ -192,6 +255,7 @@ async function initHero() {
             neon: state.neonOn,
             compact: document.body.classList.contains('is-compact'),
             reducedMotion: prefersReducedMotion(),
+            lite: liteOn,
             on: {
                 egg: onHeroEgg,
                 toggleTheme,
@@ -210,6 +274,27 @@ window.addEventListener('wiki:theme', (e) => hero?.setNight(e.detail === 'dark')
 // ---------------------------------------------------------------
 // BOOT
 // ---------------------------------------------------------------
+// Keyboard / screen-reader buttons for the skyline's clickable things
+document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-hero]');
+    if (!b) return;
+    if (b.dataset.hero === 'night') toggleTheme();
+    else hero?.act?.(b.dataset.hero);
+});
+
+document.getElementById('liteBtn')?.addEventListener('click', () => {
+    liteOn = !liteOn;
+    store.set('wikiLite', liteOn);
+    paintLite();
+    // rebuild the scene at the new quality
+    if (hero) { hero.dispose(); hero = null; initHero(); }
+});
+
+// Offline support (sw.js caches the shell; network-first so deploys show up right away)
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => { }));
+}
+
 initTheme();
 bindStatic();
 initBracket();
@@ -219,7 +304,11 @@ initEasterEggs();
 updateBadge();
 window.addEventListener('hashchange', route);
 route();
-initHero();
+// The 3D skyline (three.js + the scene, ~700 KB) waits until the page is up and the browser is idle,
+// so the lists and search are usable first. The flat skyline shows until then.
+const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+if (document.readyState === 'complete') idle(initHero, { timeout: 2500 });
+else window.addEventListener('load', () => idle(initHero, { timeout: 2500 }), { once: true });
 
 // Legacy globals for old bookmarks/inline handlers
 Object.assign(window, { toggleTheme, openGiscus, openModal, closeModal });

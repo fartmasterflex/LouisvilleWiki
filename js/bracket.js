@@ -159,7 +159,7 @@ export async function downloadBracket() {
     btn.disabled = true;
     btn.textContent = 'Printing…';
     try {
-        if (!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+        if (!window.html2canvas) await loadScript('vendor/html2canvas/html2canvas.min.js');
         const canvas = await window.html2canvas(document.getElementById('bracketCaptureArea'), { backgroundColor: '#1b1b1b', scale: 2 });
         const link = document.createElement('a');
         link.download = 'louisville-bracket.png';

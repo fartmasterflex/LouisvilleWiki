@@ -2,7 +2,8 @@
 // Billboard ads for the 3D masthead.
 //
 // HOW TO ADD AN AD: drop an image into /ads named with the next number —
-//   ads/1.png, ads/2.png, ads/3.jpg …
+//   ads/1.png, ads/2.png, ads/3.jpg … — then run `node tools/build.mjs`
+//   (or let the GitHub Action do it) to refresh ads/index.json.
 // The billboard counts up from 1 and stops at the first missing number, so
 // keep the numbers consecutive (no gaps). Make them ADS.width x ADS.height
 // pixels (2:1). Other sizes still work — they're letterboxed, never stretched.
@@ -83,9 +84,18 @@ export function drawHouseAds([a, b]) {
 let found = null;
 
 // Resolves to the loaded <img> elements, in order. Empty if the folder has none.
+// ads/index.json (written by tools/build.mjs) lists the files, so nothing 404s.
+// Without it, fall back to counting up 1.png, 2.png … until one is missing.
 export function loadAds() {
     if (found) return found;
     found = (async () => {
+        try {
+            const res = await fetch(`${ADS.folder}index.json`, { cache: 'no-cache' });
+            if (res.ok) {
+                const { ads = [] } = await res.json();
+                return (await Promise.all(ads.map(f => tryLoad(ADS.folder + f)))).filter(Boolean);
+            }
+        } catch (e) { /* no index: probe below */ }
         const imgs = [];
         let lastExt = ADS.exts[0];
         for (let n = 1; n <= ADS.max; n++) {

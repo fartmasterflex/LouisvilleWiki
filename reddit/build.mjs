@@ -4,7 +4,7 @@ const noop=()=>{}; const el=new Proxy(noop,{get:(t,p)=>p===Symbol.toPrimitive?()
 const R = new URL('../', import.meta.url).href;
 const D = await import(R + 'js/data.js');
 const { wikiData, orderedKeys, slugOf, emojiOf, COMPANIONS, ANNUAL_EVENTS, PINNED, countOf, totalCount, presetCount, MONTHS } = D;
-const SITE = 'https://fartmasterflex.github.io/LouisvilleWiki/';
+const SITE = 'https://james-baunach.github.io/louisville-wiki/';
 const link = k => `${SITE}#/c/${slugOf(k)}`;
 const esc = s => String(s ?? '').replace(/([*_~^\[\]|])/g, '\$1').trim();
 const realUrl = u => u && !/google\.com\/maps/.test(u) ? u : null;

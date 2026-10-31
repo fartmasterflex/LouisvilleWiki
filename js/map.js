@@ -10,8 +10,12 @@ let coordsReady = import('./coordinates.js')
     .catch(e => { console.warn('coordinates.js failed to load — falling back to geocoding only.', e); });
 
 const LOU = [38.2527, -85.7585];
-const LEAFLET_JS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-const LEAFLET_CSS = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+// Self-hosted (vendor/leaflet) so the map works when unpkg is slow or blocked
+const LEAFLET_JS = 'vendor/leaflet/leaflet.js';
+const LEAFLET_CSS = 'vendor/leaflet/leaflet.css';
+// Live lookups are polite (1/sec) but slow; above this many unpinned places we
+// show what's saved in coordinates.js and skip the lookups (run tools/geocode.mjs instead)
+const LIVE_LOOKUP_MAX = 25;
 
 function loadLeaflet() {
     loadCss(LEAFLET_CSS);
@@ -82,7 +86,8 @@ function pinIcon(label, dark = false) {
 // ---------------------------------------------------------------
 let catMap = null, catLayer = null, catTiles = null, catToken = 0;
 
-export async function openCategoryMap(categoryKey) {
+// itemsOverride: show just these entries (the Dining map follows the current filters)
+export async function openCategoryMap(categoryKey, itemsOverride = null) {
     const data = wikiData[categoryKey];
     if (!data || !data.items) return;
     const token = ++catToken;
@@ -105,7 +110,7 @@ export async function openCategoryMap(categoryKey) {
     catLayer.clearLayers();
     setTimeout(() => catMap.invalidateSize(), 120);
 
-    const items = data.items.filter(i => i.name && !i.header);
+    const items = (itemsOverride || data.items).filter(i => i.name && !i.header);
     const bounds = [];
     const pending = [];
     const add = (item, n, coords) => {
@@ -127,6 +132,10 @@ export async function openCategoryMap(categoryKey) {
 
     if (!pending.length) {
         status.textContent = `${bounds.length}/${items.length} pinned`;
+        return;
+    }
+    if (pending.length > LIVE_LOOKUP_MAX) {
+        status.textContent = `${bounds.length}/${items.length} pinned · ${pending.length} not mapped yet`;
         return;
     }
     let done = 0;

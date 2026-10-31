@@ -1,0 +1,36 @@
+# On every push and pull request: check the data. On pushes to main, also
+# rebuild the generated files (static list pages, sitemap, ad list, Reddit text)
+# and commit them if they changed.
+name: Check & build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate library_data.js
+        run: node tools/validate.mjs
+      - name: Build generated files
+        if: github.event_name == 'push'
+        run: node tools/build.mjs
+      - name: Commit generated files
+        if: github.event_name == 'push'
+        run: |
+          if [ -n "$(git status --porcelain list sitemap.xml robots.txt ads/index.json reddit)" ]; then
+            git config user.name "wiki-build-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add list sitemap.xml robots.txt ads/index.json reddit
+            git commit -m "Rebuild generated pages"
+            git push
+          fi

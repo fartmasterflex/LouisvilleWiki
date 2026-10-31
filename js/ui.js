@@ -1,6 +1,7 @@
 // --- js/ui.js ---
 // Home + category rendering, dining table, been-there stamps, surprise picks.
 import { wikiData, orderedKeys, PINNED, ANNUAL_EVENTS, COMPANIONS, NO_MAP, MONTHS, slugOf, emojiOf, realItems, countOf, totalCount, areaOf, eventsInMonth, randomEntry, categoryKeys } from './data.js';
+import { eventMonth, AREAS, FEATURES, featuresOf, practical, alsoIn, linkKind, LINK_LABEL, prettyDate, nextRuleDate, shortDate, activeSeasons, hoodPresets, LOST } from './data.js';
 // Namespace import: if GitHub Pages serves a cached data.js from before quick lists, this degrades instead of blanking the page
 import * as dataNs from './data.js';
 const PRESETS = dataNs.PRESETS || {};
@@ -9,7 +10,7 @@ const presetCount = (id) => dataNs.presetCount?.(id) || 0;
 // Lists shown inside a parent list's page (a cached older data.js stores a single name, not an array)
 const companionsOf = (key) => [].concat(COMPANIONS[key] || []).filter(k => wikiData[k]);
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
-import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $ } from './utils.js';
+import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $, slugify } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
 import { sfx } from './audio.js';
 
@@ -86,9 +87,10 @@ export function renderHome() {
     const companions = Object.keys(COMPANIONS).flatMap(companionsOf);
     const lists = [
         ...orderedKeys.filter(k => !featured.includes(k) && k !== ANNUAL_EVENTS && !companions.includes(k)).map(k => ({ name: k, html: (i) => card(k, i) })),
-        ...Object.keys(PRESETS).map(id => ({ name: PRESETS[id].title, html: (i) => presetCard(id, i) })),
+        ...Object.keys(PRESETS).filter(id => PRESETS[id].grid).map(id => ({ name: PRESETS[id].title, html: (i) => presetCard(id, i) })),
     ].sort((a, b) => a.name.localeCompare(b.name));
     const nFound = foundCount();
+    const seasons = activeSeasons();
 
     content().innerHTML = `
     <div class="view home">
@@ -114,7 +116,7 @@ export function renderHome() {
                 <div class="month-row">
                     <div class="month-label"><small>HAPPENING IN</small><strong>${MONTHS[m]}</strong></div>
                     <div class="month-items">
-                        ${events.length ? events.map(e => `<a href="${evHref(e)}">${esc(e.name)}</a>`).join('') : '<span class="month-none">Nothing on the calendar yet.</span>'}
+                        ${events.length ? events.map(e => { const d = e.rule && nextRuleDate(e.rule); const soon = d && d - Date.now() < 70 * 864e5; return `<a href="${evHref(e)}">${esc(e.name)}${soon ? `<small class="md">${esc(shortDate(d))}</small>` : ''}</a>`; }).join('') : '<span class="month-none">Nothing on the calendar yet.</span>'}
                     </div>
                 </div>`).join('')}
             </div>
@@ -123,6 +125,11 @@ export function renderHome() {
                 <span class="ab-name">Annual Events</span>
                 <span class="ab-desc">The whole year, month by month →</span>
             </a>
+        </section>` : ''}
+
+        ${seasons.length ? `
+        <section class="season-row" aria-label="In season now">
+            ${seasons.map(id => `<a class="season-card" href="#/p/${id}"><span class="sc-emoji" aria-hidden="true">${PRESETS[id].emoji}</span><span><small>IN SEASON NOW</small><b>${esc(PRESETS[id].title)}</b><span class="sc-desc">${presetCount(id)} spots →</span></span></a>`).join('')}
         </section>` : ''}
 
         <div class="divider"></div>
@@ -144,6 +151,13 @@ export function renderHome() {
                 <span class="tc-name">Bracket Maker</span>
                 <span class="tc-desc">Pick 16 favorites from any list. Fight to the death. Save the carnage as an image.</span>
                 <span class="tc-cta">START A BRACKET →</span>
+            </button>
+            <button type="button" class="tool-card" data-action="tool" data-tool="monthly" style="--i:1">
+                <span class="tc-badge">COMMUNITY VOTE</span>
+                <span class="tc-emoji">🗳️</span>
+                <span class="tc-name">Bracket of the Month</span>
+                <span class="tc-desc">Same 16 for everybody. A round a week, decided by the community board. One champion by month's end.</span>
+                <span class="tc-cta">CAST YOUR VOTE →</span>
             </button>
             <button type="button" class="tool-card" data-action="tool" data-tool="crawl" style="--i:1">
                 <span class="tc-badge">MAPPED</span>
@@ -229,7 +243,7 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
     const data = wikiData[key];
     if (!data) return renderHome();
     if (state.currentCategory !== key) {
-        state.filters = { cuisine: [], price: [], area: [], text: '' };
+        state.filters = emptyFilters();
     }
     state.currentCategory = key;
 
@@ -246,6 +260,7 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
     else if (data.type === 'events') body = renderEvents(key, data);
     else if (key === 'Louisville History Timeline') body = renderTimeline(key, data);
     else body = renderSections(key, data, key === 'Neighborhoods' ? 'hood-grid' : '');
+    if (key === 'Neighborhoods') body = hoodChips() + body;
     const subs = companionsOf(key);
     const parent = Object.keys(COMPANIONS).find(k => companionsOf(k).includes(key));
     const banner = (href, emoji, title, line) => `<a class="companion-banner" href="${href}"><span class="cb-emoji" aria-hidden="true">${emoji}</span><span><b>${esc(title)}</b><small>${esc(line)}</small></span></a>`;
@@ -260,6 +275,8 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
             <span class="crumb-actions">
                 ${!NO_MAP.has(key) ? `<button type="button" class="btn-map" data-action="map">🗺️ Map View</button>` : ''}
                 <button type="button" class="btn-map" data-action="pick-cat">🎲 Pick One</button>
+                <button type="button" class="btn-map" data-action="giscus" title="Tips, corrections and arguments about this list">💬 Discuss</button>
+                <button type="button" class="btn-map" data-action="share" data-slug="${slugOf(key)}" title="Share a link that previews nicely">🔗 Share</button>
             </span>
         </nav>
 
@@ -269,6 +286,7 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
             <div class="cat-sub">
                 <span class="stamp ink">${n} entries</span>
                 <span class="stamp">${esc(typeLabel(data.type, key))}</span>
+                ${data.updated ? `<span class="stamp updated" title="Last time this list changed">updated ${esc(prettyDate(data.updated))}</span>` : ''}
             </div>
         </header>
         <p class="cat-desc">${esc(data.description || '')}</p>
@@ -301,12 +319,51 @@ export function renderCategory(key, focusIdx = null, { afterHero = false } = {})
     }
 }
 
+// "Everything in Germantown" links: one gathered list per neighborhood
+export function hoodChips(title = 'Everything in one neighborhood') {
+    const ids = hoodPresets(3);
+    if (!ids.length) return '';
+    return `<nav class="hood-chips" aria-label="${esc(title)}"><span class="filter-label">${esc(title)}</span>${ids.map(id =>
+        `<a class="filter-chip" href="#/p/${id}">${esc(PRESETS[id].hood)} <small>${presetCount(id)}</small></a>`).join('')}</nav>`;
+}
+
 function typeLabel(type, key) {
     if (key === 'Louisville History Timeline') return 'timeline';
     return { table: 'sortable table', ranked: 'ranked by age', alpha: 'a → z', events: 'calendar', custom: 'curated list' }[type] || 'list';
 }
 
 const freeTag = (item) => item.free ? '<span class="free-tag" title="Free to get in">FREE</span>' : '';
+
+// Practical badges (patio, cash only, 24/7…), pooled from every list the place is on
+function featureBadges(cat, item) {
+    const p = practical(cat, item);
+    const feats = featuresOf(p).map(f => `<span class="feat" title="${esc(f.label)}${f.partial ? ' (partial)' : ''}"><span aria-hidden="true">${f.icon}</span><span class="sr-only">${esc(f.label)}</span></span>`).join('');
+    const hours = p.hours ? `<span class="hours-tag">${esc(p.hours)}</span>` : '';
+    return feats || hours ? `<span class="feats">${hours}${feats}</span>` : '';
+}
+
+// "Also on: 🍺 Bars & Late Night" links to the same place on other lists
+function alsoChips(cat, item) {
+    const others = alsoIn(cat, item.name);
+    if (!others.length) return '';
+    return `<span class="also">also on ${others.map(o => `<a href="${catHref(o.cat, o.idx)}">${emojiOf(o.cat)} ${esc(o.cat)}</a>`).join('')}</span>`;
+}
+
+// A then/now photo pair with a drag handle (Lost Louisville). Fields: then: { src, year, credit }, now: { src, credit }
+function beforeAfter(item) {
+    if (!item.then?.src || !item.now?.src) return '';
+    const t = item.then, n = item.now;
+    return `
+    <figure class="ba" style="--pos:50%">
+        <div class="ba-frame">
+            <img class="ba-now" src="${esc(n.src)}" alt="${esc(item.name)} today" loading="lazy">
+            <div class="ba-then"><img src="${esc(t.src)}" alt="${esc(item.name)}${t.year ? ' in ' + esc(t.year) : ''}" loading="lazy"></div>
+            <span class="ba-label then">${esc(t.year || 'then')}</span><span class="ba-label now">now</span>
+            <input type="range" class="ba-range" min="0" max="100" value="50" aria-label="Slide between then and now for ${esc(item.name)}">
+        </div>
+        <figcaption>${[t.credit && 'Then: ' + esc(t.credit), n.credit && 'Now: ' + esc(n.credit)].filter(Boolean).join(' · ')}</figcaption>
+    </figure>`;
+}
 
 function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {}) {
     const been = isBeen(cat, item.name);
@@ -317,11 +374,14 @@ function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {})
         <div class="entry-main">
             ${rank !== null ? `<span class="rank">#${rank}</span>` : ''}
             <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>
-            ${meta ? `<span class="entry-meta">${meta}</span>` : ''}${freeTag(item)}
+            ${meta ? `<span class="entry-meta">${meta}</span>` : ''}${freeTag(item)}${featureBadges(cat, item)}
             ${item.note ? `<p class="entry-note">${esc(item.note)}</p>` : ''}
+            ${item.from && wikiData[item.from] ? `<p class="entry-note"><a href="${catHref(item.from)}">${emojiOf(item.from)} ${esc(item.from)} →</a></p>` : ''}
+            ${beforeAfter(item)}
+            ${alsoChips(cat, item)}
         </div>
         <div class="entry-actions">
-            <a class="btn-site" href="${esc(site)}" target="_blank" rel="noopener">Site ↗</a>
+            <a class="btn-site" href="${esc(site)}" target="_blank" rel="noopener">${LINK_LABEL[linkKind(item.url)]} ↗</a>
             <button type="button" class="been-btn" data-action="been" aria-pressed="${been}" title="Been there?" aria-label="Mark ${esc(item.name)} as been there">✓</button>
         </div>
         <span class="been-stamp" aria-hidden="true">BEEN THERE</span>
@@ -333,6 +393,7 @@ function renderSections(key, data, extraGridClass) {
     let i = 0;
     data.items.forEach((item, idx) => {
         if (item.header) { html += `<li class="entry-header"><h3>${esc(item.header)}</h3></li>`; return; }
+        if (!item.name) return;
         html += entryHTML(key, item, idx, { i: i++ });
     });
     return html + '</ul>';
@@ -378,9 +439,10 @@ function renderRanked(key, data) {
             <div class="yr">${esc(item.year || '—')}</div>
             <div class="entry-main">
                 ${rank ? `<span class="rank">#${rank}</span>` : ''}
-                <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}
+                <a class="entry-name" href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}${featureBadges(key, item)}
                 ${item.note ? `<p class="entry-note">${esc(item.note)}</p>` : ''}
                 ${age !== null ? `<span class="age">${age} years & counting</span>` : ''}
+                ${typeof idx === 'number' ? alsoChips(key, item) : ''}
             </div>
             <div class="entry-actions">
                 <a class="btn-site" href="${esc(site)}" target="_blank" rel="noopener">Site ↗</a>
@@ -411,7 +473,7 @@ function renderEvents(key, data) {
     const byMonth = {};
     data.items.forEach((item, idx) => {
         if (!item.name) return;
-        (byMonth[item.monthIndex] ||= []).push({ item, idx });
+        (byMonth[eventMonth(item)] ||= []).push({ item, idx });
     });
     const months = Object.keys(byMonth).map(Number).sort((a, b) => a - b);
     return `<div class="months">${months.map(m => `
@@ -420,8 +482,12 @@ function renderEvents(key, data) {
             <h3>${MONTHS[m] || 'Sometime'} <small>${byMonth[m].length} EVENT${byMonth[m].length > 1 ? 'S' : ''}</small></h3>
             <ul>${byMonth[m].map(({ item, idx }) => `
                 <li id="e-${slugOf(key)}-${idx}" class="entry-lite">
-                    <a href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}
-                    <a class="btn-site" href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener">↗</a>
+                    <span class="ev-main">
+                        <a href="${gSearch(item.name)}" target="_blank" rel="noopener">${esc(item.name)}</a>${freeTag(item)}
+                        ${item.rule ? `<span class="ev-date" title="Next one">${esc(shortDate(nextRuleDate(item.rule)))}</span>` : ''}
+                        ${item.when ? `<small class="ev-when">${esc(item.when)}</small>` : ''}
+                    </span>
+                    <a class="btn-site" href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener" aria-label="${esc(item.name)} website">↗</a>
                 </li>`).join('')}
             </ul>
         </section>`).join('')}
@@ -472,9 +538,11 @@ export function renderPreset(id) {
             <div class="cat-sub">
                 <span class="stamp ink">${n} entries</span>
                 <span class="stamp">from ${sections.length} lists</span>
+                ${p.season ? `<span class="stamp updated">${p.season(new Date()) ? 'in season now' : 'seasonal'}</span>` : ''}
             </div>
         </header>
         <p class="cat-desc">${esc(p.desc)}</p>
+        ${p.hood ? hoodChips('Other neighborhoods') : ''}
 
         <div class="cat-body"><ul class="entries">${list}</ul></div>
     </div>`;
@@ -504,11 +572,17 @@ function diningFiltered() {
         .filter(({ item }) => !f.cuisine.length || f.cuisine.includes(item.cuisine))
         .filter(({ item }) => !f.price.length || f.price.includes(item.price))
         .filter(({ item }) => !f.area.length || f.area.includes(areaOf(item.location)))
+        .filter(({ item }) => !f.feature?.length || f.feature.every(k => practical("Dining Directory", item)[k]))
         .filter(({ item }) => !q || [item.name, item.dish, item.cuisine, item.location].join(' ').toLowerCase().includes(q));
 }
 
+// The rows the map should show: whatever the filters currently leave
+export function diningFilteredItems() { return diningFiltered().map(r => r.item); }
+
+const emptyFilters = () => ({ cuisine: [], price: [], area: [], feature: [], text: '' });
+
 function renderDining(clearForFocus = false) {
-    if (clearForFocus) state.filters = { cuisine: [], price: [], area: [], text: '' };
+    if (clearForFocus) state.filters = emptyFilters();
     renderDiningChips();
     renderDiningTable();
 }
@@ -519,15 +593,26 @@ function renderDiningChips() {
     const cuisines = tally(i => i.cuisine);
     const prices = tally(i => i.price);
     const areas = tally(i => areaOf(i.location));
+    const feats = {};
+    all.forEach(i => { const p = practical("Dining Directory", i); FEATURES.forEach(ft => { if (p[ft.key]) feats[ft.key] = (feats[ft.key] || 0) + 1; }); });
     const f = state.filters;
+    f.feature ||= [];
+    const label = (type, v) => type === 'feature' ? (FEATURES.find(x => x.key === v)?.label || v) : v;
     const chips = (type, obj, sortFn) => Object.keys(obj).sort(sortFn).map(v =>
-        `<button type="button" class="filter-chip ${f[type].includes(v) ? 'active' : ''}" data-action="filter" data-type="${type}" data-value="${esc(v)}">${esc(v)} <small>${obj[v]}</small></button>`).join('');
-    const has = f.cuisine.length || f.price.length || f.area.length || f.text;
+        `<button type="button" class="filter-chip ${f[type].includes(v) ? 'active' : ''}" data-action="filter" data-type="${type}" data-value="${esc(v)}" aria-pressed="${f[type].includes(v)}">${esc(label(type, v))} <small>${obj[v]}</small></button>`).join('');
+    const active = f.cuisine.length + f.price.length + f.area.length + f.feature.length;
+    const has = active || f.text;
+    const wrap = document.getElementById('diningChips');
+    const open = wrap.classList.contains('open');
 
-    document.getElementById('diningChips').innerHTML = `
+    wrap.innerHTML = `
+        <button type="button" class="filters-toggle" data-action="toggle-filters" aria-expanded="${open}" aria-controls="diningChipGroups">Filters${active ? ` <b>${active}</b>` : ''} <span aria-hidden="true">${open ? '▴' : '▾'}</span></button>
+        <div id="diningChipGroups" class="chip-groups">
         <div class="filter-group"><span class="filter-label">Price</span>${chips('price', prices, (a, b) => a.length - b.length)}</div>
         <div class="filter-group"><span class="filter-label">Cuisine</span>${chips('cuisine', cuisines)}</div>
-        <div class="filter-group scroll"><span class="filter-label">Area</span>${chips('area', areas)}</div>
+        <div class="filter-group"><span class="filter-label">Area</span>${chips('area', areas, (a, b) => AREAS.indexOf(a) - AREAS.indexOf(b))}</div>
+        ${Object.keys(feats).length ? `<div class="filter-group"><span class="filter-label">Extras</span>${chips('feature', feats, (a, b) => FEATURES.findIndex(x => x.key === a) - FEATURES.findIndex(x => x.key === b))}</div>` : ''}
+        </div>
         <div class="dining-foot">
             <div class="toggle-group">
                 ${['location', 'cuisine', 'dish'].map(c => `<label><input type="checkbox" data-action="col" data-col="${c}" ${state.visibleCols[c] ? 'checked' : ''}> ${c}</label>`).join('')}
@@ -569,10 +654,10 @@ function renderDiningTable() {
             <tbody>
                 ${rows.map(({ item, idx }) => `
                 <tr id="e-${slugOf('Dining Directory')}-${idx}">
-                    <td><a href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener" class="table-link">${esc(item.name)}</a></td>
+                    <td class="td-name"><a href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener" class="table-link">${esc(item.name)}</a>${linkKind(item.url) !== 'site' && linkKind(item.url) !== 'menu' ? `<span class="link-kind" title="This link goes to ${esc(LINK_LABEL[linkKind(item.url)])}">${esc(LINK_LABEL[linkKind(item.url)])}</span>` : ''}${featureBadges("Dining Directory", item)}${item.note ? `<small class="td-note">${esc(item.note)}</small>` : ''}</td>
                     <td data-label="Price"><span class="price-tag">${esc(item.price || '')}</span></td>
                     ${vc.dish ? `<td data-label="Dish">${esc(item.dish || '')}</td>` : ''}
-                    ${vc.location ? `<td data-label="Where">${esc((item.location || '').trim())}</td>` : ''}
+                    ${vc.location ? `<td data-label="Where"><a class="area-link" href="#/p/hood-${slugify(areaOf(item.location))}">${esc((item.location || '').trim())}</a></td>` : ''}
                     ${vc.cuisine ? `<td data-label="Cuisine"><span class="cuisine-tag">${esc(item.cuisine || '')}</span></td>` : ''}
                 </tr>`).join('')}
             </tbody>
@@ -580,15 +665,23 @@ function renderDiningTable() {
     </div>` : `<div class="empty-note">nothing matches. loosen up a little. ¯\\_(ツ)_/¯</div>`;
 }
 
+export function toggleFiltersDrawer() {
+    const wrap = document.getElementById('diningChips');
+    if (!wrap) return;
+    wrap.classList.toggle('open');
+    renderDiningChips();
+    wrap.querySelector('.filters-toggle')?.focus();
+}
+
 export function onDiningText(value) {
     state.filters.text = value;
-    const clear = !!(state.filters.cuisine.length || state.filters.price.length || state.filters.area.length || value);
+    const clear = !!(state.filters.cuisine.length || state.filters.price.length || state.filters.area.length || state.filters.feature?.length || value);
     if (!!document.querySelector('.filter-clear') !== clear) renderDiningChips();
     renderDiningTable();
 }
 
 export function toggleFilter(type, value) {
-    const arr = state.filters[type];
+    const arr = (state.filters[type] ||= []);
     const i = arr.indexOf(value);
     if (i > -1) arr.splice(i, 1); else arr.push(value);
     renderDiningChips();
@@ -596,7 +689,7 @@ export function toggleFilter(type, value) {
 }
 
 export function clearFilters() {
-    state.filters = { cuisine: [], price: [], area: [], text: '' };
+    state.filters = emptyFilters();
     const t = document.getElementById('diningText');
     if (t) t.value = '';
     renderDiningChips();

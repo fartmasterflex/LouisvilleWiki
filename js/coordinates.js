@@ -604,4 +604,7 @@ export const manualCoords = {
     "Joe Creason Park": [38.21030, -85.70325],                 // addr: 1297 TREVILIAN WAY, LOUISVILLE, KY, 40213
     "George Rogers Clark Park": [38.21570, -85.73000],         // addr: 1024 THRUSTON AVE, LOUISVILLE, KY, 40217
 
+    // ===== ADDED 2026-10-30 =====
+    "Tha Drippin Crab": [38.25568, -85.77069],                 // 1219 W Jefferson St (listing coordinates; spot-check)
+
 };

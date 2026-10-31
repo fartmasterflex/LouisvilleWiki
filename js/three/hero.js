@@ -25,10 +25,12 @@ const damp = (a, b, k, dt) => lerp(a, b, 1 - Math.exp(-k * dt));
 const easeInOutCubic = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const easeOutBack = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
 
-export function createHero({ canvas, container, night = false, neon = false, compact = false, reducedMotion = false, on = {} }) {
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+// lite: 1x pixels, no bloom, 30 fps (slow phones, Save-Data, low battery, or the footer toggle)
+// reducedMotion: the scene settles and stops; it wakes for a few seconds after each click
+export function createHero({ canvas, container, night = false, neon = false, compact = false, reducedMotion = false, lite = false, on = {} }) {
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: lite ? 'low-power' : 'high-performance' });
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    const DPR = Math.min(window.devicePixelRatio || 1, 1.6);
+    const DPR = lite ? 1 : Math.min(window.devicePixelRatio || 1, 1.6);
     renderer.setPixelRatio(DPR);
 
     const scene = new THREE.Scene();
@@ -808,7 +810,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
     const onLeave = () => { S.px = 0; S.py = 0; container.classList.remove('gl-hover'); };
     const onClick = (e) => {
         const hit = pick(e);
-        if (hit) { hit.fn(); on.interacted?.(); }
+        if (hit) { hit.fn(); on.interacted?.(); if (reducedMotion) wake(); }
     };
     container.addEventListener('pointermove', onMove);
     container.addEventListener('pointerleave', onLeave);
@@ -874,6 +876,9 @@ export function createHero({ canvas, container, night = false, neon = false, com
 
     // ---------------- LOOP ----------------
     let running = false, raf = 0, last = performance.now();
+    // reduced motion: run briefly (theme fades, clicked effects), then hold still
+    let settleAt = performance.now() + 2500;
+    const wake = (ms = 3500) => { settleAt = performance.now() + ms; if (inView && !document.hidden) start(); };
     const col = new THREE.Color();
     const q = new THREE.Quaternion();
 
@@ -930,7 +935,7 @@ export function createHero({ canvas, container, night = false, neon = false, com
         fleurTube.material.opacity = X;
         fleurTube.visible = X > .01;
         fleurMat.color.setHex(0xeaff00).lerp(col.setHex(0x1c2410), X * .85);
-        bloom.enabled = X > .01;
+        bloom.enabled = !lite && X > .01;
         bloom.strength = X * .45;
         riso.uniforms.uAmount.value = 0;
         riso.uniforms.uNight.value = S.night;
@@ -1119,6 +1124,8 @@ export function createHero({ canvas, container, night = false, neon = false, com
 
     function frame(now) {
         if (!running) return;
+        if (lite && now - last < 31) { raf = requestAnimationFrame(frame); return; }
+        if (reducedMotion && now > settleAt) { running = false; return; }
         const dt = Math.min(.05, (now - last) / 1000);
         last = now;
         update(dt);
@@ -1155,9 +1162,17 @@ export function createHero({ canvas, container, night = false, neon = false, com
     start();
 
     return {
-        setNight(v) { S.nightT = v ? 1 : 0; },
-        setNeon(v) { S.neonT = v ? 1 : 0; },
-        setCompact(v) { S.compactT = v ? 1 : 0; },
+        setNight(v) { S.nightT = v ? 1 : 0; if (reducedMotion) wake(); },
+        setNeon(v) { S.neonT = v ? 1 : 0; if (reducedMotion) wake(); },
+        setCompact(v) { S.compactT = v ? 1 : 0; if (reducedMotion) wake(); },
+        // The skyline's clickable things, for keyboard and screen-reader users (see the hero's button list)
+        act(name) {
+            const fn = { bridge: clickBridge, belle: clickBelle, billboard: clickBillboard, horse: clickHorse, bat: clickBat, fleur: clickFleur, island: () => on.egg?.('island') }[name];
+            if (!fn) return;
+            fn();
+            on.interacted?.();
+            wake();
+        },
         spinFleur() { fleurSpin = 1; },
         swingBat() { clickBat(); },
         toot() { clickBelle(); },
