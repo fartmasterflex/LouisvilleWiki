@@ -10,6 +10,8 @@ Small Node scripts (Node 18+, no installs) for keeping the wiki tidy. Run them f
 | `node tools/geocode.mjs` | Looks up map coordinates for entries that don't have any (OpenStreetMap, ~1 per second) and appends them to `js/coordinates.js`. | On your own computer, whenever you add places. Spot-check the new pins on the map. |
 | `node tools/tally-bracket.mjs` | Bracket of the Month: freezes the month's 16 and counts vote codes from the discussion thread for closed rounds. Needs the GitHub CLI (`gh`). | GitHub runs it daily (`.github/workflows/bracket.yml`). |
 
+`tools/icon.svg` is the source for `icon-192.png` and `icon-512.png`. Open it in a browser at 512×512 (and again scaled to 192×192) and screenshot it, or render it headlessly, e.g. `msedge --headless --window-size=512,512 --screenshot=icon-512.png tools/icon.svg`. Keep the lily and banner text inside the center circle so maskable icons don't crop them. After changing the icons, bump `VERSION` in `sw.js` so returning visitors get the new ones.
+
 ## Data fields worth knowing
 
 All optional unless noted.

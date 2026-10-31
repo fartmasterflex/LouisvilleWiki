@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" width="512" height="512">
+  <!-- App icon source. Render to icon-192.png / icon-512.png (see tools/README.md).
+       The lily and banner text sit inside the maskable safe zone: a 205px circle around the center. -->
+  <defs>
+    <style>
+      @font-face { font-family: "Archivo Black"; src: url("../vendor/fonts/archivo-black-latin-400-normal.woff2") format("woff2"); }
+    </style>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="2" fill="#141414" opacity=".12"/>
+    </pattern>
+    <!-- left half of the lily; the right half is this mirrored -->
+    <g id="half">
+      <!-- side petal: rises from the band, arches out and droops to a point -->
+      <path d="M252 292 C 240 236, 202 176, 150 158 C 110 146, 80 172, 88 210 C 91 226, 98 238, 108 248
+               C 110 228, 118 210, 134 204 C 162 196, 196 222, 214 292 Z"/>
+      <!-- foot below the band -->
+      <path d="M226 318 C 206 330, 184 340, 170 362 C 196 362, 224 348, 244 318 Z"/>
+    </g>
+  </defs>
+
+  <rect width="512" height="512" fill="#eaff00"/>
+  <rect width="512" height="512" fill="url(#dots)"/>
+
+  <g fill="#141414" transform="translate(256 190) scale(.92) translate(-256 -208)">
+    <use xlink:href="#half"/>
+    <use xlink:href="#half" transform="translate(512 0) scale(-1 1)"/>
+    <!-- center petal -->
+    <path d="M256 60 C 310 108, 330 162, 310 218 C 298 250, 276 270, 256 290 C 236 270, 214 250, 202 218 C 182 162, 202 108, 256 60 Z"/>
+    <!-- fills the seams where the petals meet the band -->
+    <rect x="214" y="262" width="84" height="30"/>
+    <!-- band -->
+    <rect x="170" y="288" width="172" height="32" rx="6"/>
+    <!-- center point below the band -->
+    <path d="M238 318 C 236 342, 244 360, 256 376 C 268 360, 276 342, 274 318 Z"/>
+  </g>
+
+  <!-- banner: tails tuck behind, front strip carries the name -->
+  <g transform="rotate(-4 256 376)">
+    <path d="M130 360 L 92 366 L 108 384 L 94 404 L 138 398 Z" fill="#141414"/>
+    <path d="M382 360 L 420 366 L 404 384 L 418 404 L 374 398 Z" fill="#141414"/>
+    <rect x="120" y="350" width="272" height="52" rx="4" fill="#141414"/>
+    <text x="256" y="388" text-anchor="middle" font-family="Archivo Black, Arial Black, sans-serif"
+          font-size="32" letter-spacing="1" fill="#eaff00">LOUISVILLE</text>
+  </g>
+</svg>
