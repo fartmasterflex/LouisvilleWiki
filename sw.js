@@ -7,7 +7,7 @@
 // billboard ads change rarely and are served CACHE-FIRST.
 //
 // Bump VERSION to drop every old cache on the next visit.
-const VERSION = '2026-10-31b';
+const VERSION = '2026-11-01a';
 const CACHE = `louwiki-${VERSION}`;
 
 // The shell: enough to open the wiki, browse every list and search with no signal

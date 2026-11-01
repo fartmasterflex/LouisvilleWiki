@@ -12,9 +12,10 @@
 // The GitHub Action in .github/workflows/check.yml runs this on every push.
 import fs from 'fs';
 import { execFileSync } from 'child_process';
+import { fileURLToPath } from 'url';
 
 const ROOT = new URL('..', import.meta.url);
-const SITE = 'https://james-baunach.github.io/louisville-wiki/';
+const SITE = 'https://fartmasterflex.github.io/LouisvilleWiki/';
 const D = await import(new URL('js/data.js', ROOT));
 const { wikiData, orderedKeys, slugOf, emojiOf, countOf, realItems, PRESETS, presetSections, presetCount, prettyDate, areaOf, alsoIn, practical, featuresOf, nextRuleDate, shortDate, COMPANIONS, linkKind, LINK_LABEL } = D;
 
@@ -56,7 +57,7 @@ function entryLine(cat, item, idx) {
     const when = item.rule ? `Next: ${shortDate(nextRuleDate(item.rule))}. ` : '';
     const note = [when + (item.when || ''), item.dish, item.note].filter(Boolean).map(esc).join(' — ');
     const feats = featuresOf(practical(cat, item)).map(f => f.label).join(', ');
-    const link = item.url ? `<a href="${esc(item.url)}" rel="noopener">${esc(LINK_LABEL[linkKind(item.url)])} ↗</a>` : `<a href="${gSearch(item.name)}" rel="noopener nofollow">Search ↗</a>`;
+    const link = (item.url ? `<a href="${esc(item.url)}" rel="noopener">${esc(LINK_LABEL[linkKind(item.url)])} ↗</a> · ` : '') + `<a href="${gSearch(item.name)}" rel="noopener nofollow">Google ↗</a>`;
     const also = idx !== undefined ? alsoIn(cat, item.name) : [];
     return `<li><span class="n">${esc(item.name)}</span>${sub ? ` <span class="s">(${sub})</span>` : ''}${item.free ? ' <span class="s">· free</span>' : ''} · ${link}
 ${note ? `<p class="note">${note}</p>` : ''}${feats ? `<p class="s">${esc(feats)}</p>` : ''}${also.length ? `<p class="also">Also on: ${also.map(o => `<a href="../${slugOf(o.cat)}/">${esc(o.cat)}</a>`).join(', ')}</p>` : ''}</li>`;
@@ -164,7 +165,7 @@ write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`);
 // Reddit text
 // ---------------------------------------------------------------
 for (const script of ['reddit/build.mjs', 'reddit/build-lite.mjs']) {
-    if (fs.existsSync(new URL(script, ROOT))) execFileSync(process.execPath, [new URL(script, ROOT).pathname], { stdio: 'inherit' });
+    if (fs.existsSync(new URL(script, ROOT))) execFileSync(process.execPath, [fileURLToPath(new URL(script, ROOT))], { stdio: 'inherit' });
 }
 
 console.log(`Built ${pages.length} list pages, sitemap, robots.txt, ads/index.json (${adFiles.length} ads).`);

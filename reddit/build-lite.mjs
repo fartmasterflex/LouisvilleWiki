@@ -9,7 +9,7 @@ const R = new URL('../', import.meta.url);
 const D = await import(new URL('js/data.js', R));
 const { wikiData, orderedKeys, slugOf, emojiOf, countOf, totalCount, realItems, areaOf, AREAS, PRESETS, presetCount, prettyDate, nextRuleDate, MONTHS, COMPANIONS, ANNUAL_EVENTS, hoodPresets } = D;
 
-const SITE = 'https://james-baunach.github.io/louisville-wiki/';
+const SITE = 'https://fartmasterflex.github.io/LouisvilleWiki/';
 const page = (k) => `${SITE}list/${slugOf(k)}/`;
 const esc = (s) => String(s ?? '').replace(/([*_~^\[\]|\\])/g, '\\$1').trim();
 const free = (i) => (i.free ? ' 🆓' : '');

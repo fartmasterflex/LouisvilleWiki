@@ -117,7 +117,7 @@ export async function openCategoryMap(categoryKey, itemsOverride = null) {
         let html = `<b>${esc(item.name)}</b>`;
         if (item.year) html += `<br><i>Est. ${esc(item.year)}</i>`;
         if (item.note) html += `<br><small>${esc(item.note)}</small>`;
-        html += `<br><a href="${gSearch(item.name)}" target="_blank" rel="noopener">Search ↗</a>`;
+        html += `<br><a href="${gSearch(item.name)}" target="_blank" rel="noopener">Google ↗</a>`;
         if (item.url) html += ` · <a href="${esc(item.url)}" target="_blank" rel="noopener">Site ↗</a>`;
         L.marker([coords.lat, coords.lng], { icon: pinIcon(n, isDark()) }).bindPopup(html).addTo(catLayer);
         bounds.push([coords.lat, coords.lng]);

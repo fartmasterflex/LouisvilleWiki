@@ -106,10 +106,10 @@ function openGiscus(override = null) {
     const s = document.createElement('script');
     s.src = 'https://giscus.app/client.js';
     Object.entries({
-        'data-repo': 'James-baunach/louisville-wiki',
-        'data-repo-id': 'R_kgDOVefAWg',
+        'data-repo': 'FartmasterFlex/LouisvilleWiki',
+        'data-repo-id': 'R_kgDORVhqTg',
         'data-category': 'Announcements',
-        'data-category-id': 'DIC_kwDOVefAWs4DKGrf',
+        'data-category-id': 'DIC_kwDORVhqTs4C4Lr2',
         ...(term ? { 'data-mapping': 'specific', 'data-term': term } : { 'data-mapping': 'pathname' }),
         'data-strict': '0',
         'data-reactions-enabled': '1',

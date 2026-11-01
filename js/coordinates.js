@@ -3,6 +3,7 @@
 // The map checks here FIRST and only falls back to a live Nominatim lookup for names not listed.
 // Format: "Item Name": [latitude, longitude]   or   null = no single location (no pin, no lookup).
 // Last checked: Oct 9, 2026, against OpenStreetMap and the US Census geocoder. Each comment says which.
+// Dining Directory pins re-checked Nov 1, 2026 against each restaurant's street address.
 
 export const manualCoords = {
 
@@ -150,7 +151,7 @@ export const manualCoords = {
     "The Old Spaghetti Factory": [38.25531, -85.75487],        // OSM: The Old Spaghetti Factory, 235, West Market Street, Louisville, Kentucky, 40202, United Stat
     "Dairy Kastle": [38.21265, -85.74737],                     // OSM: Dairy Kastle, 575, Eastern Parkway, Louisville, Kentucky, 40217
     "The Bristol Bar & Grille": [38.25081, -85.57896],         // addr: 300 N HURSTBOURNE PKWY, LOUISVILLE, KY, 40222
-    "Bearno's Pizza": [38.13632, -85.68549],                   // addr: 8019 PRESTON HWY, LOUISVILLE, KY, 40219
+    "Bearno's Pizza": [38.22263, -85.66580],                    // addr: 2900 Taylorsville Rd, Louisville, KY 40205 (re-checked 2026-11-01)
     "Kern's Korner": [38.22221, -85.68357],                    // OSM: Kern's Korner, 2600, Bardstown Road, Highlands Douglass Neighborhood, Strathmoor Gardens, Louisville, Jef
     "Hungry Pelican": [38.16629, -85.60199],                   // OSM: The Hungry Pelican, 5412, Bardstown Road, Louisville, Kentucky, 40291
     "Frank's Meat and Produce": [38.19878, -85.73241],         // addr: 3342 PRESTON HWY, LOUISVILLE, KY, 40213
@@ -246,7 +247,7 @@ export const manualCoords = {
     "Kingsley Meats & Catering": [38.22324, -85.66929],        // OSM: Kingsley Meats & Catering, 2701, Taylorsville Road, Highlands Douglass Neighborhood, Strathmoor Gardens, 
     "Red Hog": [38.25423, -85.69498],                          // OSM: Red Hog, Frankfort Avenue, Metro Council District 9, Louisville, Kentucky, 40207, United Sta
     "Lori's Fish Market": [38.25541, -85.65380],               // addr: 3941 CHENOWETH SQ, LOUISVILLE, KY, 40207
-    "Highland Fish Market": [38.22890, -85.70165],             // addr: 1745 BARDSTOWN RD, LOUISVILLE, KY, 40205
+    "Highland Fish Market": [38.24440, -85.53030],              // addr: 12121 Shelbyville Rd, Louisville, KY 40243 (re-checked 2026-11-01)
     "Viet Hoa Food Market": [38.14889, -85.69261],             // addr: 7100 PRESTON HWY, LOUISVILLE, KY, 40219
     "Patel Brothers": [38.22008, -85.58205],                   // addr: 1850 S HURSTBOURNE PKWY, LOUISVILLE, KY, 40220
     "Vietnam Oriental Market": [38.17436, -85.76742],          // addr: 5019 S 3RD ST, LOUISVILLE, KY, 40214
@@ -607,4 +608,242 @@ export const manualCoords = {
     // ===== ADDED 2026-10-30 =====
     "Tha Drippin Crab": [38.25568, -85.77069],                 // 1219 W Jefferson St (listing coordinates; spot-check)
 
+
+    // ===== DINING DIRECTORY =====
+    // Every open restaurant gets a pin here so the map never guesses by name.
+    // addr: street address from the restaurant's own site or listing, placed with the US Census geocoder.
+    // OSM: matched by name and street in OpenStreetMap. Multi-location chains are pinned at one store.
+    "Selena's at Willow Lake Tavern": [38.26992, -85.55249],    // OSM: Selena's at Willow Lake Tavern, 10609, La Grange Road, Lakeland, Louisville
+    "koko + rae": [38.23184, -85.70862],                        // OSM: koko+rAe, 1511, Bardstown Road, Highlands, Louisville
+    "Lee's Korean Restaurant": [38.20276, -85.68302],           // addr: 1941 Bishop Ln, Louisville, KY 40218
+    "Kingsley Meats": [38.22324, -85.66929],                    // OSM: Kingsley Meats & Catering, 2701, Taylorsville Road, Highlands Douglass Neighborh
+    "Le Relais": [38.22352, -85.66623],                         // OSM: Bistro Le Relais, 2817, Taylorsville Road, Highlands Douglass Neighborhood, Stra
+    "Shady Lane Cafe": [38.27783, -85.63662],                   // OSM: Shady Lane Cafe, Rudy Lane, Windy Hills
+    "Mesh": [38.26413, -85.67141],                              // OSM: Mesh, 3608, Brownsboro Road
+    "Jasmin Bakery European Bread": [38.19758, -85.65701],      // addr: 2205 Steier Ln, Louisville, KY 40218
+    "Las Gorditas": [38.17951, -85.62394],                      // addr: 4756 Bardstown Rd, Louisville, KY 40218
+    "Aljazzar Meats & Grill": [38.18839, -85.64000],            // addr: 4213 Bardstown Rd, Louisville, KY 40218
+    "Eden & Kissi": [38.16293, -85.66004],                      // addr: 6006 Shepherdsville Rd, Louisville, KY 40228
+    "Momo House": [38.19417, -85.65109],                        // addr: 3952 Bardstown Rd, Louisville, KY 40218
+    "Bellissimo": [38.19768, -85.65683],                        // addr: 2217 Steier Ln, Louisville, KY 40218
+    "Pizza Lupo": [38.25947, -85.72223],                        // OSM: Pizza Lupo, 1540, Frankfort Avenue, Clifton, Louisville
+    "Decade": [38.25579, -85.73078],                            // OSM: Decade, 1076, East Washington Street, Louisville
+    "Yachtsea": [38.25427, -85.73366],                          // addr: 111 N Wenzel St, Louisville, KY 40206
+    "Caffe Classico": [38.25352, -85.70625],                    // OSM: Caffe Classico, 2144, Frankfort Avenue, Clifton
+    "SmashD": [38.25418, -85.70829],                            // addr: 2113 Frankfort Ave, Louisville, KY 40206
+    "The Irish Rover": [38.25371, -85.70247],                   // OSM: The Irish Rover, 2319, Frankfort Avenue
+    "Ciao Ristorante": [38.24724, -85.72731],                   // OSM: Ciao Ristorante, 1201, Payne Street, Clifton
+    "The Manhattan Project": [38.25443, -85.70817],             // OSM: TMP The Manhattan Project, Vernon Avenue, Clifton
+    "Morning Fork": [38.25735, -85.71853],                      // addr: 1722 Frankfort Ave, Louisville, KY 40206
+    "Time 4 Thai": [38.25347, -85.70571],                       // OSM: Time 4 Thai, Frankfort Avenue, Clifton
+    "CM Chicken of Louisville": [38.25361, -85.70522],          // OSM: CM Chicken, 2221, Frankfort Avenue, Clifton
+    "Volare Italian Ristorante": [38.25331, -85.70311],         // addr: 2300 Frankfort Ave, Louisville, KY 40206
+    "Bourbons Bistro": [38.25350, -85.70403],                   // OSM: Bourbons Bistro, 2255, Frankfort Avenue, Clifton
+    "Crave Cafe": [38.25334, -85.70430],                        // addr: 2250 Frankfort Ave, Louisville, KY 40206
+    "Chicken King": [38.24522, -85.74183],                      // OSM: Chicken King, 639, East Broadway, Louisville
+    "Safier Mediterranean Deli": [38.24760, -85.75798],         // OSM: Safier Mediterranean Deli, 641, South 4th Street, Louisville
+    "Abyssinia": [38.24953, -85.75965],                         // OSM: Abyssinia, 554, South 5th Street, Louisville
+    "Old Spaghetti Factory": [38.25531, -85.75487],             // OSM: The Old Spaghetti Factory, 235, West Market Street, Louisville
+    "Doc Crow's": [38.25635, -85.75276],                        // OSM: Doc Crow's, West Main Street, Louisville
+    "Troll Pub Under the Bridge": [38.25689, -85.75289],        // OSM: Troll Pub Under the Bridge, 150, West Washington Street, Louisville
+    "Porch Kitchen & Bar": [38.25329, -85.75495],               // OSM: Porch Kitchen & Bar, 280, West Jefferson Street, Louisville
+    "Brown Hotel Lobby Bar & Grill": [38.24606, -85.75731],     // addr: 335 W Broadway, Louisville, KY 40202
+    "Vincenzo's": [38.25562, -85.75869],                        // OSM: Vincenzo's Italian Restaurant, 150, South 5th Street, Louisville
+    "Proof on Main": [38.25699, -85.76182],                     // OSM: Proof on Main, South 7th Street, Louisville
+    "Jeff Ruby's Steakhouse": [38.25679, -85.75561],            // OSM: Jeff Ruby's Steakhouse - Louisville, 325, West Main Street, Louisville
+    "Brendon's Catch 23": [38.25071, -85.75735],                // OSM: Brendon's Catch 23, 505, South 4th Street, Louisville
+    "Repeal Oak-Fired Steakhouse": [38.25630, -85.75190],       // OSM: Repeal Oak-Fired Steakhouse, 101, West Main Street, Louisville
+    "Swizzle Dinner & Drinks": [38.25747, -85.75637],           // addr: 140 N 4th St, Louisville, KY 40202
+    "Wild Swann": [38.25704, -85.75990],                        // addr: 601 W Main St, Louisville, KY 40202
+    "Shreeji Indian Vegetarian Street Food": [38.21765, -85.58657], // addr: 1987 S Hurstbourne Pkwy, Louisville, KY 40220
+    "Take Thai": [38.28891, -85.51142],                         // addr: 12908 Factory Ln, Louisville, KY 40245
+    "Born 2 Bagel": [38.24168, -85.54618],                      // addr: 231 Blankenbaker Pkwy, Louisville, KY 40243
+    "Tandoori Fusion": [38.30931, -85.56614],                   // addr: 4600 Chamberlain Ln, Louisville, KY 40241
+    "Cask Southern Kitchen": [38.22582, -85.57399],             // addr: 9980 Linn Station Rd, Louisville, KY 40223
+    "Brasserie Provence": [38.24935, -85.57828],                // addr: 150 N Hurstbourne Pkwy, Louisville, KY 40222
+    "Bahn Thai": [38.12989, -85.57689],                         // addr: 8125 Bardstown Rd, Louisville, KY 40291
+    "Blue Dog Bakery": [38.25462, -85.68760],                   // addr: 2868 Frankfort Ave, Louisville, KY 40206
+    "Frankfort Avenue Beer Depot": [38.25428, -85.67549],       // addr: 3204 Frankfort Ave, Louisville, KY 40206
+    "Osaka Japanese Restaurant": [38.25457, -85.70955],         // addr: 2039 Frankfort Ave, Louisville, KY 40206
+    "Con Huevos": [38.25364, -85.70149],                        // OSM: Con Huevos, 2339, Frankfort Avenue
+    "Porcini": [38.25459, -85.69233],                           // OSM: Porcini, 2734, Frankfort Avenue
+    "Nord's Bakery": [38.21678, -85.74544],                     // OSM: Nord's Bakery, 2118, South Preston Street, Germantown, Louisville
+    "Hauck's Corner": [38.22764, -85.73642],                    // OSM: Hauck's Corner, 1000, Goss Avenue, Germantown, Louisville
+    "Jays Burgers": [38.23474, -85.72997],                      // addr: 1241 E Oak St, Louisville, KY 40204
+    "Come Back Inn": [38.23913, -85.73657],                     // addr: 909 Swan St, Louisville, KY 40204
+    "Hammerheads": [38.23855, -85.73655],                       // OSM: Hammerheads, East Caldwell Street, Louisville
+    "The Post": [38.22768, -85.73539],                          // OSM: The Post, 1045, Goss Avenue, Germantown, Louisville
+    "Monnik Beer Co.": [38.22256, -85.73938],                   // OSM: Monnik Beer Company, 1036, East Burnett Avenue, Germantown, Louisville
+    "Sarino": [38.22694, -85.73553],                            // OSM: Sarino, 1030, Goss Avenue, Germantown, Louisville
+    "North of Bourbon": [38.22945, -85.73885],                  // addr: 935 Goss Ave, Louisville, KY 40217
+    "Morris' Deli": [38.22315, -85.68351],                      // OSM: Morris' Liquors and Deli, Taylorsville Road, Highlands Douglass Neighborhood, St
+    "Wiltshire Bakery": [38.24026, -85.73103],                  // OSM: Wiltshire Pantry Bakery and Cafe, 901, Barret Avenue, Louisville
+    "Yummy Pollo": [38.20002, -85.68610],                       // addr: 4222 Bishop Ln, Louisville, KY 40218
+    "Banh Mi & Pho Lounge": [38.23672, -85.71778],              // addr: 1237 Bardstown Rd, Louisville, KY 40204
+    "Kebab House": [38.24089, -85.72471],                       // addr: 969 Baxter Ave, Louisville, KY 40204
+    "Syrian Grill": [38.20694, -85.66764],                      // addr: 3325 Bardstown Rd, Louisville, KY 40218
+    "La Suerte": [38.22502, -85.69502],                         // addr: 2116 Bardstown Rd, Louisville, KY 40205
+    "M. Peppers": [38.23501, -85.71492],                        // addr: 1306 Bardstown Rd, Louisville, KY 40204
+    "80/20 at Kaelin's": [38.22292, -85.71059],                 // addr: 1801 Newburg Rd, Louisville, KY 40205
+    "Impellizzeri's Pizza": [38.23360, -85.71211],              // addr: 1381 Bardstown Rd, Louisville, KY 40204
+    "Uptown Cafe": [38.23017, -85.70398],                       // OSM: Uptown Cafe, 1624, Bardstown Road, Bonnycastle Neighborhood, Highlands, Louisvil
+    "Ditto's": [38.23791, -85.72055],                           // OSM: Ditto's Grill, 1114, Bardstown Road, Louisville
+    "Stevens & Stevens Deli": [38.23807, -85.72048],            // addr: 1114 Bardstown Rd, Louisville, KY 40204
+    "Ramsi's Cafe on the World": [38.23573, -85.71554],         // OSM: Ramsi's Cafe On the World, 1293, Bardstown Road, Highlands, Louisville
+    "Kashmir Indian Restaurant": [38.23590, -85.71629],         // addr: 1277 Bardstown Rd, Louisville, KY 40204
+    "Sapporo Japanese Grill": [38.22985, -85.70335],            // addr: 1706 Bardstown Rd, Louisville, KY 40205
+    "Queen of Sheba": [38.22257, -85.66772],                    // OSM: Queen of Sheba, 2804, Taylorsville Road, Highlands Douglass Neighborhood, Strath
+    "Cafe Lou Lou": [38.22393, -85.69373],                      // addr: 2216 Dundee Rd, Louisville, KY 40205
+    "Dragon King's Daughter": [38.23146, -85.70700],            // OSM: Dragon King's Daughter, 1543, Bardstown Road, Bonnycastle Neighborhood, Highland
+    "Heart & Soy / Roots": [38.23667, -85.71794],               // addr: 1216 Bardstown Rd, Louisville, KY 40204
+    "Bunz Burgerz": [38.24322, -85.73498],                      // addr: 712 Brent St, Louisville, KY 40204
+    "Gralehaus": [38.23914, -85.72314],                         // OSM: Gralehaus, 1001, Baxter Avenue, Louisville
+    "The Eagle": [38.23476, -85.71473],                         // OSM: The Eagle, 1314, Bardstown Road, Highlands, Louisville
+    "Oskar's Slider Bar": [38.20575, -85.71280],                // OSM: Oskar's Slider Bar, 3799, Poplar Level Road, Germantown, Louisville
+    "Noche Mexican BBQ": [38.22740, -85.69989],                 // OSM: Noche Mexican BBQ, 1838, Bardstown Road, Bonnycastle Neighborhood, Highlands, Lo
+    "Palermo's": [38.24128, -85.72520],                         // addr: 938 Baxter Ave, Louisville, KY 40204
+    "The Black Italian": [38.24040, -85.72415],                 // addr: 2009 Highland Ave, Louisville, KY 40204
+    "Wheated Pizza": [38.23129, -85.70640],                     // addr: 1553 Bardstown Rd, Louisville, KY 40205
+    "Seviche A Latin Restaurant": [38.23133, -85.70710],        // addr: 1538 Bardstown Rd, Louisville, KY 40205
+    "The Fat Lamb": [38.23900, -85.72088],                      // OSM: The Fat Lamb, 2011, Grinstead Drive, Louisville
+    "ROC": [38.23498, -85.71424],                               // OSM: ROC, 1327, Bardstown Road, Highlands, Louisville
+    "Yi Sushi Omakase": [38.23473, -85.71415],                  // addr: 1331 Bardstown Rd, Louisville, KY 40204
+    "Bristol Bar & Grille": [38.25081, -85.57896],              // addr: 300 N Hurstbourne Pkwy, Louisville, KY 40222
+    "Wick's Pizza Parlor": [38.24078, -85.72463],               // addr: 975 Baxter Ave, Louisville, KY 40204
+    "Havana Rumba": [38.22430, -85.69339],                      // addr: 2210 Bardstown Rd, Louisville, KY 40205
+    "Highland Morning": [38.23284, -85.71117],                  // OSM: Highland Morning, 1416, Bardstown Road, Highlands, Louisville
+    "Soupys": [38.21888, -85.62539],                            // addr: 3027 Hunsinger Ln, Louisville, KY 40220
+    "Grassa Gramma": [38.28321, -85.63195],                     // OSM: Grassa Gramma, Holiday Manor Center, Northfield
+    "The Charcoal Restaurant": [38.28601, -85.57032],           // OSM: The Charcoal Restaurant, 2805, North Hurstbourne Parkway, The Meadow, Louisville
+    "Yen Ching Chinese": [38.22008, -85.58205],                 // addr: 1850 S Hurstbourne Pkwy, Louisville, KY 40220
+    "Shalimar Indian Restaurant": [38.22021, -85.58180],        // addr: 1820 S Hurstbourne Pkwy, Louisville, KY 40220
+    "Payne Street Bakehouse": [38.25185, -85.71877],            // OSM: Payne Street Bakehouse, 225, South Spring Street, Clifton
+    "Spring Street Bar and Grill": [38.25614, -85.72316],       // addr: 300 N Spring St, Louisville, KY 40206
+    "Buds Tavern": [38.19835, -85.58871],                       // addr: 9119 Galene Dr, Louisville, KY 40299
+    "Passtime Fish House": [38.20431, -85.55706],               // OSM: Passtime Fish House, 10801, Locust Road, Jeffersontown
+    "Mussel & Burger Bar": [38.21226, -85.58746],               // addr: 9200 Taylorsville Rd, Louisville, KY 40299
+    "Sichuan House": [38.14627, -85.69097],                     // addr: 7309 Preston Hwy, Louisville, KY 40219
+    "Al Watan": [38.20962, -85.63919],                          // addr: 3711 Klondike Ln, Louisville, KY 40218
+    "Game": [38.24580, -85.70471],                              // OSM: Game, 2295, Lexington Avenue
+    "Le Moo": [38.24517, -85.70331],                            // OSM: Le Moo, 2300, Lexington Road
+    "The Goose Eatery & Hangout": [38.26344, -85.60835],        // addr: 812 Lyndon Ln, Louisville, KY 40222
+    "Danny Mac's Pizza": [38.26350, -85.71314],                 // addr: 1860 Mellwood Ave, Louisville, KY 40206
+    "VinBun": [38.24598, -85.52576],                            // addr: 12422 Shelbyville Rd, Louisville, KY 40243
+    "Clay Oven": [38.24566, -85.52210],                         // OSM: Clay Oven Indian Restaurant, 12567, Shelbyville Road, Middletown
+    "Skyline": [38.24226, -85.57853],                           // addr: 340 Whittington Pkwy, Louisville, KY 40222
+    "Lee's Chicken": null,                                      // chain with several stores; no single pin
+    "Homemade Ice Cream and Pie Kitchen": [38.23961, -85.72267], // OSM: Homemade Ice Cream and Pie Kitchen, 1041, Bardstown Road, Louisville
+    "Carali's Rotisserie Chicken": [38.24454, -85.52258],       // addr: 12531 Shelbyville Rd, Louisville, KY 40243
+    "I love Tacos": [38.25265, -85.75393],                      // addr: 400 S 2nd St, Louisville, KY 40202
+    "Mark's Feed Store": [38.23149, -85.70854],                 // OSM: Mark's Feed Store, 1514, Bardstown Road, Bonnycastle Neighborhood, Highlands, Lo
+    "Shiraz Grill": [38.23124, -85.70570],                      // OSM: Shiraz Mediterranead Grill, 1565, Bardstown Road, Bonnycastle Neighborhood, High
+    "Martin's Bar-B-Que Joint": [38.29488, -85.55264],          // addr: 3408 Indian Lake Dr, Louisville, KY 40241
+    "Malone's": [38.30812, -85.57595],                          // addr: 4370 Summit Plaza Dr, Louisville, KY 40241
+    "Mayan Cafe": [38.25330, -85.73741],                        // OSM: Mayan Cafe, East Market Street, Louisville
+    "Grind Burger Kitchen": [38.25347, -85.73659],              // OSM: Grind Burger Kitchen, 829, East Market Street, Louisville
+    "Feast BBQ": [38.25310, -85.73545],                         // OSM: Feast BBQ, 909, East Market Street, Louisville
+    "Royals Hot Chicken": [38.25293, -85.73862],                // OSM: Royals Hot Chicken, 736, East Market Street, Louisville
+    "Emmy Squared": [38.25318, -85.73749],                      // addr: 825 E Market St, Louisville, KY 40206
+    "Biscuit Belly": [38.25429, -85.73570],                     // addr: 900 E Main St, Louisville, KY 40206
+    "Lou Lou on Market": [38.25309, -85.73774],                 // addr: 812 E Market St, Louisville, KY 40206
+    "Mashup Food Hall": [38.25166, -85.73864],                  // OSM: Mashup Food Hall, 750, East Jefferson Street, Louisville
+    "Pasta Garage": [38.25361, -85.74244],                      // addr: 552 E Market St, Louisville, KY 40202
+    "MeeshMeesh": [38.25348, -85.74131],                        // addr: 636 E Market St, Louisville, KY 40202
+    "Agave & Rye": [38.24843, -85.73074],                       // addr: 426 Baxter Ave, Louisville, KY 40204
+    "Bar Genevieve": [38.25298, -85.73910],                     // OSM: Bar Genevieve, 730, East Market Street, Louisville
+    "Cold Smoke Bagels": [38.25185, -85.73928],                 // addr: 750 E Jefferson St, Louisville, KY 40202
+    "El Pastorcito": [38.21915, -85.58380],                     // addr: 2060 S Hurstbourne Pkwy, Louisville, KY 40220
+    "Old Louisville Tavern": [38.22509, -85.76214],             // addr: 1532 S 4th St, Louisville, KY 40208
+    "Burger Boy": [38.22654, -85.75514],                        // addr: 1450 S Brook St, Louisville, KY 40208
+    "Sam's Gyros": [38.20384, -85.76203],                       // OSM: Sam's Gyros, 3123, South 2nd Street, Wilder Park, Louisville
+    "610 Magnolia": [38.22937, -85.76540],                      // OSM: 610 Magnolia, West Magnolia Avenue, Louisville
+    "Buck's Restaurant": [38.23323, -85.76209],                 // OSM: Buck's, 425, West Ormsby Avenue, Louisville
+    "Martini Italian Bistro": [38.30796, -85.57752],            // OSM: Martini Italian Bistro, 4021, Summit Plaza Drive, Paddock Shops, Louisville
+    "The Cafe": [38.24305, -85.73467],                          // addr: 731 Brent St, Louisville, KY 40204
+    "Maya Bagel Express": [38.21343, -85.72240],                // addr: 3029 Poplar Level Rd, Louisville, KY 40213
+    "Kum's Cafe & Arirang": [38.18530, -85.70038],              // addr: 4544 Poplar Level Rd, Louisville, KY 40213
+    "Open Caribbean Kitchen": [38.17582, -85.68799],            // addr: 4735 Poplar Level Rd, Louisville, KY 40213
+    "Louie's Hot Chicken": [38.19885, -85.70804],               // addr: 4222 Poplar Level Rd, Louisville, KY 40213
+    "Veronica's Mexican": [38.16443, -85.67973],                // addr: 5044 Poplar Level Rd, Louisville, KY 40219
+    "La Tropicana": [38.17317, -85.71109],                      // addr: 5215 Preston Hwy, Louisville, KY 40213
+    "La Rosita": [38.17476, -85.71277],                         // addr: 5059 Preston Hwy, Louisville, KY 40213
+    "Panchitos": [38.13446, -85.68462],                         // addr: 8118 Preston Hwy, Louisville, KY 40219
+    "Tacolandia": [38.17039, -85.70900],                        // addr: 5400 Preston Hwy, Louisville, KY 40213
+    "Mirage Mediterranean": [38.19274, -85.72847],              // addr: 4100 Preston Hwy, Louisville, KY 40213
+    "Koreana Restaurant III": [38.17523, -85.71326],            // addr: 5009 Preston Hwy, Louisville, KY 40213
+    "Captain's Quarters Riverside Grille": [38.32845, -85.64422], // addr: 5700 Captains Quarters Rd, Louisville, KY 40059
+    "River House Restaurant and Raw Bar": [38.27847, -85.69778], // addr: 3015 River Rd, Louisville, KY 40207
+    "Franny's Seafood": [38.22783, -85.73649],                  // addr: 998 Goss Ave, Louisville, KY 40217
+    "Shirley Mae's Cafe": [38.24149, -85.74219],                // addr: 802 S Clay St, Louisville, KY 40203
+    "Toastys Tavern": [38.23133, -85.74190],                    // addr: 1258 S Shelby St, Louisville, KY 40203
+    "Foko": [38.23617, -85.73938],                              // addr: 1001 Logan St, Louisville, KY 40204
+    "Perso": [38.23363, -85.74158],                             // OSM: Perso, 741, East Oak Street, Germantown, Louisville
+    "Daddy Vic's Soul Food": [38.18237, -85.81509],             // addr: 4404 Dixie Hwy, Louisville, KY 40216
+    "Christi's Cafe": [38.07005, -85.88496],                    // addr: 12810 Dixie Hwy, Louisville, KY 40272
+    "Rubbies": [38.15725, -85.76458],                           // addr: 6905 Southside Dr, Louisville, KY 40214
+    "Vietnam Kitchen": [38.17110, -85.77057],                   // addr: 5339 Mitscher Ave, Louisville, KY 40214
+    "A Chau Restaurant": [38.17298, -85.76766],                 // addr: 5103 S 3rd St, Louisville, KY 40214
+    "DaLat's Cafe": [38.15712, -85.76459],                      // addr: 6915 Southside Dr, Louisville, KY 40214
+    "La Chiquita Bakery": null,                                 // two different addresses listed online; no pin until confirmed
+    "La Torta Loca": [38.17319, -85.71111],                     // addr: 5213 Preston Hwy, Louisville, KY 40213
+    "Kathmandu Kitchen": [38.19664, -85.65546],                 // addr: 3825 Bardstown Rd, Louisville, KY 40218
+    "Sam's Chicago Grill": [38.19514, -85.84278],               // addr: 4501 Cane Run Rd, Louisville, KY 40216
+    "Weekend Burger": [38.14932, -85.76178],                    // addr: 5600 National Turnpike, Louisville, KY 40214
+    "Caribbean Cafe": [38.18188, -85.76739],                    // OSM: Caribbean Cafe, 317, West Woodlawn Avenue, Beechmont, Louisville
+    "Tumbleweed": [38.11516, -85.86012],                        // OSM: Tumbleweed, 9701, Dixie Highway, Johnsontown, Louisville
+    "Tuscany Italian": [38.12665, -85.78258],                   // addr: 165 Outer Loop, Louisville, KY 40214
+    "El Molcajete": [38.20656, -85.76561],                      // OSM: El Molcajete, 2932, South 4th Street, Louisville
+    "Anko Sushi": [38.18157, -85.76676],                        // addr: 304 W Woodlawn Ave, Louisville, KY 40214
+    "Jamaican Jerk Center": [38.19922, -85.65961],              // addr: 2220 Hikes Ln, Louisville, KY 40218
+    "Parkway Diner": [38.21192, -85.74767],                     // addr: 570 Eastern Pkwy, Louisville, KY 40217
+    "Plehns Bakery": [38.25262, -85.65419],                     // addr: 3940 Shelbyville Rd, Louisville, KY 40207
+    "W.W. Cousins": [38.23486, -85.63990],                      // OSM: W.W.Cousins, 900, Dupont Road, Springlee, St. Matthews
+    "Maira": [38.23351, -85.63521],                             // addr: 4000 Dutchmans Ln, Louisville, KY 40207
+    "Ricky B's Club Cafe": [38.26010, -85.68806],               // addr: 2901 Brownsboro Rd, Louisville, KY 40206
+    "Shawarma Shack": [38.25076, -85.62994],                    // addr: 4600 Shelbyville Rd, Louisville, KY 40207
+    "Bruegger's Bagels": [38.25217, -85.65473],                 // addr: 119 Breckenridge Ln, Louisville, KY 40207
+    "Wild Eggs": [38.23400, -85.63453],                         // OSM: Wild Eggs, 3985, Dutchmans Lane, Springlee, St. Matthews
+    "Nam Nam Cafe": [38.25186, -85.65760],                      // OSM: Nam Nam Cafe, 318, Wallace Avenue, Breckenridge Villa, Broad Fields
+    "Coals Artisan Pizza": [38.25320, -85.65979],               // addr: 3730 Frankfort Ave, Louisville, KY 40207
+    "Momma's Mustard Pickles & BBQ": [38.25286, -85.66226],     // OSM: Momma's Mustard, Pickles & BBQ, 102, Bauer Avenue, Cherrywood Village
+    "Joella's Hot Chicken": [38.25378, -85.66990],              // OSM: Joella's Hot Chicken, 3400, Frankfort Avenue
+    "Silvio's Italian Restaurant": [38.25221, -85.65143],       // addr: 104 Fairfax Ave, Louisville, KY 40207
+    "Mojito in Havana": [38.25287, -85.65435],                  // addr: 3939 Shelbyville Rd, Louisville, KY 40207
+    "Taco Choza": [38.25350, -85.65460],                        // OSM: Taco Choza, 3922, Westport Road, Cherrywood Village
+    "District 6": [38.25264, -85.65445],                        // addr: 3930 Shelbyville Rd, Louisville, KY 40207
+    "Bourbon and Burgers": [38.25357, -85.65237],               // addr: 117 St Matthews Ave, Louisville, KY 40207
+    "Indi's Chicken": [38.17452, -85.76739],                    // addr: 5009 S 3rd St, Louisville, KY 40214
+    "Lucretia's Kitchen": [38.23559, -85.76456],                // OSM: Lucretia's Kitchen, 617, West Oak Street, Louisville
+    "La Rosita Sol": [38.28060, -85.59162],                     // addr: 8730 Westport Rd, Louisville, KY 40242
+    "Jade Palace": [38.26728, -85.61243],                       // OSM: Jade Palace, Herr Lane, St. Matthews
+    "Osteria Italian Seafood": [38.26848, -85.61258],           // OSM: Osteria Italian Seafood, 1215, Herr Lane, Graymoor-Devondale
+    "Comfy Cow": [38.26824, -85.61379],                         // addr: 1301 Herr Ln, Louisville, KY 40222
+    "El Rey Market": [38.13933, -85.75428],                     // OSM: El Rey Market, 7600, National Turnpike, Louisville
+    "Cipollini": [38.23062, -85.70462],                         // addr: 1606 Bardstown Rd, Louisville, KY 40205
+    "Mill Iron 4": [38.25699, -85.71744],                       // addr: 1758 Frankfort Ave, Louisville, KY 40206
+    "OMA": [38.23465, -85.73978],                               // addr: 1116 Logan St, Louisville, KY 40204
+    "Sweet Colada": [38.23473, -85.73962],                      // addr: 1113 Logan St, Louisville, KY 40204
+    "Jaymar Japanese Grill": [38.22661, -85.73662],             // addr: 1039 Ash St, Louisville, KY 40217
+    "Murray's Creole Pub": [38.23098, -85.70559],               // addr: 1576 Bardstown Rd, Louisville, KY 40205
+    "Prado 264": [38.23165, -85.70850],                         // addr: 1514 Bardstown Rd, Louisville, KY 40205
+    "Mimi's Ethiopian": [38.23136, -85.70723],                  // addr: 1534 Bardstown Rd, Louisville, KY 40205
+    "Hurry for Curry": [38.23093, -85.70541],                   // addr: 1582 Bardstown Rd, Louisville, KY 40205
+    "Classico Pizzeria": [38.25538, -85.74579],                 // addr: 400 E Main St, Louisville, KY 40202
+    "Secret Recipe": [38.25525, -85.75745],                     // addr: 438 W Market St, Louisville, KY 40202
+    "La Guanaquita 2": [38.24492, -85.74350],                   // addr: 600 E Broadway, Louisville, KY 40202
+    "Sweet Peaches": [38.25364, -85.78075],                     // addr: 1800 W Muhammad Ali Blvd, Louisville, KY 40203
+    "Gigi's Kitchen": [38.25884, -85.78896],                    // addr: 2300 W Market St, Louisville, KY 40212
+    "Acai-Ville Cafe": [38.25604, -85.80128],                   // addr: 3029 W Muhammad Ali Blvd, Louisville, KY 40212
+    "Imanka": [38.24552, -85.76515],                            // addr: 737 S 8th St, Louisville, KY 40203
+    "Unice's Kitchen": [38.19147, -85.66060],                   // addr: 3800 Shepherdsville Rd, Louisville, KY 40218
+    "Turmeric Indian Bistro": [38.17974, -85.62436],            // addr: 4742 Bardstown Rd, Louisville, KY 40218
+    "TOGO India": [38.19171, -85.64613],                        // addr: 4109 Bardstown Rd, Louisville, KY 40218
+    "Zila Indian Kitchen": [38.25232, -85.65926],               // addr: 3733 Lexington Rd, Louisville, KY 40207
+    "Peru Peruvian": [38.24657, -85.52693],                     // addr: 12338 Shelbyville Rd, Louisville, KY 40243
+    "Trujillo": [38.12857, -85.68092],                          // addr: 4413 St Rita Dr, Louisville, KY 40219
+    "Beechmont Bakeshop": [38.17950, -85.78375],                // addr: 1314 Bluegrass Ave, Louisville, KY 40215
+    "Annie's Pizza": [38.27071, -85.78914],                     // addr: 2520 Portland Ave, Louisville, KY 40212
+    "Aladdin's": [38.28355, -85.82065],                         // addr: 37 Bank St, New Albany, IN 47150
+    "Red Yeti": [38.27182, -85.74016],                          // OSM: Red Yeti, 256, Spring Street, Jeffersonville, Clark County, Indiana, 47130
+    "The Exchange Pub + Kitchen": [38.28349, -85.82382],        // OSM: The Exchange Pub + Kitchen, 118, West Main Street, New Albany Downtown Historic 
 };

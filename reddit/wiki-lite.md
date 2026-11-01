@@ -1,12 +1,12 @@
 # ⚜ The Louisville Wiki: the short version
 
-**1,050+ Louisville spots, legends and dates, boiled down to one page.** The full site (search, maps, filters, a been-there tracker, generators and plenty of easter eggs) is at **[james-baunach.github.io/louisville-wiki](https://james-baunach.github.io/louisville-wiki/)**. Every heading below links to its full list.
+**1,050+ Louisville spots, legends and dates, boiled down to one page.** The full site (search, maps, filters, a been-there tracker, generators and plenty of easter eggs) is at **[fartmasterflex.github.io/LouisvilleWiki](https://fartmasterflex.github.io/LouisvilleWiki/)**. Every heading below links to its full list.
 
 🆓 = free · $ to $$$$ = price · lists last updated Oct 30, 2026
 
 ---
 
-**Jump to a full list:** [Dining Directory](https://james-baunach.github.io/louisville-wiki/list/dining-directory/) · [Eats & Lingo](https://james-baunach.github.io/louisville-wiki/list/eats-and-lingo/) · [Oldest Restaurants](https://james-baunach.github.io/louisville-wiki/list/oldest-restaurants/) · [Oldest Landmarks](https://james-baunach.github.io/louisville-wiki/list/oldest-landmarks/) · [Louisville History Timeline](https://james-baunach.github.io/louisville-wiki/list/louisville-history-timeline/) · [Neighborhoods](https://james-baunach.github.io/louisville-wiki/list/neighborhoods/) · [Lost Louisville](https://james-baunach.github.io/louisville-wiki/list/lost-louisville/) · [Active Louisville](https://james-baunach.github.io/louisville-wiki/list/active-louisville/) · [Attractions & Outings](https://james-baunach.github.io/louisville-wiki/list/attractions-and-outings/) · [Bars & Late Night](https://james-baunach.github.io/louisville-wiki/list/bars-and-late-night/) · [Books, Libraries & Schools](https://james-baunach.github.io/louisville-wiki/list/books-libraries-and-schools/) · [Breweries & Distilleries](https://james-baunach.github.io/louisville-wiki/list/breweries-and-distilleries/) · [Coffee](https://james-baunach.github.io/louisville-wiki/list/coffee/) · [Day Trips](https://james-baunach.github.io/louisville-wiki/list/day-trips/) · [Groceries & Markets](https://james-baunach.github.io/louisville-wiki/list/groceries-and-markets/) · [Louisville Media](https://james-baunach.github.io/louisville-wiki/list/louisville-media/) · [Museums & Galleries](https://james-baunach.github.io/louisville-wiki/list/museums-and-galleries/) · [Music, Stage & Screen](https://james-baunach.github.io/louisville-wiki/list/music-stage-and-screen/) · [Parks](https://james-baunach.github.io/louisville-wiki/list/parks/) · [Shops & Digging](https://james-baunach.github.io/louisville-wiki/list/shops-and-digging/) · [Sports, Clubs & Activities](https://james-baunach.github.io/louisville-wiki/list/sports-clubs-and-activities/) · [Weird & Wonderful](https://james-baunach.github.io/louisville-wiki/list/weird-and-wonderful/) · [Notable Annual Events](https://james-baunach.github.io/louisville-wiki/list/notable-annual-events/) · [Church Picnics & Fish Fries](https://james-baunach.github.io/louisville-wiki/list/church-picnics-and-fish-fries/)
+**Jump to a full list:** [Dining Directory](https://fartmasterflex.github.io/LouisvilleWiki/list/dining-directory/) · [Eats & Lingo](https://fartmasterflex.github.io/LouisvilleWiki/list/eats-and-lingo/) · [Oldest Restaurants](https://fartmasterflex.github.io/LouisvilleWiki/list/oldest-restaurants/) · [Oldest Landmarks](https://fartmasterflex.github.io/LouisvilleWiki/list/oldest-landmarks/) · [Louisville History Timeline](https://fartmasterflex.github.io/LouisvilleWiki/list/louisville-history-timeline/) · [Neighborhoods](https://fartmasterflex.github.io/LouisvilleWiki/list/neighborhoods/) · [Lost Louisville](https://fartmasterflex.github.io/LouisvilleWiki/list/lost-louisville/) · [Active Louisville](https://fartmasterflex.github.io/LouisvilleWiki/list/active-louisville/) · [Attractions & Outings](https://fartmasterflex.github.io/LouisvilleWiki/list/attractions-and-outings/) · [Bars & Late Night](https://fartmasterflex.github.io/LouisvilleWiki/list/bars-and-late-night/) · [Books, Libraries & Schools](https://fartmasterflex.github.io/LouisvilleWiki/list/books-libraries-and-schools/) · [Breweries & Distilleries](https://fartmasterflex.github.io/LouisvilleWiki/list/breweries-and-distilleries/) · [Coffee](https://fartmasterflex.github.io/LouisvilleWiki/list/coffee/) · [Day Trips](https://fartmasterflex.github.io/LouisvilleWiki/list/day-trips/) · [Groceries & Markets](https://fartmasterflex.github.io/LouisvilleWiki/list/groceries-and-markets/) · [Louisville Media](https://fartmasterflex.github.io/LouisvilleWiki/list/louisville-media/) · [Museums & Galleries](https://fartmasterflex.github.io/LouisvilleWiki/list/museums-and-galleries/) · [Music, Stage & Screen](https://fartmasterflex.github.io/LouisvilleWiki/list/music-stage-and-screen/) · [Parks](https://fartmasterflex.github.io/LouisvilleWiki/list/parks/) · [Shops & Digging](https://fartmasterflex.github.io/LouisvilleWiki/list/shops-and-digging/) · [Sports, Clubs & Activities](https://fartmasterflex.github.io/LouisvilleWiki/list/sports-clubs-and-activities/) · [Weird & Wonderful](https://fartmasterflex.github.io/LouisvilleWiki/list/weird-and-wonderful/) · [Notable Annual Events](https://fartmasterflex.github.io/LouisvilleWiki/list/notable-annual-events/) · [Church Picnics & Fish Fries](https://fartmasterflex.github.io/LouisvilleWiki/list/church-picnics-and-fish-fries/)
 
 ---
 
@@ -29,7 +29,7 @@
 
 ## 🍽️ Dining Directory
 
-*Every restaurant on the site, by neighborhood. The full list has dishes, prices, cuisines, filters and a map.* **[Full list (286) →](https://james-baunach.github.io/louisville-wiki/list/dining-directory/)**
+*Every restaurant on the site, by neighborhood. The full list has dishes, prices, cuisines, filters and a map.* **[Full list (286) →](https://fartmasterflex.github.io/LouisvilleWiki/list/dining-directory/)**
 
 | Neighborhood | Spots |
 |:--|:--|
@@ -41,22 +41,22 @@
 | **Paristown** | Bunz Burgerz · The Cafe |
 | **Irish Hill** | Game · Le Moo · Payne Street Bakehouse · Ramen House · Spring Street Bar and Grill |
 | **Germantown / Schnitzelburg** | Check's Cafe · Come Back Inn · Dairy Kastle · Four Pegs · Franny's Seafood · Hammerheads · Hauck's Corner · Jaymar Japanese Grill · Jays Burgers · Monnik Beer Co. · Nord's Bakery · North of Bourbon · Parkway Diner · Sarino · The Post |
-| **Highlands** | 80/20 at Kaelin's · Agave & Rye · Bambi Bar · Banh Mi & Pho Lounge · Barret Bar · Cafe Lou Lou · Cipollini · Ditto's · Dragon King's Daughter · El Mundo · Flanagan's Ale House · Gralehaus · Havana Rumba · Heart & Soy / Roots · Highland Morning · Holy Grale · Hurry for Curry · Impellizzeri's Pizza · Jack Fry's · Kashmir Indian Restaurant · Kebab House · Kern's Korner · koko + rae · La Suerte · Lucia's Cafecito y Mas · M. Peppers · Mimi's Ethiopian · Mixmix Cafe · Molly Malone's · Morris' Deli · Murray's Creole Pub · Noche Mexican BBQ · O'Shea's Irish Pub · Oskar's Slider Bar · Palermo's · Prado 264 · Queen of Sheba · Ramsi's Cafe on the World · ROC · Sapporo Japanese Grill · Seviche A Latin Restaurant · Shenanigans · Stevens & Stevens Deli · Syrian Grill · The Black Italian · The Eagle · The Fat Lamb · Twig and Leaf · Uptown Cafe · Wheated Pizza · Wick's Pizza Parlor · Wiltshire Bakery · Yi Sushi Omakase · Yummy Pollo |
+| **Highlands** | 80/20 at Kaelin's · Agave & Rye · Bambi Bar · Banh Mi & Pho Lounge · Barret Bar · Cafe Lou Lou · Cipollini · Ditto's · Dragon King's Daughter · El Mundo · Flanagan's Ale House · Gralehaus · Havana Rumba · Heart & Soy / Roots · Highland Morning · Holy Grale · Hurry for Curry · Impellizzeri's Pizza · Jack Fry's · Kashmir Indian Restaurant · Kebab House · Kern's Korner · koko + rae · La Suerte · Lucia's Cafecito y Mas · M. Peppers · Mimi's Ethiopian · Mixmix Cafe · Molly Malone's · Morris' Deli · Murray's Creole Pub · Noche Mexican BBQ · O'Shea's Irish Pub · Palermo's · Prado 264 · Queen of Sheba · Ramsi's Cafe on the World · ROC · Sapporo Japanese Grill · Seviche A Latin Restaurant · Shenanigans · Stevens & Stevens Deli · The Black Italian · The Eagle · The Fat Lamb · Twig and Leaf · Uptown Cafe · Wheated Pizza · Wick's Pizza Parlor · Wiltshire Bakery · Yi Sushi Omakase |
 | **Clifton** | Bourbons Bistro · Caffe Classico · Ciao Ristorante · Clifton Tavern · CM Chicken of Louisville · Crave Cafe · Danny Mac's Pizza · Mellwood Tavern · Mill Iron 4 · Morning Fork · Pat's Steakhouse · Serai · SmashD · The Irish Rover · The Manhattan Project · Time 4 Thai · Volare Italian Ristorante |
 | **Crescent Hill** | Blue Dog Bakery · Con Huevos · Frankfort Avenue Beer Depot · Osaka Japanese Restaurant · Porcini · Red Hog |
-| **Old Louisville** | 610 Magnolia · Buck's Restaurant · Burger Boy · Dizzy Whizz · Granville Pub · Old Louisville Tavern · Ollie's Trolley · Pizza Donisi · Sam's Gyros |
+| **Old Louisville** | 610 Magnolia · Buck's Restaurant · Burger Boy · Dizzy Whizz · Granville Pub · Lucretia's Kitchen · Old Louisville Tavern · Ollie's Trolley · Pizza Donisi |
 | **Portland** | Annie's Pizza |
-| **West End** | Acai-Ville Cafe · Gigi's Kitchen · Indi's Chicken · Lucretia's Kitchen · Sweet Peaches · Tha Drippin Crab |
-| **South End** | A Chau Restaurant · Anko Sushi · Beechmont Bakeshop · Caribbean Cafe · Christi's Cafe · DaLat's Cafe · El Molcajete · El Pastorcito · El Rey Market · Jamaican Jerk Center · Kathmandu Kitchen · La Chiquita Bakery · La Torta Loca · Mike Linnig's · Ott's Tavern · Rubbies · Sam's Chicago Grill · Suburban Social Club Fish Fry · Tumbleweed · Tuscany Italian · Vietnam Kitchen · Wagner's Pharmacy · Weekend Burger |
-| **Okolona** | Eden & Kissi · Trujillo |
-| **Preston Hwy** | Frank's Meat & Produce · Koreana Restaurant III · La Rosita · La Tropicana · Mirage Mediterranean · Panchitos · Tacolandia |
-| **Poplar Level** | Kum's Cafe & Arirang · Lee's Korean Restaurant · Louie's Hot Chicken · Maya Bagel Express · Open Caribbean Kitchen · Veronica's Mexican |
-| **Buechel / Hikes Point** | Al Watan · Aljazzar Meats & Grill · Bellissimo · Jasmin Bakery European Bread · Las Gorditas · Momo House · Soupys · TOGO India · Turmeric Indian Bistro · Unice's Kitchen |
+| **West End** | Acai-Ville Cafe · Gigi's Kitchen · Sweet Peaches · Tha Drippin Crab |
+| **South End** | A Chau Restaurant · Anko Sushi · Beechmont Bakeshop · Caribbean Cafe · Christi's Cafe · DaLat's Cafe · El Molcajete · El Rey Market · Indi's Chicken · La Chiquita Bakery · La Torta Loca · Mike Linnig's · Ott's Tavern · Rubbies · Sam's Chicago Grill · Sam's Gyros · Suburban Social Club Fish Fry · Tumbleweed · Tuscany Italian · Vietnam Kitchen · Wagner's Pharmacy · Weekend Burger |
+| **Okolona** | Eden & Kissi · Panchitos · Sichuan House · Trujillo |
+| **Preston Hwy** | Frank's Meat & Produce · Koreana Restaurant III · La Rosita · La Tropicana · Mirage Mediterranean · Tacolandia |
+| **Poplar Level** | Kum's Cafe & Arirang · Lee's Korean Restaurant · Louie's Hot Chicken · Maya Bagel Express · Open Caribbean Kitchen · Oskar's Slider Bar · Veronica's Mexican |
+| **Buechel / Hikes Point** | Al Watan · Aljazzar Meats & Grill · Bellissimo · El Pastorcito · Jamaican Jerk Center · Jasmin Bakery European Bread · Kathmandu Kitchen · Las Gorditas · Momo House · Soupys · Syrian Grill · TOGO India · Turmeric Indian Bistro · Unice's Kitchen · Yummy Pollo |
 | **Taylorsville Rd** | Bearno's Pizza · Kingsley Meats · Le Relais |
-| **St. Matthews** | Bourbon and Burgers · Bruegger's Bagels · Burger Girl Diner · Coals Artisan Pizza · District 6 · Heitzman Bakery · Joella's Hot Chicken · Lori's Fish Market · Lotsa Pasta · Maira · Mojito in Havana · Momma's Mustard Pickles & BBQ · Nam Nam Cafe · Oriental House · Plehns Bakery · Ricky B's Club Cafe · Shawarma Shack · Silvio's Italian Restaurant · Taco Choza · The Fishery · W.W. Cousins · Wild Eggs · Zila Indian Kitchen |
-| **East End** | Born 2 Bagel · Brasserie Provence · Bristol Bar & Grille · Cask Southern Kitchen · Grassa Gramma · Jade Palace · La Rosita Sol · Martin's Bar-B-Que Joint · Martini Italian Bistro · Mesh · Osteria Italian Seafood · Selena's at Willow Lake Tavern · Shady Lane Cafe · Shalimar Indian Restaurant · Shreeji Indian Vegetarian Street Food · Take Thai · Tandoori Fusion · The Charcoal Restaurant · The Goose Eatery & Hangout · Yen Ching Chinese |
+| **St. Matthews** | Bourbon and Burgers · Bruegger's Bagels · Burger Girl Diner · Coals Artisan Pizza · District 6 · Joella's Hot Chicken · Lori's Fish Market · Lotsa Pasta · Maira · Mojito in Havana · Momma's Mustard Pickles & BBQ · Nam Nam Cafe · Oriental House · Plehns Bakery · Ricky B's Club Cafe · Shawarma Shack · Silvio's Italian Restaurant · Taco Choza · The Fishery · W.W. Cousins · Wild Eggs · Zila Indian Kitchen |
+| **East End** | Born 2 Bagel · Brasserie Provence · Bristol Bar & Grille · Cask Southern Kitchen · Grassa Gramma · Heitzman Bakery · Jade Palace · La Rosita Sol · Martin's Bar-B-Que Joint · Martini Italian Bistro · Mesh · Osteria Italian Seafood · Selena's at Willow Lake Tavern · Shady Lane Cafe · Shalimar Indian Restaurant · Shreeji Indian Vegetarian Street Food · Take Thai · Tandoori Fusion · The Charcoal Restaurant · The Goose Eatery & Hangout · Yen Ching Chinese |
 | **Middletown** | Clay Oven · Highland Fish Market · Peru Peruvian · VinBun |
-| **Jeffersontown** | Buds Tavern · Mussel & Burger Bar · Passtime Fish House · Recbar · Sichuan House |
+| **Jeffersontown** | Buds Tavern · Mussel & Burger Bar · Passtime Fish House · Recbar |
 | **Fern Creek** | Bahn Thai · Hungry Pelican · Pide Point |
 | **River Road** | Captain's Quarters Riverside Grille · Cunningham's Creekside · KingFish · River House Restaurant and Raw Bar |
 | **Shively** | Daddy Vic's Soul Food |
@@ -67,7 +67,7 @@
 
 ## 🗣️ Eats & Lingo
 
-*The foods and phrases that only make sense here. Where to try each one, and what people mean when they say it.* **[Full list (24) →](https://james-baunach.github.io/louisville-wiki/list/eats-and-lingo/)**
+*The foods and phrases that only make sense here. Where to try each one, and what people mean when they say it.* **[Full list (24) →](https://fartmasterflex.github.io/LouisvilleWiki/list/eats-and-lingo/)**
 
 **Only-in-Louisville Eats**
 
@@ -103,7 +103,7 @@
 
 ## 🥘 Oldest Restaurants
 
-*The survivors.* **[Full list (27) →](https://james-baunach.github.io/louisville-wiki/list/oldest-restaurants/)**
+*The survivors.* **[Full list (27) →](https://fartmasterflex.github.io/LouisvilleWiki/list/oldest-restaurants/)**
 
 1922 **Wagner's Pharmacy** · 1923 **English Grill at the Brown Hotel** · 1925 **Mike Linnig's** · 1933 **Jack Fry's** · 1937 **Joe's Older Than Dirt** · 1939 **Granville Pub** · 1944 **Check's Cafe** · 1947 **Dizzy Whizz** · 1948 **KingFish** · 1951 **Dairy Del** · 1958 **Pat's Steakhouse** · 1962 **Twig and Leaf** · 1963 **Ott's Tavern** · 1964 **Oriental House** · 1967 **Moby Dick** · 1973 **Ollie's Trolley** · 1976 **Dairy Kastle** · 1977 **The Bristol Bar & Grille** · 1977 **Bearno's Pizza** · 1978 **Kern's Korner** · 1978 **Hungry Pelican** · 1979 **Frank's Meat and Produce** · 1979 **Impellizzeri's** · 1980 **Burger Boy Diner** · 1980 **The Fishery** · 1980 **Lee's Korean** · 1985 **The Old Spaghetti Factory**
 
@@ -111,7 +111,7 @@
 
 ## 🏛️ Oldest Landmarks
 
-*History in stone and brick.* **[Full list (45) →](https://james-baunach.github.io/louisville-wiki/list/oldest-landmarks/)**
+*History in stone and brick.* **[Full list (45) →](https://fartmasterflex.github.io/LouisvilleWiki/list/oldest-landmarks/)**
 
 1786 **First Public Cemetery** · 1790 **Springfield (Zachary Taylor House)** · 1791 **Oxmoor Farm** · 1792 **Locust Grove** · 1812 **Squire Earick House** · 1816 **Farmington** · 1824 **Christ Church Cathedral** · 1830 **Louisville and Portland Canal** · 1837 **Riverside, the Farnsley-Moremen Landing** · 1837 **Bank of Louisville** · 1838 **Louisville Metro Hall** · 1843 **Eastern Cemetery** 🆓 · 1848 **Cave Hill Cemetery** 🆓 · 1852 **U.S. Marine Hospital** · 1852 **Cathedral of the Assumption** · 1850s **Whiskey Row** 🆓 · 1857 **Heigold House Facade** · 1858 **American Printing House for the Blind** · 1850s **Thomas Edison House** · 1860 **Louisville Water Tower** · 1868 **Brennan House** · 1873 **Louisville City Hall** · 1875 **Churchill Downs** · 1879 **Crescent Hill Reservoir** · 1879 **Simmons College of Kentucky** · 1880 **Old Louisville Historic District** 🆓 · 1884 **Louisville Slugger Museum & Factory** · 1891 **Olmsted Parks Founded** 🆓 · 1891 **Union Station** · 1895 **Conrad-Caldwell House** · 1895 **Big Four Bridge** 🆓 · 1890s **St. James Court** 🆓 · 1905 **Filson Historical Society** · 1905 **The Seelbach** · 1908 **Louisville Free Public Library** · 1908 **Western Branch Library** · 1914 **Belle of Louisville** · 1918 **Vernon Lanes** · 1923 **The Brown Hotel** · 1926 **Waverly Hills Sanatorium** · 1927 **Speed Art Museum** · 1928 **The Pendennis Clubhouse** · 1928 **The Palace Theatre** · 1928 **Zachary Taylor National Cemetery** 🆓 · 1929 **Louisville Memorial Auditorium**
 
@@ -119,7 +119,7 @@
 
 ## ⏳ Louisville History Timeline
 
-*A deep dive into the events that shaped the Derby City.* **[Full list (67) →](https://james-baunach.github.io/louisville-wiki/list/louisville-history-timeline/)**
+*A deep dive into the events that shaped the Derby City.* **[Full list (67) →](https://fartmasterflex.github.io/LouisvilleWiki/list/louisville-history-timeline/)**
 
 **18th Century: The Frontier**
 
@@ -201,7 +201,7 @@
 
 ## 🏘️ Neighborhoods
 
-*A historical guide to the distinct pockets that make up the city.* **[Full list (26) →](https://james-baunach.github.io/louisville-wiki/list/neighborhoods/)**
+*A historical guide to the distinct pockets that make up the city.* **[Full list (26) →](https://fartmasterflex.github.io/LouisvilleWiki/list/neighborhoods/)**
 
 * **Downtown / Central Business District** – The original 1778 settlement at the Falls of the Ohio.
 * **Old Louisville** – Originally a suburb called the 'Southern Extension'.
@@ -234,7 +234,7 @@
 
 ## 🕯️ Lost Louisville
 
-*Gone but not forgotten. A memorial wall for the places we still give directions by.* **[Full list (16) →](https://james-baunach.github.io/louisville-wiki/list/lost-louisville/)**
+*Gone but not forgotten. A memorial wall for the places we still give directions by.* **[Full list (16) →](https://fartmasterflex.github.io/LouisvilleWiki/list/lost-louisville/)**
 
 * **Mazzoni's** (1884–c.2010) – Started at Third and Market, handing out a free rolled oyster with every beer.
 * **Fontaine Ferry Park** (1905–1969) – A riverside amusement park in the West End with 50+ rides, a pool and a skating rink.
@@ -260,7 +260,7 @@
 
 ## 🚴 Active Louisville
 
-*How to burn off the bourbon and Hot Browns: trails, climbing, paddling, golf, and the bike shops that keep you rolling.* **[Full list (44) →](https://james-baunach.github.io/louisville-wiki/list/active-louisville/)**
+*How to burn off the bourbon and Hot Browns: trails, climbing, paddling, golf, and the bike shops that keep you rolling.* **[Full list (44) →](https://fartmasterflex.github.io/LouisvilleWiki/list/active-louisville/)**
 
 **Parks & Trails**
 
@@ -328,7 +328,7 @@
 
 ## 🎡 Attractions & Outings
 
-*Things to do when you have guests in town, or just need to get out.* **[Full list (17) →](https://james-baunach.github.io/louisville-wiki/list/attractions-and-outings/)**
+*Things to do when you have guests in town, or just need to get out.* **[Full list (17) →](https://fartmasterflex.github.io/LouisvilleWiki/list/attractions-and-outings/)**
 
 **Icons & Green Spaces**
 
@@ -357,7 +357,7 @@
 
 ## 🍺 Bars & Late Night
 
-*Dives, pubs and cocktail bars, plus where to go when they close. Late hours shift, so call before a 3 AM trek.* **[Full list (55) →](https://james-baunach.github.io/louisville-wiki/list/bars-and-late-night/)**
+*Dives, pubs and cocktail bars, plus where to go when they close. Late hours shift, so call before a 3 AM trek.* **[Full list (55) →](https://fartmasterflex.github.io/LouisvilleWiki/list/bars-and-late-night/)**
 
 **Bars**
 
@@ -430,7 +430,7 @@
 
 ## 📚 Books, Libraries & Schools
 
-*Read local, learn local. Indie bookstores, every LFPL branch, a library that lends power drills, and the colleges in town.* **[Full list (42) →](https://james-baunach.github.io/louisville-wiki/list/books-libraries-and-schools/)**
+*Read local, learn local. Indie bookstores, every LFPL branch, a library that lends power drills, and the colleges in town.* **[Full list (42) →](https://fartmasterflex.github.io/LouisvilleWiki/list/books-libraries-and-schools/)**
 
 **Bookstores**
 
@@ -490,7 +490,7 @@
 
 ## 🥃 Breweries & Distilleries
 
-*Local suds and world-class bourbon. Kentucky has more bourbon barrels aging than people living in it.* **[Full list (32) →](https://james-baunach.github.io/louisville-wiki/list/breweries-and-distilleries/)**
+*Local suds and world-class bourbon. Kentucky has more bourbon barrels aging than people living in it.* **[Full list (32) →](https://fartmasterflex.github.io/LouisvilleWiki/list/breweries-and-distilleries/)**
 
 **Craft Distilleries**
 
@@ -534,7 +534,7 @@
 
 ## ☕ Coffee
 
-*Roasters, neighborhood cafes and Yemeni coffeehouses. Where Louisville gets its caffeine.* **[Full list (27) →](https://james-baunach.github.io/louisville-wiki/list/coffee/)**
+*Roasters, neighborhood cafes and Yemeni coffeehouses. Where Louisville gets its caffeine.* **[Full list (27) →](https://fartmasterflex.github.io/LouisvilleWiki/list/coffee/)**
 
 **Roasters and Cafe**
 
@@ -573,7 +573,7 @@
 
 ## 🚗 Day Trips
 
-*Worthy escapes within 3 hours. Louisville is embarrassingly well-positioned for road trips.* **[Full list (27) →](https://james-baunach.github.io/louisville-wiki/list/day-trips/)**
+*Worthy escapes within 3 hours. Louisville is embarrassingly well-positioned for road trips.* **[Full list (27) →](https://fartmasterflex.github.io/LouisvilleWiki/list/day-trips/)**
 
 **Under 1 Hour**
 
@@ -615,7 +615,7 @@
 
 ## 🧺 Groceries & Markets
 
-*Local provisions, international grocers and farmers markets. Shop local whenever you can.* **[Full list (35) →](https://james-baunach.github.io/louisville-wiki/list/groceries-and-markets/)**
+*Local provisions, international grocers and farmers markets. Shop local whenever you can.* **[Full list (35) →](https://fartmasterflex.github.io/LouisvilleWiki/list/groceries-and-markets/)**
 
 **Grocers & Specialty Markets**
 
@@ -665,7 +665,7 @@
 
 ## 📰 Louisville Media
 
-*Local news, indie radio, podcasts, and blogs.* **[Full list (21) →](https://james-baunach.github.io/louisville-wiki/list/louisville-media/)**
+*Local news, indie radio, podcasts, and blogs.* **[Full list (21) →](https://fartmasterflex.github.io/LouisvilleWiki/list/louisville-media/)**
 
 **Print & Digital**
 
@@ -701,7 +701,7 @@
 
 ## 🖼️ Museums & Galleries
 
-*The intersection of fine art, weird history, and local makers.* **[Full list (25) →](https://james-baunach.github.io/louisville-wiki/list/museums-and-galleries/)**
+*The intersection of fine art, weird history, and local makers.* **[Full list (25) →](https://fartmasterflex.github.io/LouisvilleWiki/list/museums-and-galleries/)**
 
 **The Heavy Hitters**
 
@@ -738,7 +738,7 @@
 
 ## 🎸 Music, Stage & Screen
 
-*Live music, theatre, dance and comedy, plus the movie houses and drive-ins.* **[Full list (45) →](https://james-baunach.github.io/louisville-wiki/list/music-stage-and-screen/)**
+*Live music, theatre, dance and comedy, plus the movie houses and drive-ins.* **[Full list (45) →](https://fartmasterflex.github.io/LouisvilleWiki/list/music-stage-and-screen/)**
 
 **Music Venues**
 
@@ -798,7 +798,7 @@
 
 ## 🌳 Parks
 
-*Green Spaces.* **[Full list (38) →](https://james-baunach.github.io/louisville-wiki/list/parks/)**
+*Green Spaces.* **[Full list (38) →](https://fartmasterflex.github.io/LouisvilleWiki/list/parks/)**
 
 **Olmsted Parks**
 
@@ -851,7 +851,7 @@
 
 ## 🛍️ Shops & Digging
 
-*Vintage racks, flea markets, record bins and things made here. For collectors, weirdos and anyone avoiding the mall.* **[Full list (30) →](https://james-baunach.github.io/louisville-wiki/list/shops-and-digging/)**
+*Vintage racks, flea markets, record bins and things made here. For collectors, weirdos and anyone avoiding the mall.* **[Full list (30) →](https://fartmasterflex.github.io/LouisvilleWiki/list/shops-and-digging/)**
 
 **Curated Vintage & Boutiques**
 
@@ -902,7 +902,7 @@
 
 ## 🎳 Sports, Clubs & Activities
 
-*Teams to cheer for, then how to meet people in this town, from mainstream kickball to obscure street games.* **[Full list (44) →](https://james-baunach.github.io/louisville-wiki/list/sports-clubs-and-activities/)**
+*Teams to cheer for, then how to meet people in this town, from mainstream kickball to obscure street games.* **[Full list (44) →](https://fartmasterflex.github.io/LouisvilleWiki/list/sports-clubs-and-activities/)**
 
 **Teams to Watch**
 
@@ -979,7 +979,7 @@
 
 ## 🦇 Weird & Wonderful
 
-*Free oddities, giant bats, cursed trees and famous graves, plus the best sunsets, star parties and sledding hills. The sledding hills open once 2 to 3 inches stick: no sledding on golf courses, no bonfires.* **[Full list (20) →](https://james-baunach.github.io/louisville-wiki/list/weird-and-wonderful/)**
+*Free oddities, giant bats, cursed trees and famous graves, plus the best sunsets, star parties and sledding hills. The sledding hills open once 2 to 3 inches stick: no sledding on golf courses, no bonfires.* **[Full list (20) →](https://fartmasterflex.github.io/LouisvilleWiki/list/weird-and-wonderful/)**
 
 **Legends & Curiosities**
 
@@ -1020,7 +1020,7 @@
 
 ## 📅 Notable Annual Events
 
-*Mark your calendar. Dates that follow a rule (Thunder, the Derby, the Dainty) show this year's day; for the rest, check the organizer.* **[Full list (40) →](https://james-baunach.github.io/louisville-wiki/list/notable-annual-events/)**
+*Mark your calendar. Dates that follow a rule (Thunder, the Derby, the Dainty) show this year's day; for the rest, check the organizer.* **[Full list (40) →](https://fartmasterflex.github.io/LouisvilleWiki/list/notable-annual-events/)**
 
 | Month | What's on |
 |:--|:--|
@@ -1043,7 +1043,7 @@
 
 ## 🐟 Church Picnics & Fish Fries
 
-*Rides, bingo, beer booths and fried fish, all for a good cause. Picnic season runs May to September, and fish fries run on the Fridays of Lent. Dates shift every year, so check the parish first.* **[Full list (26) →](https://james-baunach.github.io/louisville-wiki/list/church-picnics-and-fish-fries/)**
+*Rides, bingo, beer booths and fried fish, all for a good cause. Picnic season runs May to September, and fish fries run on the Fridays of Lent. Dates shift every year, so check the parish first.* **[Full list (26) →](https://fartmasterflex.github.io/LouisvilleWiki/list/church-picnics-and-fish-fries/)**
 
 **Summer Picnics**
 
@@ -1081,14 +1081,14 @@
 
 ## 📍 Everything in one neighborhood
 
-[Highlands](https://james-baunach.github.io/louisville-wiki/list/hood-highlands/) (60) · [Downtown](https://james-baunach.github.io/louisville-wiki/list/hood-downtown/) (28) · [Germantown / Schnitzelburg](https://james-baunach.github.io/louisville-wiki/list/hood-germantown-schnitzelburg/) (23) · [South End](https://james-baunach.github.io/louisville-wiki/list/hood-south-end/) (23) · [St. Matthews](https://james-baunach.github.io/louisville-wiki/list/hood-st-matthews/) (23) · [East End](https://james-baunach.github.io/louisville-wiki/list/hood-east-end/) (21) · [Clifton](https://james-baunach.github.io/louisville-wiki/list/hood-clifton/) (18) · [NuLu](https://james-baunach.github.io/louisville-wiki/list/hood-nulu/) (16) · [Old Louisville](https://james-baunach.github.io/louisville-wiki/list/hood-old-louisville/) (12) · [Buechel / Hikes Point](https://james-baunach.github.io/louisville-wiki/list/hood-buechel-hikes-point/) (10) · [Preston Hwy](https://james-baunach.github.io/louisville-wiki/list/hood-preston-hwy/) (9) · [Shelby Park](https://james-baunach.github.io/louisville-wiki/list/hood-shelby-park/) (8) · [Crescent Hill](https://james-baunach.github.io/louisville-wiki/list/hood-crescent-hill/) (8) · [Jeffersontown](https://james-baunach.github.io/louisville-wiki/list/hood-jeffersontown/) (8)
+[Highlands](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-highlands/) (57) · [Downtown](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-downtown/) (28) · [Germantown / Schnitzelburg](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-germantown-schnitzelburg/) (23) · [South End](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-south-end/) (22) · [St. Matthews](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-st-matthews/) (22) · [East End](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-east-end/) (22) · [Clifton](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-clifton/) (18) · [NuLu](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-nulu/) (16) · [Buechel / Hikes Point](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-buechel-hikes-point/) (15) · [Old Louisville](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-old-louisville/) (12) · [Shelby Park](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-shelby-park/) (8) · [Crescent Hill](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-crescent-hill/) (8) · [Preston Hwy](https://fartmasterflex.github.io/LouisvilleWiki/list/hood-preston-hwy/) (8)
 
 ## 🎲 On the site, not on this page
 
 * **Search & maps.** Every list is searchable and most have a map.
 * **Bracket of the Month.** Same 16 for everyone; a round a week, voted on the community board.
 * **Generators.** Bar Crawl (3 bars, one walk), History Walk, Night Out Slot, Louisville Bingo, a bracket maker.
-* **Seasonal lists.** [Derby Season](https://james-baunach.github.io/louisville-wiki/list/derby/), [Fish Fry Fridays](https://james-baunach.github.io/louisville-wiki/list/lent/), [Picnic Season](https://james-baunach.github.io/louisville-wiki/list/picnics/), [Spooky Louisville](https://james-baunach.github.io/louisville-wiki/list/spooky/), [Lights & Snow Days](https://james-baunach.github.io/louisville-wiki/list/winter/).
+* **Seasonal lists.** [Derby Season](https://fartmasterflex.github.io/LouisvilleWiki/list/derby/), [Fish Fry Fridays](https://fartmasterflex.github.io/LouisvilleWiki/list/lent/), [Picnic Season](https://fartmasterflex.github.io/LouisvilleWiki/list/picnics/), [Spooky Louisville](https://fartmasterflex.github.io/LouisvilleWiki/list/spooky/), [Lights & Snow Days](https://fartmasterflex.github.io/LouisvilleWiki/list/winter/).
 * **Been-there tracker** and a vault of easter eggs.
 
 *Something closed, moved or missing? Post it here or hit 💬 Discuss on that list. Every change is checked before it goes in.*

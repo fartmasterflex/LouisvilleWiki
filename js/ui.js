@@ -10,7 +10,7 @@ const presetCount = (id) => dataNs.presetCount?.(id) || 0;
 // Lists shown inside a parent list's page (a cached older data.js stores a single name, not an array)
 const companionsOf = (key) => [].concat(COMPANIONS[key] || []).filter(k => wikiData[k]);
 import { state, isBeen, toggleBeen, beenCount } from './state.js';
-import { gSearch, gLucky, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $, slugify } from './utils.js';
+import { gSearch, escapeHtml as esc, openModal, prefersReducedMotion, rand, store, $, slugify } from './utils.js';
 import { foundCount, SECRETS } from './secrets.js';
 import { sfx } from './audio.js';
 
@@ -365,9 +365,15 @@ function beforeAfter(item) {
     </figure>`;
 }
 
+// The place's own site (or menu / Facebook / Instagram) when it has one, else a Google search
+function siteBtn(item) {
+    return item.url
+        ? `<a class="btn-site" href="${esc(item.url)}" target="_blank" rel="noopener">${LINK_LABEL[linkKind(item.url)]} ↗</a>`
+        : `<a class="btn-site" href="${gSearch(item.name)}" target="_blank" rel="noopener" title="Search Google for ${esc(item.name)} Louisville">Google ↗</a>`;
+}
+
 function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {}) {
     const been = isBeen(cat, item.name);
-    const site = item.url ? item.url : gLucky(item.name);
     const meta = [item.year ? `(${esc(item.year)})` : '', item.month ? `(${esc(item.month)})` : ''].join('');
     return `
     <li class="entry ${been ? 'is-been' : ''} ${extraClass}" id="e-${slugOf(cat)}-${idx}" data-cat="${esc(cat)}" data-name="${esc(item.name)}" style="--i:${Math.min(i, 40)}">
@@ -381,7 +387,7 @@ function entryHTML(cat, item, idx, { rank = null, extraClass = '', i = 0 } = {})
             ${alsoChips(cat, item)}
         </div>
         <div class="entry-actions">
-            <a class="btn-site" href="${esc(site)}" target="_blank" rel="noopener">${LINK_LABEL[linkKind(item.url)]} ↗</a>
+            ${siteBtn(item)}
             <button type="button" class="been-btn" data-action="been" aria-pressed="${been}" title="Been there?" aria-label="Mark ${esc(item.name)} as been there">✓</button>
         </div>
         <span class="been-stamp" aria-hidden="true">BEEN THERE</span>
@@ -433,7 +439,6 @@ function renderRanked(key, data) {
     const row = (item, idx, rank, i) => {
         const age = parseInt(item.year, 10) ? nowYear - parseInt(item.year, 10) : null;
         const been = isBeen(key, item.name);
-        const site = item.url ? item.url : gLucky(item.name);
         return `
         <li class="entry ${been ? 'is-been' : ''}" id="e-${slugOf(key)}-${idx}" data-cat="${esc(key)}" data-name="${esc(item.name)}" style="--i:${Math.min(i, 40)}">
             <div class="yr">${esc(item.year || '—')}</div>
@@ -445,7 +450,7 @@ function renderRanked(key, data) {
                 ${typeof idx === 'number' ? alsoChips(key, item) : ''}
             </div>
             <div class="entry-actions">
-                <a class="btn-site" href="${esc(site)}" target="_blank" rel="noopener">Site ↗</a>
+                ${siteBtn(item)}
                 <button type="button" class="been-btn" data-action="been" aria-pressed="${been}" title="Been there?" aria-label="Mark ${esc(item.name)} as been there">✓</button>
             </div>
             <span class="been-stamp" aria-hidden="true">BEEN THERE</span>
@@ -487,7 +492,7 @@ function renderEvents(key, data) {
                         ${item.rule ? `<span class="ev-date" title="Next one">${esc(shortDate(nextRuleDate(item.rule)))}</span>` : ''}
                         ${item.when ? `<small class="ev-when">${esc(item.when)}</small>` : ''}
                     </span>
-                    <a class="btn-site" href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener" aria-label="${esc(item.name)} website">↗</a>
+                    <a class="btn-site" href="${esc(item.url || gSearch(item.name))}" target="_blank" rel="noopener" aria-label="${esc(item.name)} ${item.url ? 'website' : 'on Google'}">↗</a>
                 </li>`).join('')}
             </ul>
         </section>`).join('')}
@@ -654,7 +659,7 @@ function renderDiningTable() {
             <tbody>
                 ${rows.map(({ item, idx }) => `
                 <tr id="e-${slugOf('Dining Directory')}-${idx}">
-                    <td class="td-name"><a href="${esc(item.url || gLucky(item.name))}" target="_blank" rel="noopener" class="table-link">${esc(item.name)}</a>${linkKind(item.url) !== 'site' && linkKind(item.url) !== 'menu' ? `<span class="link-kind" title="This link goes to ${esc(LINK_LABEL[linkKind(item.url)])}">${esc(LINK_LABEL[linkKind(item.url)])}</span>` : ''}${featureBadges("Dining Directory", item)}${item.note ? `<small class="td-note">${esc(item.note)}</small>` : ''}</td>
+                    <td class="td-name"><a href="${gSearch(item.name)}" target="_blank" rel="noopener" class="table-link" title="Search Google for ${esc(item.name)} Louisville">${esc(item.name)}</a><span class="td-links">${item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(LINK_LABEL[linkKind(item.url)])} ↗</a>` : ''}<a href="${gSearch(item.name)}" target="_blank" rel="noopener" title="Search Google for ${esc(item.name)} Louisville">Google ↗</a></span>${featureBadges("Dining Directory", item)}${item.note ? `<small class="td-note">${esc(item.note)}</small>` : ''}</td>
                     <td data-label="Price"><span class="price-tag">${esc(item.price || '')}</span></td>
                     ${vc.dish ? `<td data-label="Dish">${esc(item.dish || '')}</td>` : ''}
                     ${vc.location ? `<td data-label="Where"><a class="area-link" href="#/p/hood-${slugify(areaOf(item.location))}">${esc((item.location || '').trim())}</a></td>` : ''}
@@ -753,7 +758,6 @@ export function surprisePick(cat = null) {
         entry = randomEntry();
     }
     const { item } = entry;
-    const site = item.url || gLucky(item.name);
     const sub = item.note || item.dish || [item.cuisine, item.location].filter(Boolean).join(' · ') || (item.year ? `Est. ${item.year}` : '') || (item.month ? `Every ${item.month}` : '');
     document.getElementById('pickBody').innerHTML = `
         <div class="pick-emoji">${emojiOf(entry.cat)}</div>
@@ -762,7 +766,7 @@ export function surprisePick(cat = null) {
         ${sub ? `<div class="pick-note">${esc(sub)}</div>` : ''}
         <div class="pick-links">
             <a class="btn-map" href="${gSearch(item.name)}" target="_blank" rel="noopener">Google it</a>
-            <a class="btn-map" href="${esc(site)}" target="_blank" rel="noopener">Site ↗</a>
+            ${item.url ? `<a class="btn-map" href="${esc(item.url)}" target="_blank" rel="noopener">${esc(LINK_LABEL[linkKind(item.url)])} ↗</a>` : ''}
             ${entry.cat !== 'Louisville History Timeline' ? `<a class="btn-map" href="${catHref(entry.cat, entry.idx)}" data-close>Find in wiki →</a>` : ''}
         </div>`;
     sfx.pop();

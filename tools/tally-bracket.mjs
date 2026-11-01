@@ -11,7 +11,7 @@ import fs from 'fs';
 import { execFileSync } from 'child_process';
 import { newMonth, matchups, countVotes, ROUND_DAYS, TERM_PREFIX, monthKey } from '../js/monthly-core.js';
 
-const REPO = process.env.BRACKET_REPO || 'James-baunach/louisville-wiki';
+const REPO = process.env.BRACKET_REPO || 'FartmasterFlex/LouisvilleWiki';
 const DIR = new URL('../data/bracket/', import.meta.url);
 const args = process.argv.slice(2);
 const dry = args.includes('--dry');

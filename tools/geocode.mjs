@@ -24,7 +24,7 @@ const only = args.find(a => wikiData[a]);
 
 // Louisville metro plus the Southern Indiana riverfront
 const VIEWBOX = '-86.05,38.45,-85.35,37.95';
-const UA = 'LouisvilleWiki-geocoder/1.0 (https://github.com/James-baunach/louisville-wiki)';
+const UA = 'LouisvilleWiki-geocoder/1.0 (https://github.com/FartmasterFlex/LouisvilleWiki)';
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 const todo = [];

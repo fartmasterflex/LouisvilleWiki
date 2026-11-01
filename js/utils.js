@@ -2,7 +2,6 @@
 // Small shared helpers: links, escaping, storage, modals, toasts.
 
 export function gSearch(name) { return `https://www.google.com/search?q=${encodeURIComponent(name + ' Louisville')}`; }
-export function gLucky(name) { return `https://www.google.com/search?q=${encodeURIComponent(name + ' Louisville')}&btnI=1`; }
 
 export const $ = (sel, root = document) => root.querySelector(sel);
 export const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
