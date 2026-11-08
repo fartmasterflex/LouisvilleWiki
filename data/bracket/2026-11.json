@@ -19,7 +19,46 @@
     "Porch Kitchen & Bar",
     "Seviche A Latin Restaurant"
   ],
-  "results": {},
-  "votes": {},
-  "voters": {}
+  "results": {
+    "R1": "AAAAAAAA"
+  },
+  "votes": {
+    "R1": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ]
+  },
+  "voters": {
+    "R1": 0
+  }
 }
